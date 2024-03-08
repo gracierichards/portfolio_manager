@@ -2,7 +2,7 @@
 // time the user bought it
 
 public interface ModelInterface {
-
+  
   /**
    *
    * @param portfolioName

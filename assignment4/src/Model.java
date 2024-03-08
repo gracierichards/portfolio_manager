@@ -1,11 +1,19 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Model implements ModelInterface {
   private Map<String, Portfolio> portfolioList;
+
+  public Model() {
+    this.portfolioList = new HashMap<>();
+  }
 
   /**
    * Helper function to determine if name is the name of a portfolio that has been created or not.
@@ -15,6 +23,48 @@ public class Model implements ModelInterface {
       throw new IllegalArgumentException("Not a valid portfolio name.");
     }
   }
+
+
+
+  @Override
+  public float createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts) {
+    if (portfolioList.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio with the same name already exists.");
+    }
+
+    Portfolio portfolio = new Portfolio(portfolioName);
+    for (int i = 0; i < tickerSymbols.length; i++) {
+      portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+    }
+    portfolioList.put(portfolioName, portfolio);
+
+    // For simplicity, returning a default initial value
+    return 0.0f;
+  }
+
+  @Override
+    public void savePortfolioToFile(String portfolioName, String filename) {
+        Portfolio portfolio = portfolioList.get(portfolioName);
+        if (portfolio == null) {
+            System.out.println("Portfolio not found.");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("Portfolio Name: " + portfolio.getName());
+            writer.newLine();
+            writer.write("Stock Composition:");
+            writer.newLine();
+            for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
+                writer.write(entry.getKey() + ": " + entry.getValue());
+                writer.newLine();
+            }
+            System.out.println("Portfolio saved to file: " + filename);
+        } catch (IOException e) {
+            System.out.println("Error saving portfolio to file: " + e.getMessage());
+        }
+    }
+
 
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
