@@ -8,4 +8,5 @@ public interface ControllerInterface {
   float determineValue(String portfolioName, String date);
 
 
+
 }
