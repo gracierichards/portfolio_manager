@@ -49,6 +49,8 @@ public class Model implements ModelInterface {
     return output.toString();
   }
 
+  //To do for myself - write another method to get ticker symbol data from Alpha Vantage
+
   public float determineValue(String portfolioName, String date) throws IllegalArgumentException {
     checkValidPortfolioName(portfolioName);
 
