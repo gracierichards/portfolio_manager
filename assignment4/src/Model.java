@@ -136,7 +136,7 @@ public class Model implements ModelInterface {
     Portfolio p = portfolioList.get(portfolioName);
     float sum = 0;
     for (Stock s : p.getStocks()) {
-      
+
     }
   }
 }
