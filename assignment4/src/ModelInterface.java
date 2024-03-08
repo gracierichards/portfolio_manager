@@ -20,12 +20,19 @@ public interface ModelInterface {
    */
   float createPortfolioFromFile(String portfolioName);
 
+  /**
+   * Errors if portfolioName is not the name of a portfolio that has been created.
+   * @param portfolioName
+   * @param filename
+   */
   void savePortfolioToFile(String portfolioName, String filename);
 
   /**
-   * 
    * @param portfolioName
+   * @param date in MM/DD/YYYY format
    * @return
+   * @throws IllegalArgumentException if portfolioName is not the name of a portfolio that has
+   * been created.
    */
-  float determineValue(String portfolioName);
+  float determineValue(String portfolioName, String date) throws IllegalArgumentException;
 }
