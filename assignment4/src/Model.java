@@ -133,6 +133,10 @@ public class Model implements ModelInterface {
 
   public float determineValue(String portfolioName, String date) throws IllegalArgumentException {
     checkValidPortfolioName(portfolioName);
-
+    Portfolio p = portfolioList.get(portfolioName);
+    float sum = 0;
+    for (Stock s : p.getStocks()) {
+      
+    }
   }
 }
