@@ -71,15 +71,39 @@ public class Model implements ModelInterface {
    * with the given ticker symbol on the given date. Returns all the data as a String in csv
    * format - lines separated by newline chaacters, and individual cells separated by commas.
    */
-  private String getAlphaVantageData(String tickerSymbol) {
+  private String getStockData(String tickerSymbol) {
+    return getAlphaVantageData("function=TIME_SERIES_DAILY"
+            + "&outputsize=full"
+            + "&symbol"
+            + "=" + tickerSymbol);
+  }
+
+  /**
+   * The user can look up ticker symbols that match the name of a company, or all ticker symbols
+   * that start with the inputted string. This method will query Alpha Vantage for a list of
+   * matching results.
+   * It will only include results whose type is "Equity" and whose region is "United States".
+   * @param query the partial or full name of a company or ticker symbol being looked up by the
+   *              user
+   * @return data in csv format of the ticker symbol matches. The columns output by Alpha
+   * Vantage are symbol, name, type, region, marketOpen, marketClose, timezone, currency, and
+   * matchScore.
+   */
+  String getTickerMatches(String query) {
+    return getAlphaVantageData("function=SYMBOL_SEARCH"
+            + "&keywords=" + query);
+  }
+
+  /**
+   * Helper function that performs the common functionality between getStockData and
+   * getTickerMatches.
+   */
+  private String getAlphaVantageData(String urlPart) {
     String apiKey = "8FDS9CHM4YROZVC5";
     URL url = null;
     try {
-      url = new URL("https://www.alphavantage"
-              + ".co/query?function=TIME_SERIES_DAILY"
-              + "&outputsize=full"
-              + "&symbol"
-              + "=" + tickerSymbol + "&apikey="+apiKey+"&datatype=csv");
+      url = new URL("https://www.alphavantage" + ".co/query?" + urlPart + "&apikey="
+              + apiKey + "&datatype=csv");
     } catch (MalformedURLException e) {
       throw new RuntimeException("the alphavantage API has either changed or "
               + "no longer works");
@@ -94,12 +118,18 @@ public class Model implements ModelInterface {
         output.append((char)b);
       }
     } catch (IOException e) {
-      throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+      if (urlPart.contains("TIME_SERIES_DAILY")) {
+        String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol")
+                + "symbol".length() + 1);
+        throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+      } else {
+        String query = urlPart.substring(urlPart.indexOf("keywords")
+                + "keywords".length() + 1);
+        throw new IllegalArgumentException("No ticker symbols or companies found for " + query);
+      }
     }
     return output.toString();
   }
-
-  //To do for myself - write another method to get ticker symbol data from Alpha Vantage
 
   public float determineValue(String portfolioName, String date) throws IllegalArgumentException {
     checkValidPortfolioName(portfolioName);
