@@ -1,5 +1,7 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.util.HashSet;
 import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,21 +12,14 @@ import java.util.HashMap;
 
 public class Model implements ModelInterface {
   private Map<String, Portfolio> portfolioList;
+  // A list of all stocks that Alpha Vantage data has been downloaded for
+  private HashSet<String> tickersDownloaded;
 
   public Model() {
     this.portfolioList = new HashMap<>();
+    this.tickersDownloaded = new HashSet<>();
+    new File("stockcsvs").mkdirs();
   }
-
-  /**
-   * Helper function to determine if name is the name of a portfolio that has been created or not.
-   */
-  private void checkValidPortfolioName(String name) throws IllegalArgumentException {
-    if (!portfolioList.containsKey(name)) {
-      throw new IllegalArgumentException("Not a valid portfolio name.");
-    }
-  }
-
-
 
   @Override
   public float createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts) {
@@ -34,7 +29,24 @@ public class Model implements ModelInterface {
 
     Portfolio portfolio = new Portfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
-      portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+      String csvData = null;
+      try {
+        csvData = getStockData(tickerSymbols[i]);
+      } catch (Exception e) {
+        System.out.println("Data for ticker symbol " + tickerSymbols[i] + " not found. Not adding "
+                + "this stock to portfolio.");
+      }
+      if (csvData != null) {
+        tickersDownloaded.add(tickerSymbols[i]);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("stockcsvs",
+                tickerSymbols[i] + ".csv")))) {
+          writer.write(csvData);
+        } catch (IOException e) {
+          throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
+        }
+
+        portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+      }
     }
     portfolioList.put(portfolioName, portfolio);
 
@@ -69,7 +81,7 @@ public class Model implements ModelInterface {
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
    * with the given ticker symbol on the given date. Returns all the data as a String in csv
-   * format - lines separated by newline chaacters, and individual cells separated by commas.
+   * format - lines separated by newline characters, and individual cells separated by commas.
    */
   private String getStockData(String tickerSymbol) {
     return getAlphaVantageData("function=TIME_SERIES_DAILY"
@@ -131,8 +143,12 @@ public class Model implements ModelInterface {
     return output.toString();
   }
 
-  public float determineValue(String portfolioName, String date) throws IllegalArgumentException {
-    checkValidPortfolioName(portfolioName);
+  public float determineValue(String portfolioName, String date) {
+    Portfolio p = portfolioList.get(portfolioName);
+    if (p == null) {
+      System.out.println("Portfolio not found.");
+      return 0;
+    }
     Portfolio p = portfolioList.get(portfolioName);
     float sum = 0;
 
