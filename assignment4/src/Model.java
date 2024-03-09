@@ -1,7 +1,11 @@
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Model implements ModelInterface {
   private Map<String, Portfolio> portfolioList;
@@ -149,8 +154,42 @@ public class Model implements ModelInterface {
       System.out.println("Portfolio not found.");
       return 0;
     }
-    Portfolio p = portfolioList.get(portfolioName);
     float sum = 0;
+    for (Map.Entry<String, Integer> entry : p.getStocks().entrySet()) {
+      float price = 0;
+      try {
+        File file1 = new File("stockcsvs", entry.getKey() + ".csv");
+        Scanner s = new Scanner(file1);
+        String line;
+        //skip first line, which is the header
+        if (s.hasNextLine()) {
+          line = s.nextLine();
+        }
+        while (s.hasNextLine()) {
+          line = s.nextLine();
+          String csvDate = line.split(",")[0];
+          if (compareDates(date, csvDate)) {
+            price = Float.parseFloat(line.split(",")[1]);
+            break;
+          }
+        }
+        s.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("Unable to read " + entry.getKey() + ".csv." + e.getMessage());
+      }
+      sum += price * entry.getValue();
+    }
+    return sum;
+  }
 
+  /**
+   * Determines whether two dates are the same date. It takes in one date in the format the user
+   * provides, which should be MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   */
+  boolean compareDates(String inputDate, String csvDate) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
+    LocalDate date1 = LocalDate.parse(inputDate, formatter);
+    LocalDate date2 = LocalDate.parse(csvDate, formatter);
+    return date1.isEqual(date2);
   }
 }
