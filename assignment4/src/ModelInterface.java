@@ -16,9 +16,10 @@ public interface ModelInterface {
   /**
    *
    * @param portfolioName
+   * @param filename
    * @return value of the portfolio at the time of creation
    */
-  float createPortfolioFromFile(String portfolioName);
+  float createPortfolioFromFile(String portfolioName, String filename);
 
   /**
    * If portfolioName is not the name of a portfolio that has been created before, prints a message
