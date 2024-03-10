@@ -1,6 +1,3 @@
-//Notes for model implementation - model should save the stockAmounts * value of each stock at the
-// time the user bought it
-
 public interface ModelInterface {
   
   /**

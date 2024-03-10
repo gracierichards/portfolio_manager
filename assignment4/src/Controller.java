@@ -7,7 +7,7 @@ import java.util.List;
  * for a user who wants to make a new portfolio with 20 shares of MSFT, 10 shares of AAPL, and 30
  * shares of NVDA
  * The load portfolio from file command can be:
- * load portfolio <filename>
+ * load portfolio <portfolio_name> <filename>
  * The save portfolio to file command can be:
  * save <portfolio_name> <filename>
  * The command to examine the composition of a portfolio can be:
@@ -66,16 +66,35 @@ public class Controller implements ControllerInterface {
         }
         break;
       case "load":
+        if (words[1].equals("portfolio")) {
+          startIndex = 2;
+        } else {
+          startIndex = 1;
+        }
+        model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
         break;
       case "save":
+        if (words[1].equals("portfolio")) {
+          startIndex = 2;
+        } else {
+          startIndex = 1;
+        }
+        model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
         break;
       case "list":
+        Portfolio p = model.getPortfolio(words[1]);
+        view.examineComposition(p);
         break;
       case "value":
+        float value = model.determineValue(words[1], words[2]);
+        view.displayPortfolioValue(words[1], words[2], value);
         break;
       case "search":
+        String matches = model.getTickerMatches(words[1]);
+        view.showTickerMatches(matches);
         break;
       default:
+        System.out.println("Did not understand the command, please try again");
         break;
     }
   }

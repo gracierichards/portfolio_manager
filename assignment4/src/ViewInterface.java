@@ -11,4 +11,12 @@ public interface ViewInterface {
    *                    marketClose, timezone, currency, and matchScore.
    */
   void showTickerMatches(String csvContents);
+
+  /**
+   * Prints the name of a portfolio and its value on a certain date, and prints the date.
+   * @param portfolioName the name of the portfolio that the list command was run on.
+   * @param date the date that the value of the portfolio was determined for. MM/DD/YYYY format.
+   * @param value the total value of the portfolio.
+   */
+  void displayPortfolioValue(String portfolioName, String date, float value);
 }

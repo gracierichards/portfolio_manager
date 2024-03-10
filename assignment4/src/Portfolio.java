@@ -7,7 +7,7 @@ import java.util.Set;
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
 public class Portfolio {
-  private String name; // Name of the portfolio
+  private final String name; // Name of the portfolio
   private Map<String, Integer> stocks; // Map to store stocks with their corresponding amounts
 
   /**

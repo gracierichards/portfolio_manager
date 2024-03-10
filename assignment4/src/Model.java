@@ -26,6 +26,13 @@ public class Model implements ModelInterface {
     new File("stockcsvs").mkdirs();
   }
 
+  Portfolio getPortfolio(String portfolioName) throws IllegalArgumentException {
+    if (!portfolioList.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Cannot find portfolio with this name.");
+    }
+    return portfolioList.get(portfolioName);
+  }
+
   @Override
   public float createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts) {
     if (portfolioList.containsKey(portfolioName)) {
