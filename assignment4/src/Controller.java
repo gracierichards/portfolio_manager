@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Maybe the create portfolio command for the user can be in the format:
- * create portfolio MSFT:20, AAPL:10, NVDA:30
+ * create portfolio <portfolio_name> MSFT:20, AAPL:10, NVDA:30
  * for a user who wants to make a new portfolio with 20 shares of MSFT, 10 shares of AAPL, and 30
  * shares of NVDA
  * The load portfolio from file command can be:
@@ -18,7 +21,65 @@
  * search <ticker_symbol>
  */
 public class Controller implements ControllerInterface {
+  private Model model;
+  private View view;
+  public Controller(Model m, View v) {
+    this.model = m;
+    this.view = v;
+  }
   public void processCommand(String input) {
-
+    String[] words = input.split(" ");
+    switch (words[0]) {
+      case "create":
+        List<String> tickerSymbols = new ArrayList<>();
+        List<Float> stockAmounts = new ArrayList<>();
+        String portfolioName;
+        int startIndex;
+        if (words[1].equals("portfolio")) {
+          startIndex = 2;
+        } else {
+          startIndex = 1;
+        }
+        if (words[startIndex].contains(":")) {
+          System.out.println("Please provide a name for your portfolio. The name cannot contain "
+                  + "a colon.");
+        } else {
+          portfolioName = words[startIndex];
+          for (int i = startIndex + 1; i < words.length; i++) {
+            if (!words[i].contains(":")) {
+              System.out.println("There is something wrong with the syntax of the create "
+                      + "portfolio command.");
+              break;
+            }
+            String value = words[i].substring(words[i].indexOf(":") + 1);
+            if (isInteger(Float.parseFloat(value))) {
+              tickerSymbols.add(words[i].substring(0, words[i].indexOf(":")));
+              stockAmounts.add(Float.parseFloat(value));
+            } else {
+              System.out.println("Cannot purchase a fractional number of shares. Not including "
+                      + "stock" + words[i].substring(0, words[i].indexOf(":")) + "in the "
+                      + "portfolio.");
+            }
+          }
+          model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
+                  stockAmounts.toArray(new float[0]));
+        }
+        break;
+      case "load":
+        break;
+      case "save":
+        break;
+      case "list":
+        break;
+      case "value":
+        break;
+      case "search":
+        break;
+      default:
+        break;
+    }
+  }
+  boolean isInteger(float num) {
+    return (float) (int) num == num;
   }
 }
