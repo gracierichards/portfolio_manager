@@ -61,8 +61,12 @@ public class Controller implements ControllerInterface {
                       + "portfolio.");
             }
           }
+          float[] amountsArray = new float[stockAmounts.size()];
+          for (int i = 0; i < stockAmounts.size(); i++) {
+            amountsArray[i] = stockAmounts.get(i);
+          }
           model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
-                  stockAmounts.toArray(new float[0]));
+                  amountsArray);
         }
         break;
       case "load":
@@ -98,6 +102,7 @@ public class Controller implements ControllerInterface {
         break;
     }
   }
+
   boolean isInteger(float num) {
     return (float) (int) num == num;
   }

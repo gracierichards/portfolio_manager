@@ -1,11 +1,5 @@
 public interface ControllerInterface {
-  /**
-   *
-   * @param portfolioName
-   * @param date in MM/DD/YYYY format
-   * @return
-   */
-  float determineValue(String portfolioName, String date);
+
 
   /**
    * Reads the latest user input and calls the relevant method.

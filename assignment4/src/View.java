@@ -1,4 +1,16 @@
-public class View {
+import java.util.Map;
+
+public class View implements ViewInterface{
+
+  @Override
+  public void examineComposition(Portfolio p) {
+    System.out.println("Portfolio: " + p.getName());
+    Map<String, Integer> stocks = p.getStocks();
+    for (Map.Entry<String, Integer> entry : stocks.entrySet()) {
+      System.out.println(entry.getKey() + ": " + entry.getValue());
+    }
+  }
+
   public void showTickerMatches(String csvContents) {
     System.out.println("Matching stocks:");
     System.out.println("symbol\tname\t");
@@ -11,5 +23,12 @@ public class View {
         System.out.println(elements[0] + "\t" + elements[1] + "\n");
       }
     }
+  }
+
+  @Override
+  public void displayPortfolioValue(String portfolioName, String date, float value) {
+    System.out.println("Portfolio: " + portfolioName);
+    System.out.println("Date: " + date);
+    System.out.println("Total Value: $" + value);
   }
 }

@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
@@ -89,6 +91,44 @@ public class Model implements ModelInterface {
         }
     }
 
+
+  @Override
+  public float createPortfolioFromFile(String portfolioName, String filename) {
+    File file = new File(filename);
+    if (!file.exists()) {
+      System.out.println("File not found.");
+      return 0.0f;
+    }
+
+    try (Scanner scanner = new Scanner(file)) {
+      List<String> tickerSymbols = new ArrayList<>();
+      List<Float> stockAmounts = new ArrayList<>();
+
+      while (scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        String[] parts = line.split(":");
+        if (parts.length != 2) {
+          System.out.println("Invalid format in file.");
+          return 0.0f;
+        }
+        tickerSymbols.add(parts[0]);
+        stockAmounts.add(Float.parseFloat(parts[1]));
+      }
+
+      float[] amountsArray = new float[stockAmounts.size()];
+      for (int i = 0; i < stockAmounts.size(); i++) {
+        amountsArray[i] = stockAmounts.get(i);
+      }
+
+      return createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
+              amountsArray);
+    } catch (FileNotFoundException e) {
+      System.out.println("Error reading file: " + e.getMessage());
+    } catch (NumberFormatException e) {
+      System.out.println("Invalid data format in file.");
+    }
+    return 0.0f;
+  }
 
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
