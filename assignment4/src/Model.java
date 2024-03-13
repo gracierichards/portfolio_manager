@@ -121,8 +121,7 @@ public class Model implements ModelInterface {
         amountsArray[i] = stockAmounts.get(i);
       }
 
-      return createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
-              amountsArray);
+      return createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
     } catch (FileNotFoundException e) {
       System.out.println("Error reading file: " + e.getMessage());
     } catch (NumberFormatException e) {
@@ -130,6 +129,7 @@ public class Model implements ModelInterface {
     }
     return 0.0f;
   }
+
 
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
