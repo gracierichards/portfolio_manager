@@ -67,6 +67,7 @@ public class Controller implements ControllerInterface {
           }
           model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
                   amountsArray);
+          System.out.println("Portfolio created successfully.");
         }
         break;
       case "load":

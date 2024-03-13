@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Model implements ModelInterface {
-  private Map<String, Portfolio> portfolioList;
+  protected Map<String, Portfolio> portfolioList;
   // A list of all stocks that Alpha Vantage data has been downloaded for
   private HashSet<String> tickersDownloaded;
 
@@ -63,7 +63,7 @@ public class Model implements ModelInterface {
       }
     }
     portfolioList.put(portfolioName, portfolio);
-
+    //System.out.println("Portfolio created successfully.");
     // For simplicity, returning a default initial value
     return 0.0f;
   }
@@ -85,7 +85,8 @@ public class Model implements ModelInterface {
                 writer.write(entry.getKey() + ": " + entry.getValue());
                 writer.newLine();
             }
-            System.out.println("Portfolio saved to file: " + filename);
+            //System.out.println("Portfolio saved to file: " + filename);
+          System.out.println("Portfolio saved successfully to file.");
         } catch (IOException e) {
             System.out.println("Error saving portfolio to file: " + e.getMessage());
         }
