@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/Users/gracierichards/Desktop/CS 5010/group/assignment4/src</OriginalElement>
+  <nodes>
+    <node x="-269.15714285714284" y="644.2">Controller</node>
+    <node x="-269.15714285714284" y="471.4857142857142">ControllerInterface</node>
+    <node x="161.4142857142856" y="644.2">View</node>
+    <node x="-862.0" y="265.5">ModelInterface</node>
+    <node x="-512.5" y="61.0">Portfolio</node>
+    <node x="-822.0" y="568.8142857142857">Model</node>
+    <node x="-409.84285714285716" y="1074.2571428571428">Main</node>
+    <node x="161.4142857142856" y="447.48571428571427">ViewInterface</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Main" target="Model" relationship="CREATE">
+      <point x="0.0" y="-31.5" />
+      <point x="-326.84285714285716" y="1093.0" />
+      <point x="-743.0" y="1093.0" />
+      <point x="-79.0" y="152.0" />
+    </edge>
+    <edge source="View" target="ViewInterface" relationship="REALIZATION">
+      <point x="0.0" y="-55.5" />
+      <point x="328.4142857142856" y="473.0" />
+      <point x="328.4142857142856" y="473.0" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="Controller" target="ControllerInterface" relationship="REALIZATION">
+      <point x="59.5" y="-68.0" />
+      <point x="-150.15714285714284" y="644.2" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="Model" target="Portfolio" relationship="CREATE">
+      <point x="105.33333333333334" y="-152.0" />
+      <point x="-558.6666666666666" y="473.0" />
+      <point x="-319.75" y="473.0" />
+      <point x="64.25" y="92.0" />
+    </edge>
+    <edge source="Controller" target="View" relationship="TO_ONE">
+      <point x="-59.5" y="-68.0" />
+      <point x="-404.0" y="644.2" />
+      <point x="-404.0" y="973.0" />
+      <point x="244.9142857142856" y="973.0" />
+      <point x="-83.5" y="55.5" />
+    </edge>
+    <edge source="Controller" target="Model" relationship="TO_ONE">
+      <point x="-59.5" y="-68.0" />
+      <point x="-404.0" y="644.2" />
+      <point x="-404.0" y="973.0" />
+      <point x="-585.0" y="973.0" />
+      <point x="79.0" y="152.0" />
+    </edge>
+    <edge source="Model" target="ModelInterface" relationship="REALIZATION">
+      <point x="-105.33333333333337" y="-152.0" />
+      <point x="-769.3333333333334" y="613.0" />
+      <point x="-704.0" y="613.0" />
+      <point x="0.0" y="67.5" />
+    </edge>
+    <edge source="Main" target="Controller" relationship="CREATE">
+      <point x="0.0" y="-31.5" />
+      <point x="-326.84285714285716" y="1253.0" />
+      <point x="-150.15714285714284" y="1253.0" />
+      <point x="0.0" y="68.0" />
+    </edge>
+    <edge source="Model" target="Portfolio" relationship="TO_MANY">
+      <point x="0.0" y="-152.0" />
+      <point x="-664.0" y="453.0" />
+      <point x="-448.25" y="453.0" />
+      <point x="-64.25" y="92.0" />
+    </edge>
+    <edge source="Main" target="View" relationship="CREATE">
+      <point x="0.0" y="-31.5" />
+      <point x="-326.84285714285716" y="1253.0" />
+      <point x="-204.0" y="1253.0" />
+      <point x="-204.0" y="993.0" />
+      <point x="411.9142857142856" y="993.0" />
+      <point x="83.5" y="55.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.4294478527607362" showDependencies="true" x="-393.5" y="713.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
