@@ -31,7 +31,8 @@ public class ControllerTest {
     controller.processCommand(input);
 
     assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("Portfolio created successfully.\n", outContent.toString());
+    assertEquals("Portfolio created successfully." + System.lineSeparator(),
+            outContent.toString());
   }
 
   @Test
@@ -41,23 +42,27 @@ public class ControllerTest {
     controller.processCommand(input);
 
     assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("Portfolio loaded successfully from file.\n", outContent.toString());
+    assertEquals("Portfolio loaded successfully from file." + System.lineSeparator(),
+            outContent.toString());
   }
 
   @Test
   public void testProcessCommand_SavePortfolioToFile() {
     String input = "save portfolio TestPortfolio test_portfolio.txt";
-    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new float[]{10.0f, 20.0f});
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"},
+            new float[]{10.0f, 20.0f});
 
     controller.processCommand(input);
 
-    assertEquals("Portfolio saved successfully to file.\n", outContent.toString());
+    assertEquals("Portfolio saved successfully to file." + System.lineSeparator(),
+            outContent.toString());
   }
 
   @Test
   public void testProcessCommand_ListPortfolio() {
     String input = "list TestPortfolio";
-    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new float[]{10.0f, 20.0f});
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"},
+            new float[]{10.0f, 20.0f});
 
     controller.processCommand(input);
 
@@ -101,7 +106,7 @@ public class ControllerTest {
 
     assertEquals("Please provide a name for your portfolio. The name cannot contain a "
             + "colon.\nCannot purchase a fractional number of shares. Not including stock AAPL in "
-            + "the portfolio.\n", outContent.toString());
+            + "the portfolio.\nPortfolio created successfully.\n", outContent.toString());
     assertTrue(model.portfolioList.containsKey("TestPortfolio"));
     controller.processCommand("list TestPortfolio");
 
@@ -112,10 +117,11 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_CreatePortfolio_InvalidTicker() {
-    String input = "create portfolio AAAA:10";
+    String input = "create portfolio TestPortfolio AAAA:10";
     controller.processCommand(input);
 
-    //assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("No price data found for AAAA\n", outContent.toString());
+    assertEquals("AAAA is not a valid ticker symbol. Not adding to portfolio."
+                    + System.lineSeparator() + "Portfolio created successfully."
+                    + System.lineSeparator(), outContent.toString());
   }
 }

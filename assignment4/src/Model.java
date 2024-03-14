@@ -17,12 +17,9 @@ import java.util.Scanner;
 
 public class Model implements ModelInterface {
   protected Map<String, Portfolio> portfolioList;
-  // A list of all stocks that Alpha Vantage data has been downloaded for
-  private HashSet<String> tickersDownloaded;
 
   public Model() {
     this.portfolioList = new HashMap<>();
-    this.tickersDownloaded = new HashSet<>();
     new File("stockcsvs").mkdirs();
   }
 
@@ -46,22 +43,18 @@ public class Model implements ModelInterface {
         portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
         continue;
       }
-      String csvData = null;
-      try {
-        csvData = getStockData(tickerSymbols[i]);
-      } catch (Exception e) {
-        System.out.println("Data for ticker symbol " + tickerSymbols[i] + " not found. Not adding "
-                + "this stock to portfolio.");
+      String csvData = getStockData(tickerSymbols[i]);
+      //Check if it's a valid ticker symbol
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        writer.write(csvData);
+      } catch (IOException e) {
+        throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
       }
-      if (csvData != null) {
-        tickersDownloaded.add(tickerSymbols[i]);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-          writer.write(csvData);
-        } catch (IOException e) {
-          throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
-        }
-
-        portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+      if (csvData.charAt(0) == '{') {
+        System.out.println(tickerSymbols[i] + " is not a valid ticker symbol. Not adding to "
+                + "portfolio.");
+      } else {
+        portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
       }
     }
     portfolioList.put(portfolioName, portfolio);
@@ -174,6 +167,8 @@ public class Model implements ModelInterface {
     }
     InputStream in = null;
     StringBuilder output = new StringBuilder();
+    String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol") + "symbol".length()
+            + 1);
     try {
       in = url.openStream();
       int b;
@@ -181,10 +176,12 @@ public class Model implements ModelInterface {
       while ((b=in.read())!=-1) {
         output.append((char)b);
       }
+
+      //if (output.charAt(0) == '{') {
+      //  System.out.println(tickerSymbol + " is not a valid ticker symbol.");
+      //}
     } catch (IOException e) {
       if (urlPart.contains("TIME_SERIES_DAILY")) {
-        String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol")
-                + "symbol".length() + 1);
         System.out.println("No price data found for " + tickerSymbol);
       } else {
         String query = urlPart.substring(urlPart.indexOf("keywords")
@@ -228,6 +225,27 @@ public class Model implements ModelInterface {
       sum += price * entry.getValue();
     }
     return sum;
+  }
+
+  /**
+   * Helper method to determine whether a ticker symbol is valid. Can only be used for tickers that
+   * have been queried at least once to Alpha Vantage by this program.
+   * So far only used by determineValue.
+   * @param ticker the ticker symbol to be checked.
+   * @return whether the ticker symbol is valid.
+   */
+  private boolean isValidTicker(String ticker) throws FileNotFoundException {
+    File file1 = new File("stockcsvs", ticker + ".csv");
+    Scanner s = new Scanner(file1);
+    String line = "";
+    if (s.hasNextLine()) {
+      line = s.nextLine();
+    }
+    if (line.equals("{" + System.lineSeparator())) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /**
