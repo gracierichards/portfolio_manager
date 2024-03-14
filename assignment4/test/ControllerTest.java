@@ -96,10 +96,26 @@ public class ControllerTest {
   public void testProcessCommand_CreatePortfolio_InvalidSyntax() {
     String input = "create portfolio AAPL:10 MSFT:20";
     controller.processCommand(input);
-    //input = ""
+    input = "create portfolio TestPortfolio AAPL:1.5 MSFT:20";
+    controller.processCommand(input);
+
+    assertEquals("Please provide a name for your portfolio. The name cannot contain a "
+            + "colon.\nCannot purchase a fractional number of shares. Not including stock AAPL in "
+            + "the portfolio.\n", outContent.toString());
+    assertTrue(model.portfolioList.containsKey("TestPortfolio"));
+    controller.processCommand("list TestPortfolio");
+
+    // Check if the output contains the portfolio information
+    assertFalse(outContent.toString().contains("AAPL: 1.5"));
+    assertTrue(outContent.toString().contains("MSFT: 20"));
+  }
+
+  @Test
+  public void testProcessCommand_CreatePortfolio_InvalidTicker() {
+    String input = "create portfolio AAAA:10";
+    controller.processCommand(input);
 
     //assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("Please provide a name for your portfolio. The name cannot contain a "
-            + "colon.\n", outContent.toString());
+    assertEquals("No price data found for AAAA\n", outContent.toString());
   }
 }

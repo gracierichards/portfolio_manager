@@ -190,11 +190,11 @@ public class Model implements ModelInterface {
       if (urlPart.contains("TIME_SERIES_DAILY")) {
         String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol")
                 + "symbol".length() + 1);
-        throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+        System.out.println("No price data found for " + tickerSymbol);
       } else {
         String query = urlPart.substring(urlPart.indexOf("keywords")
                 + "keywords".length() + 1);
-        throw new IllegalArgumentException("No ticker symbols or companies found for " + query);
+        System.out.println("No ticker symbols or companies found for " + query);
       }
     }
     return output.toString();

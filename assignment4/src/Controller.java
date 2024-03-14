@@ -57,7 +57,7 @@ public class Controller implements ControllerInterface {
               stockAmounts.add(Float.parseFloat(value));
             } else {
               System.out.println("Cannot purchase a fractional number of shares. Not including "
-                      + "stock" + words[i].substring(0, words[i].indexOf(":")) + "in the "
+                      + "stock " + words[i].substring(0, words[i].indexOf(":")) + " in the "
                       + "portfolio.");
             }
           }
