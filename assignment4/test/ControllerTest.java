@@ -36,12 +36,12 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_LoadPortfolioFromFile() {
-    String input = "load portfolio TestPortfolio test_portfolio.txt";
+    String input = "load portfolio TestPortfolio test_portfolio_from_file.txt";
 
     controller.processCommand(input);
 
     assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("Portfolio loaded successfully from file.\n", outContent.toString());
+    assertEquals("Portfolio loaded successfully from file.\r\n", outContent.toString());
   }
 
   @Test
@@ -90,5 +90,32 @@ public class ControllerTest {
   @After
   public void restoreStreams() {
     System.setOut(originalOut);
+  }
+
+  @Test
+  public void testProcessCommand_CreatePortfolio_InvalidSyntax() {
+    String input = "create portfolio AAPL:10 MSFT:20";
+    controller.processCommand(input);
+    input = "create portfolio TestPortfolio AAPL:1.5 MSFT:20";
+    controller.processCommand(input);
+
+    assertEquals("Please provide a name for your portfolio. The name cannot contain a "
+            + "colon.\nCannot purchase a fractional number of shares. Not including stock AAPL in "
+            + "the portfolio.\n", outContent.toString());
+    assertTrue(model.portfolioList.containsKey("TestPortfolio"));
+    controller.processCommand("list TestPortfolio");
+
+    // Check if the output contains the portfolio information
+    assertFalse(outContent.toString().contains("AAPL: 1.5"));
+    assertTrue(outContent.toString().contains("MSFT: 20"));
+  }
+
+  @Test
+  public void testProcessCommand_CreatePortfolio_InvalidTicker() {
+    String input = "create portfolio AAAA:10";
+    controller.processCommand(input);
+
+    //assertTrue(model.portfolioList.containsKey("TestPortfolio"));
+    assertEquals("No price data found for AAAA\r\n", outContent.toString());
   }
 }

@@ -43,6 +43,11 @@ public class Model implements ModelInterface {
 
     Portfolio portfolio = new Portfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
+      File file = new File("stockcsvs", tickerSymbols[i] + ".csv");
+      if (file.exists()) {
+        portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+        continue;
+      }
       String csvData = null;
       try {
         csvData = getStockData(tickerSymbols[i]);
@@ -52,8 +57,7 @@ public class Model implements ModelInterface {
       }
       if (csvData != null) {
         tickersDownloaded.add(tickerSymbols[i]);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("stockcsvs",
-                tickerSymbols[i] + ".csv")))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
           writer.write(csvData);
         } catch (IOException e) {
           throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
@@ -69,28 +73,28 @@ public class Model implements ModelInterface {
   }
 
   @Override
-    public void savePortfolioToFile(String portfolioName, String filename) {
-        Portfolio portfolio = portfolioList.get(portfolioName);
-        if (portfolio == null) {
-            System.out.println("Portfolio not found.");
-            return;
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Portfolio Name: " + portfolio.getName());
-            writer.newLine();
-            writer.write("Stock Composition:");
-            writer.newLine();
-            for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
-                writer.write(entry.getKey() + ": " + entry.getValue());
-                writer.newLine();
-            }
-            //System.out.println("Portfolio saved to file: " + filename);
-          System.out.println("Portfolio saved successfully to file.");
-        } catch (IOException e) {
-            System.out.println("Error saving portfolio to file: " + e.getMessage());
-        }
+  public void savePortfolioToFile(String portfolioName, String filename) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found.");
+      return;
     }
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+      writer.write("Portfolio Name: " + portfolio.getName());
+      writer.newLine();
+      writer.write("Stock Composition:");
+      writer.newLine();
+      for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
+        writer.write(entry.getKey() + ": " + entry.getValue());
+        writer.newLine();
+      }
+      //System.out.println("Portfolio saved to file: " + filename);
+      System.out.println("Portfolio saved successfully to file.");
+    } catch (IOException e) {
+      System.out.println("Error saving portfolio to file: " + e.getMessage());
+    }
+  }
 
 
   @Override
@@ -121,6 +125,7 @@ public class Model implements ModelInterface {
         amountsArray[i] = stockAmounts.get(i);
       }
 
+      System.out.println("Portfolio loaded successfully from file.");
       return createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
     } catch (FileNotFoundException e) {
       System.out.println("Error reading file: " + e.getMessage());
@@ -186,11 +191,11 @@ public class Model implements ModelInterface {
       if (urlPart.contains("TIME_SERIES_DAILY")) {
         String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol")
                 + "symbol".length() + 1);
-        throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+        System.out.println("No price data found for " + tickerSymbol);
       } else {
         String query = urlPart.substring(urlPart.indexOf("keywords")
                 + "keywords".length() + 1);
-        throw new IllegalArgumentException("No ticker symbols or companies found for " + query);
+        System.out.println("No ticker symbols or companies found for " + query);
       }
     }
     return output.toString();
@@ -216,7 +221,8 @@ public class Model implements ModelInterface {
         while (s.hasNextLine()) {
           line = s.nextLine();
           String csvDate = line.split(",")[0];
-          if (compareDates(date, csvDate)) {
+          if (compareDates(date, csvDate) >= 0) {
+            //the same as saying if the value is equal to 0 or 1
             price = Float.parseFloat(line.split(",")[1]);
             break;
           }
@@ -231,13 +237,17 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Determines whether two dates are the same date. It takes in one date in the format the user
-   * provides, which should be MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   * Determines whether two dates are the same date, one date is before the other, or if the date
+   * comes after the other. It takes in one date in the format the user provides, which should be
+   * MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   * @returns 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
+   * positive number if inputDate is after inputDate.
    */
-  boolean compareDates(String inputDate, String csvDate) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
-    LocalDate date1 = LocalDate.parse(inputDate, formatter);
-    LocalDate date2 = LocalDate.parse(csvDate, formatter);
-    return date1.isEqual(date2);
+  int compareDates(String inputDate, String csvDate) {
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("M/d/yy");
+    LocalDate date1 = LocalDate.parse(inputDate, formatter1);
+    LocalDate date2 = LocalDate.parse(csvDate, formatter2);
+    return date1.compareTo(date2);
   }
 }
