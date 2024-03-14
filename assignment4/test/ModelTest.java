@@ -32,9 +32,8 @@ public class ModelTest {
     String[] tickerSymbols = {"AAPL", "MSFT"};
     float[] stockAmounts = {10.0f, 20.0f};
 
-    float result = model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
 
-    assertEquals(0.0f, result, 0.001f);
     assertNotNull(model.getPortfolio(portfolioName));
   }
 
@@ -69,9 +68,8 @@ public class ModelTest {
       fail("File not found: " + e.getMessage());
     }
 
-    float result = model.createPortfolioFromFile("TestPortfolio", filename);
+    model.createPortfolioFromFile("TestPortfolio", filename);
 
-    assertEquals(0.0f, result, 0.001f);
     assertNotNull(model.getPortfolio("TestPortfolio"));
   }
 

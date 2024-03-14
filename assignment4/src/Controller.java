@@ -20,6 +20,11 @@ import java.util.List;
  * OR
  * search <ticker_symbol>
  */
+
+/**
+ * The implementation of Controller. Its processCommand method handles the cases for each of the
+ * possible commands this program accepts - see SETUP-README.txt for documentation of commands.
+ */
 public class Controller implements ControllerInterface {
   private Model model;
   private View view;

@@ -7,13 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -36,7 +34,7 @@ public class Model implements ModelInterface {
   }
 
   @Override
-  public float createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts) {
+  public void createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts) {
     if (portfolioList.containsKey(portfolioName)) {
       throw new IllegalArgumentException("Portfolio with the same name already exists.");
     }
@@ -68,8 +66,6 @@ public class Model implements ModelInterface {
     }
     portfolioList.put(portfolioName, portfolio);
     //System.out.println("Portfolio created successfully.");
-    // For simplicity, returning a default initial value
-    return 0.0f;
   }
 
   @Override
@@ -98,11 +94,11 @@ public class Model implements ModelInterface {
 
 
   @Override
-  public float createPortfolioFromFile(String portfolioName, String filename) {
+  public void createPortfolioFromFile(String portfolioName, String filename) {
     File file = new File(filename);
     if (!file.exists()) {
       System.out.println("File not found.");
-      return 0.0f;
+      return;
     }
 
     try (Scanner scanner = new Scanner(file)) {
@@ -114,7 +110,7 @@ public class Model implements ModelInterface {
         String[] parts = line.split(":");
         if (parts.length != 2) {
           System.out.println("Invalid format in file.");
-          return 0.0f;
+          return;
         }
         tickerSymbols.add(parts[0]);
         stockAmounts.add(Float.parseFloat(parts[1]));
@@ -125,13 +121,12 @@ public class Model implements ModelInterface {
         amountsArray[i] = stockAmounts.get(i);
       }
 
-      return createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
+      createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
     } catch (FileNotFoundException e) {
       System.out.println("Error reading file: " + e.getMessage());
     } catch (NumberFormatException e) {
       System.out.println("Invalid data format in file.");
     }
-    return 0.0f;
   }
 
 
