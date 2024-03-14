@@ -91,4 +91,15 @@ public class ControllerTest {
   public void restoreStreams() {
     System.setOut(originalOut);
   }
+
+  @Test
+  public void testProcessCommand_CreatePortfolio_InvalidSyntax() {
+    String input = "create portfolio AAPL:10 MSFT:20";
+    controller.processCommand(input);
+    //input = ""
+
+    //assertTrue(model.portfolioList.containsKey("TestPortfolio"));
+    assertEquals("Please provide a name for your portfolio. The name cannot contain a "
+            + "colon.\n", outContent.toString());
+  }
 }

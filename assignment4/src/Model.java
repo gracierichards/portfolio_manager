@@ -220,7 +220,8 @@ public class Model implements ModelInterface {
         while (s.hasNextLine()) {
           line = s.nextLine();
           String csvDate = line.split(",")[0];
-          if (compareDates(date, csvDate)) {
+          if (compareDates(date, csvDate) >= 0) {
+          //the same as saying if the value is equal to 0 or 1
             price = Float.parseFloat(line.split(",")[1]);
             break;
           }
@@ -238,15 +239,14 @@ public class Model implements ModelInterface {
    * Determines whether two dates are the same date, one date is before the other, or if the date
    * comes after the other. It takes in one date in the format the user provides, which should be
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
-   * @returns 0 if the dates are the same, -1 if inputDate is before csvDate, and 1 if csvDate is
-   * after inputDate.
+   * @returns 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
+   * positive number if inputDate is after inputDate.
    */
-  boolean compareDates(String inputDate, String csvDate) {
+  int compareDates(String inputDate, String csvDate) {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
     DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("M/d/yy");
-    //DateTimeFormatter formatter = DateTimeFormatter.BASIC_ISO_DATE;
     LocalDate date1 = LocalDate.parse(inputDate, formatter1);
     LocalDate date2 = LocalDate.parse(csvDate, formatter2);
-    return date1.isEqual(date2);
+    return date1.compareTo(date2);
   }
 }
