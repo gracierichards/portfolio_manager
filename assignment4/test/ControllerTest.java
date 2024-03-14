@@ -31,7 +31,7 @@ public class ControllerTest {
     controller.processCommand(input);
 
     assertTrue(model.portfolioList.containsKey("TestPortfolio"));
-    assertEquals("Portfolio created successfully.\r\n", outContent.toString());
+    assertEquals("Portfolio created successfully.\n", outContent.toString());
   }
 
   @Test
@@ -51,7 +51,7 @@ public class ControllerTest {
 
     controller.processCommand(input);
 
-    assertEquals("Portfolio saved successfully to file.\r\n", outContent.toString());
+    assertEquals("Portfolio saved successfully to file.\n", outContent.toString());
   }
 
   @Test

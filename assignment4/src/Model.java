@@ -43,6 +43,11 @@ public class Model implements ModelInterface {
 
     Portfolio portfolio = new Portfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
+      File file = new File("stockcsvs", tickerSymbols[i] + ".csv");
+      if (file.exists()) {
+        portfolio.addStock(tickerSymbols[i], (int)stockAmounts[i]);
+        continue;
+      }
       String csvData = null;
       try {
         csvData = getStockData(tickerSymbols[i]);
@@ -52,8 +57,7 @@ public class Model implements ModelInterface {
       }
       if (csvData != null) {
         tickersDownloaded.add(tickerSymbols[i]);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("stockcsvs",
-                tickerSymbols[i] + ".csv")))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
           writer.write(csvData);
         } catch (IOException e) {
           throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
@@ -231,13 +235,18 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Determines whether two dates are the same date. It takes in one date in the format the user
-   * provides, which should be MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   * Determines whether two dates are the same date, one date is before the other, or if the date
+   * comes after the other. It takes in one date in the format the user provides, which should be
+   * MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   * @returns 0 if the dates are the same, -1 if inputDate is before csvDate, and 1 if csvDate is
+   * after inputDate.
    */
   boolean compareDates(String inputDate, String csvDate) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy", Locale.ENGLISH);
-    LocalDate date1 = LocalDate.parse(inputDate, formatter);
-    LocalDate date2 = LocalDate.parse(csvDate, formatter);
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("M/d/yy");
+    //DateTimeFormatter formatter = DateTimeFormatter.BASIC_ISO_DATE;
+    LocalDate date1 = LocalDate.parse(inputDate, formatter1);
+    LocalDate date2 = LocalDate.parse(csvDate, formatter2);
     return date1.isEqual(date2);
   }
 }
