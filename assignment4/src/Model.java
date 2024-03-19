@@ -281,16 +281,11 @@ public class Model implements ModelInterface {
    * @return 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
    * positive number if inputDate is after inputDate.
    */
-  int compareDates(String inputDate, String csvDate) {
-    try {
-      DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
-      DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("M/d/yy");
-      LocalDate date1 = LocalDate.parse(inputDate, formatter1);
-      LocalDate date2 = LocalDate.parse(csvDate, formatter2);
-      return date1.compareTo(date2);
-    } catch (DateTimeParseException e) {
-      System.out.println("Error parsing date: " + e.getMessage());
-      return 0; // Return 0 to indicate an error
-    }
+  int compareDates(String inputDate, String csvDate) throws DateTimeParseException {
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-M-d");
+    LocalDate date1 = LocalDate.parse(inputDate, formatter1);
+    LocalDate date2 = LocalDate.parse(csvDate, formatter2);
+    return date1.compareTo(date2);
   }
 }

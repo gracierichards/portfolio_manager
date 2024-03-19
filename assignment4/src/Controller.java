@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,8 +122,13 @@ public class Controller implements ControllerInterface {
           System.out.println("Please provide a date.");
           break;
         }
-        float value = model.determineValue(words[1], words[2]);
-        view.displayPortfolioValue(words[1], words[2], value);
+        try {
+          float value = model.determineValue(words[1], words[2]);
+          view.displayPortfolioValue(words[1], words[2], value);
+        } catch (DateTimeParseException e) {
+          System.out.println("Invalid date. Date must be given in MM/DD/YYYY format. Please try "
+                  + "again.");
+        }
         break;
       case "search":
         String matches = model.getTickerMatches(words[1]);

@@ -88,6 +88,19 @@ public class ModelTest {
     assertTrue(value > 0.0f);
   }
 
+  @Test
+  public void testDetermineValue2() {
+    String portfolioName = "TestPortfolio";
+    Portfolio portfolio = new Portfolio(portfolioName);
+    portfolio.addStock("AAPL", 1);
+    model.portfolioList.put(portfolioName, portfolio);
+    // Assume the data is available in stockcsvs folder
+    String date = "01/01/2024";
+
+    float value = model.determineValue(portfolioName, date);
+    assertEquals(193.9000, value, 0.001);
+  }
+
   @After
   public void restoreStreams() {
     System.setOut(originalOut);
