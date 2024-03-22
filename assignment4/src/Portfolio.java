@@ -27,8 +27,43 @@ public class Portfolio {
    * @param amount       The amount of the stock to be added.
    */
   public void addStock(String tickerSymbol, int amount) {
-    stocks.put(tickerSymbol, amount);
+    if (stocks.containsKey(tickerSymbol)) {
+      // If the stock already exists in the portfolio, update the amount
+      int currentAmount = stocks.get(tickerSymbol);
+      stocks.put(tickerSymbol, currentAmount + amount);
+    } else {
+      // If the stock is not already in the portfolio, add it
+      stocks.put(tickerSymbol, amount);
+    }
   }
+
+  /**
+   * Method to remove a specified number of shares of a specific stock from the portfolio.
+   *
+   * @param tickerSymbol The ticker symbol of the stock to be removed.
+   * @param numShares    The number of shares to be removed.
+   * @throws IllegalArgumentException If the stock is not found in the portfolio or if the number of shares to remove exceeds the available shares.
+   */
+  public void removeStock(String tickerSymbol, int numShares) throws IllegalArgumentException {
+    if (!stocks.containsKey(tickerSymbol)) {
+      throw new IllegalArgumentException("Stock not found in portfolio.");
+    }
+
+    int currentShares = stocks.get(tickerSymbol);
+    if (currentShares < numShares) {
+      throw new IllegalArgumentException("Not enough shares to sell.");
+    }
+
+    int remainingShares = currentShares - numShares;
+    if (remainingShares == 0) {
+      // If no shares left, remove the stock from the portfolio
+      stocks.remove(tickerSymbol);
+    } else {
+      // Update the number of shares in the portfolio
+      stocks.put(tickerSymbol, remainingShares);
+    }
+  }
+
 
   /**
    * Method to retrieve the name of the portfolio.

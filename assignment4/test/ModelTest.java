@@ -105,4 +105,18 @@ public class ModelTest {
   public void restoreStreams() {
     System.setOut(originalOut);
   }
+
+  @Test
+  public void testAddRemoveStocks() {
+    String portfolioName = "TanayPortfolio";
+    String[] tickerSymbols = {"AAPL", "MSFT"};
+    float[] stockAmounts = {10.0f, 20.0f};
+
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.purchaseShares(portfolioName, "VZ", "03/21/2024", 10);
+    model.purchaseShares(portfolioName, "AAPL", "03/21/2024", 30);
+    model.sellShares(portfolioName,"MSFT", "03/21/2024", 30 );
+    model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
+
+  }
 }

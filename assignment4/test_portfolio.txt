@@ -1,4 +1,2 @@
 Portfolio Name: TestPortfolio
 Stock Composition:
-MSFT: 20
-AAPL: 10

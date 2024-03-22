@@ -24,10 +24,6 @@ import java.util.Scanner;
 public class Model implements ModelInterface {
   protected Map<String, Portfolio> portfolioList;
 
-  /**
-   * Creates an empty HashMap to store all portfolios, and creates a stockcsvs directory if none
-   * exists.
-   */
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
@@ -288,4 +284,51 @@ public class Model implements ModelInterface {
     LocalDate date2 = LocalDate.parse(csvDate, formatter2);
     return date1.compareTo(date2);
   }
+
+  /**
+   * Purchase a specified number of shares of a stock with the given ticker symbol
+   * for the specified portfolio and date.
+   * Throws an IllegalArgumentException if the portfolio is not found.
+   *
+   * @param portfolioName The name of the portfolio where the shares will be purchased.
+   * @param tickerSymbol The ticker symbol of the stock to be purchased.
+   * @param date The date of the purchase.
+   * @param numShares The number of shares to be purchased.
+   * @throws IllegalArgumentException If the specified portfolio is not found.
+   */
+  public void purchaseShares(String portfolioName, String tickerSymbol, String date, int numShares) throws IllegalArgumentException {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      throw new IllegalArgumentException("Portfolio not found.");
+    }
+
+    // Add purchase information to the portfolio
+    portfolio.addStock(tickerSymbol, numShares);
+
+    // If necessary, additional logic to record the purchase date could be added here.
+  }
+
+  /**
+   * Sell a specified number of shares of a stock with the given ticker symbol
+   * from the specified portfolio and date.
+   * Throws an IllegalArgumentException if the portfolio is not found.
+   *
+   * @param portfolioName The name of the portfolio from which the shares will be sold.
+   * @param tickerSymbol The ticker symbol of the stock to be sold.
+   * @param date The date of the sale.
+   * @param numShares The number of shares to be sold.
+   * @throws IllegalArgumentException If the specified portfolio is not found.
+   */
+  public void sellShares(String portfolioName, String tickerSymbol, String date, int numShares) throws IllegalArgumentException {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      throw new IllegalArgumentException("Portfolio not found.");
+    }
+
+    // Remove sold shares from the portfolio
+    portfolio.removeStock(tickerSymbol, numShares);
+
+    // Additional logic to record the sale date could be added here
+  }
+
 }
