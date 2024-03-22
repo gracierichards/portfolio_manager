@@ -163,6 +163,26 @@ public class Controller implements ControllerInterface {
         String matches = model.getTickerMatches(words[1]);
         view.showTickerMatches(matches);
         break;
+      case "stock-direction-day":
+        if (words.length < 3) {
+          System.out.println("Please provide a ticker symbol and date.");
+          break;
+        }
+        boolean isGained;
+        try {
+          isGained = model.stockDirection(words[1], words[2]);
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+          break;
+        }
+        if (isGained) {
+          System.out.println(words[1] + " gained value.");
+        } else {
+          System.out.println(words[1] + " lost value.");
+        }
+        break;
+        //stock-direction-day <ticker_symbol> MM/DD/YYYY
+        // * Tells you whether the given stock gained or lost on the given day.
       default:
         System.out.println("Did not understand the command, please try again");
         break;

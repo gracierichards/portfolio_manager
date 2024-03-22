@@ -218,28 +218,7 @@ public class Model implements ModelInterface {
     }
     float sum = 0;
     for (Map.Entry<String, Integer> entry : p.getStocks().entrySet()) {
-      float price = 0;
-      try {
-        File file1 = new File("stockcsvs", entry.getKey() + ".csv");
-        Scanner s = new Scanner(file1);
-        String line;
-        //skip first line, which is the header
-        if (s.hasNextLine()) {
-          line = s.nextLine();
-        }
-        while (s.hasNextLine()) {
-          line = s.nextLine();
-          String csvDate = line.split(",")[0];
-          if (compareDates(date, csvDate) >= 0) {
-          //the same as saying if the value is equal to 0 or 1
-            price = Float.parseFloat(line.split(",")[1]);
-            break;
-          }
-        }
-        s.close();
-      } catch (FileNotFoundException e) {
-        System.out.println("Unable to read " + entry.getKey() + ".csv." + e.getMessage());
-      }
+      float price = getStockPrice(entry.getKey(), date, TypeOfPrice.CLOSE);
       sum += price * entry.getValue();
     }
     return sum;
@@ -331,4 +310,81 @@ public class Model implements ModelInterface {
     // Additional logic to record the sale date could be added here
   }
 
+  private enum TypeOfPrice {
+    OPEN, CLOSE
+  }
+
+  /**
+   * Returns the value of the given stock on the given date, or if there is no data for the given
+   * date, the value on the last date before the given date.
+   * @param tickerSymbol the ticker symbol of the stock to look up
+   * @param date the date for which you want the value, in MM/DD/YYYY
+   * @return the value of the stock on that day.
+   */
+  private float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
+    float price = 0;
+    try {
+      File file1 = new File("stockcsvs", tickerSymbol + ".csv");
+      Scanner s = new Scanner(file1);
+      String line;
+      //skip first line, which is the header
+      if (s.hasNextLine()) {
+        line = s.nextLine();
+      }
+      while (s.hasNextLine()) {
+        line = s.nextLine();
+        String csvDate = line.split(",")[0];
+        //the same as saying if the value is equal to 0 or 1
+        if (compareDates(date, csvDate) >= 0) {
+          if (typeOfPrice == TypeOfPrice.OPEN) {
+            return Float.parseFloat(line.split(",")[1]);
+          } else {
+            return Float.parseFloat(line.split(",")[4]);
+          }
+        }
+      }
+      s.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
+    }
+    throw new RuntimeException("Reached end of file. Stock price not found in file.");
+  }
+
+  @Override
+  public boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException {
+    //check if it's a valid ticker symbol or if we need to query Alpha Vantage
+    File file = new File("stockcsvs", tickerSymbol + ".csv");
+    if (file.exists()) {
+      if (isValidTicker(tickerSymbol)) {
+        return stockDirectionHelper(tickerSymbol, date);
+      } else {
+        throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+      }
+    }
+    String csvData = getStockData(tickerSymbol);
+    //Check if it's a valid ticker symbol
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+      writer.write(csvData);
+    } catch (IOException e) {
+      throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
+    }
+    if (csvData.charAt(0) == '{') {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    } else {
+      return stockDirectionHelper(tickerSymbol, date);
+    }
+  }
+
+  private boolean stockDirectionHelper(String tickerSymbol, String date) throws
+          IllegalStateException {
+    float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
+    float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+    if (closingPrice > openingPrice) {
+      return true;
+    } else if (closingPrice < openingPrice) {
+      return false;
+    } else {
+      throw new IllegalStateException("Stock neither gained nor lost in the day.");
+    }
+  }
 }

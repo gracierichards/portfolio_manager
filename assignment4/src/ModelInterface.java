@@ -37,4 +37,13 @@ public interface ModelInterface {
    * @return the value of the portfolio
    */
   float determineValue(String portfolioName, String date);
+
+  /**
+   * Determines whether the given stock gained or lost on the given day.
+   * @param tickerSymbol the stock to check
+   * @param date the date to check the stock data for
+   * @return a boolean, true if the stock gained, false if it lost value
+   * @throws IllegalArgumentException if given an invalid ticker symbol
+   */
+  boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException;
 }
