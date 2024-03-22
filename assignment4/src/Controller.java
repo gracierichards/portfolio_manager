@@ -28,6 +28,35 @@ import java.util.List;
  * OR
  * search <ticker_symbol>
  *
+ * stock-direction-day <ticker_symbol> MM/DD/YYYY
+ * Tells you whether the given stock gained or lost on the given day.
+ *
+ * stock-direction-over-time <ticker_symbol> start_date end_date
+ * Tells you whether the given stock gained or lost over the given period of time, from start_date
+ * to end_date (both in MM/DD/YYYY)
+ *
+ * The command for an x-day moving average is:
+ * moving-average x <ticker_symbol> MM/DD/YYYY
+ * Calculates the average price for the given stock in the last x days, starting from the given
+ * date. It includes the last x days for which stock prices are available.
+ *
+ * crossovers start_date end_date
+ * Returns a list of the positive crossovers and negative crossovers within the given time period.
+ * A crossover day means that the closing price for the day and the closing price for the previous
+ * day are on opposite sides
+ * of the 30-day moving average.
+ *
+ * moving-crossover
+ * This command will lead to two prompts. The first is "A moving crossover is when a moving average
+ * over a shorter period of time (ex. 30 days) crosses the amount of the moving average for a
+ * longer period of time (ex. 100 days). Please specify the number of days for the first moving
+ * average."
+ * After receiving an answer, it will say "Please specify the number of days for the second moving
+ * average."
+ * If the second amount is not longer than the first amount, then it will say "Invalid values:
+ * second amount of days must be greater than the first." and reprompt for the two values. The user
+ * may also enter "cancel" to go back and be able to enter commands again.
+ *
  * quit   - to terminate the program.
  */
 
