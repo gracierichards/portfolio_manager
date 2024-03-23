@@ -471,4 +471,46 @@ public class Model implements ModelInterface {
       throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     }
   }
+
+  @Override
+  public String findCrossovers(String tickerSymbol, String startDateString, String endDateString)
+          throws IllegalArgumentException {
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    LocalDate curDate = LocalDate.parse(startDateString, formatter1);
+    LocalDate endDate = LocalDate.parse(endDateString, formatter1);
+    if (endDate.isBefore(curDate)) {
+      throw new IllegalArgumentException("End date cannot be before the start date.");
+    }
+    if (isValidTicker(tickerSymbol)) {
+      ArrayList<String> positiveCrossovers = new ArrayList<>();
+      ArrayList<String> negativeCrossovers = new ArrayList<>();
+      LocalDate prevDate = curDate.minusDays(1);
+      String prevDateString = prevDate.format(formatter1);
+      String curDateString = curDate.format(formatter1);
+      while (!curDateString.equals(endDateString)) {
+        float movingAverage30Day = movingAverage(30, tickerSymbol, curDateString);
+        float stockPrice1 = getStockPrice(tickerSymbol, prevDateString, TypeOfPrice.CLOSE);
+        float stockPrice2 = getStockPrice(tickerSymbol, curDateString, TypeOfPrice.CLOSE);
+        if ((stockPrice1 < movingAverage30Day && stockPrice2 > movingAverage30Day)) {
+          positiveCrossovers.add(startDateString);
+        } else if ((stockPrice1 > movingAverage30Day && stockPrice2 < movingAverage30Day)) {
+          negativeCrossovers.add(startDateString);
+        }
+        prevDateString = curDateString;
+        curDate = curDate.plusDays(1);
+        curDateString = curDate.format(formatter1);
+      }
+      StringBuilder ret = new StringBuilder();
+      for (String d : positiveCrossovers) {
+        ret.append(d).append(",");
+      }
+      ret.append(" ");
+      for (String d : negativeCrossovers) {
+        ret.append(d).append(",");
+      }
+      return ret.toString();
+    } else {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    }
+  }
 }

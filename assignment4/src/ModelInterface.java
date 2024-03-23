@@ -66,6 +66,21 @@ public interface ModelInterface {
    * @param tickerSymbol the stock to calculate the average for
    * @param date the last date of the desired period, in MM/DD/YYYY
    * @return the average stock price of the given period
+   * @throws IllegalArgumentException if given an invalid ticker symbol
    */
-  float movingAverage(int numDays, String tickerSymbol, String date);
+  float movingAverage(int numDays, String tickerSymbol, String date)
+          throws IllegalArgumentException;
+
+  /**
+   * Returns a list of the positive crossovers and negative crossovers within the given time
+   * period.
+   * @param tickerSymbol the stock to check for crossovers
+   * @param startDate the start date of the period to check (in MM/DD/YYYY format)
+   * @param endDate the end date of the period to check (in MM/DD/YYYY format)
+   * @return a string listing the positive and negative crossovers. For the View to parse into the
+   *     final printed output.
+   * @throws IllegalArgumentException if given an invalid ticker symbol
+   */
+  String findCrossovers(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException;
 }

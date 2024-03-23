@@ -28,4 +28,11 @@ public interface ViewInterface {
    * @param value the total value of the portfolio.
    */
   void displayPortfolioValue(String portfolioName, String date, float value);
+
+  /**
+   * Takes a string containing the crossover results from the controller and prints it in a
+   * user-friendly format.
+   * @param results the crossover results from the model
+   */
+  void showCrossovers(String results);
 }

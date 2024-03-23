@@ -119,4 +119,10 @@ public class ModelTest {
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
 
   }
+
+  @Test
+  public void testFindCrossovers() {
+    model.findCrossovers("AAPL", "03/08/2024", "03/12/2024");
+    model.findCrossovers("AAPL", "03/04/2024", "03/08/2024");
+  }
 }

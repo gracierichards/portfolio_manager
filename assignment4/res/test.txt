@@ -1,0 +1,5 @@
+Portfolio Name: test
+Stock Composition:
+MSFT: 20
+NVDA: 30
+AAPL: 10

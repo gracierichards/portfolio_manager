@@ -40,13 +40,12 @@ import java.util.List;
  * Calculates the average price for the given stock in the last x days, starting from the given
  * date. It includes the last x days for which stock prices are available.
  *
- * crossovers start_date end_date
+ * crossovers <ticker_symbol> start_date end_date
  * Returns a list of the positive crossovers and negative crossovers within the given time period.
  * A crossover day means that the closing price for the day and the closing price for the previous
- * day are on opposite sides
- * of the 30-day moving average.
+ * day are on opposite sides of the 30-day moving average.
  *
- * moving-crossover
+ * moving-crossovers <ticker_symbol>
  * This command will lead to two prompts. The first is "A moving crossover is when a moving average
  * over a shorter period of time (ex. 30 days) crosses the amount of the moving average for a
  * longer period of time (ex. 100 days). Please specify the number of days for the first moving
@@ -78,145 +77,161 @@ public class Controller implements ControllerInterface {
     this.view = v;
   }
   public void processCommand(String input) {
-    String[] words = input.split(" ");
-    switch (words[0]) {
-      case "create":
-        List<String> tickerSymbols = new ArrayList<>();
-        List<Float> stockAmounts = new ArrayList<>();
-        String portfolioName;
-        int startIndex;
-        if (words[1].equals("portfolio")) {
-          startIndex = 2;
-        } else {
-          startIndex = 1;
-        }
-        if (words[startIndex].contains(":")) {
-          System.out.println("Please provide a name for your portfolio. The name cannot contain "
-                  + "a colon.");
-        } else {
-          portfolioName = words[startIndex];
-          for (int i = startIndex + 1; i < words.length; i++) {
-            if (!words[i].contains(":")) {
-              System.out.println("There is something wrong with the syntax of the create "
-                      + "portfolio command.");
-              break;
-            }
-            String value = words[i].substring(words[i].indexOf(":") + 1);
-            if (isInteger(Float.parseFloat(value))) {
-              tickerSymbols.add(words[i].substring(0, words[i].indexOf(":")));
-              stockAmounts.add(Float.parseFloat(value));
-            } else {
-              System.out.println("Cannot purchase a fractional number of shares. Not including "
-                      + "stock " + words[i].substring(0, words[i].indexOf(":")) + " in the "
-                      + "portfolio.");
-            }
+    try {
+      String[] words = input.split(" ");
+      switch (words[0]) {
+        case "create":
+          List<String> tickerSymbols = new ArrayList<>();
+          List<Float> stockAmounts = new ArrayList<>();
+          String portfolioName;
+          int startIndex;
+          if (words[1].equals("portfolio")) {
+            startIndex = 2;
+          } else {
+            startIndex = 1;
           }
-          float[] amountsArray = new float[stockAmounts.size()];
-          for (int i = 0; i < stockAmounts.size(); i++) {
-            amountsArray[i] = stockAmounts.get(i);
+          if (words[startIndex].contains(":")) {
+            System.out.println("Please provide a name for your portfolio. The name cannot contain "
+                    + "a colon.");
+          } else {
+            portfolioName = words[startIndex];
+            for (int i = startIndex + 1; i < words.length; i++) {
+              if (!words[i].contains(":")) {
+                System.out.println("There is something wrong with the syntax of the create "
+                        + "portfolio command.");
+                break;
+              }
+              String value = words[i].substring(words[i].indexOf(":") + 1);
+              if (isInteger(Float.parseFloat(value))) {
+                tickerSymbols.add(words[i].substring(0, words[i].indexOf(":")));
+                stockAmounts.add(Float.parseFloat(value));
+              } else {
+                System.out.println("Cannot purchase a fractional number of shares. Not including "
+                        + "stock " + words[i].substring(0, words[i].indexOf(":")) + " in the "
+                        + "portfolio.");
+              }
+            }
+            float[] amountsArray = new float[stockAmounts.size()];
+            for (int i = 0; i < stockAmounts.size(); i++) {
+              amountsArray[i] = stockAmounts.get(i);
+            }
+            model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
+                    amountsArray);
+            System.out.println("Portfolio created successfully.");
           }
-          model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
-                  amountsArray);
-          System.out.println("Portfolio created successfully.");
-        }
-        break;
-      case "load":
-        if (words[1].equals("portfolio")) {
-          startIndex = 2;
-        } else {
-          startIndex = 1;
-        }
-        model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
-        break;
-      case "save":
-        if (words[1].equals("portfolio")) {
-          startIndex = 2;
-        } else {
-          startIndex = 1;
-        }
-        model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
-        break;
-      case "list":
-        Portfolio p = null;
-        try {
-          p = model.getPortfolio(words[1]);
-        } catch (FileNotFoundException e) {
-          System.out.println("Cannot find portfolio with this name.");
           break;
-        }
-        view.examineComposition(p);
-        break;
-      case "value":
-        if (words.length < 3) {
-          System.out.println("Please provide a date.");
+        case "load":
+          if (words[1].equals("portfolio")) {
+            startIndex = 2;
+          } else {
+            startIndex = 1;
+          }
+          model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
           break;
-        }
-        try {
-          float value = model.determineValue(words[1], words[2]);
-          view.displayPortfolioValue(words[1], words[2], value);
-        } catch (DateTimeParseException e) {
-          System.out.println("Invalid date. Date must be given in MM/DD/YYYY format. Please try "
-                  + "again.");
-        }
-        break;
-      case "search":
-        String matches = model.getTickerMatches(words[1]);
-        view.showTickerMatches(matches);
-        break;
-      case "stock-direction-day":
-        if (words.length < 3) {
-          System.out.println("Please provide a ticker symbol and date.");
+        case "save":
+          if (words[1].equals("portfolio")) {
+            startIndex = 2;
+          } else {
+            startIndex = 1;
+          }
+          model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
           break;
-        }
-        boolean isGained;
-        try {
-          isGained = model.stockDirection(words[1], words[2]);
-        } catch (Exception e) {
-          System.out.println(e.getMessage());
+        case "list":
+          Portfolio p = null;
+          try {
+            p = model.getPortfolio(words[1]);
+          } catch (FileNotFoundException e) {
+            System.out.println("Cannot find portfolio with this name.");
+            break;
+          }
+          view.examineComposition(p);
           break;
-        }
-        if (isGained) {
-          System.out.println(words[1] + " gained value.");
-        } else {
-          System.out.println(words[1] + " lost value.");
-        }
-        break;
-      case "stock-direction-over-time":
-        if (words.length < 4) {
-          System.out.println("Please provide a ticker symbol, start date, and end date.");
+        case "value":
+          if (words.length < 3) {
+            System.out.println("Please provide a date.");
+            break;
+          }
+          try {
+            float value = model.determineValue(words[1], words[2]);
+            view.displayPortfolioValue(words[1], words[2], value);
+          } catch (DateTimeParseException e) {
+            System.out.println("Invalid date. Date must be given in MM/DD/YYYY format. Please try "
+                    + "again.");
+          }
           break;
-        }
-        try {
-          isGained = model.stockDirection(words[1], words[2], words[3]);
-        } catch (Exception e) {
-          System.out.println(e.getMessage());
+        case "search":
+          String matches = model.getTickerMatches(words[1]);
+          view.showTickerMatches(matches);
           break;
-        }
-        if (isGained) {
-          System.out.println(words[1] + " gained value.");
-        } else {
-          System.out.println(words[1] + " lost value.");
-        }
-        break;
-      case "moving-average":
-        if (words.length < 4) {
-          System.out.println("Please provide a number of days to calculate the average over, a "
-                  + "ticker symbol, and the date of the last day in the desired period.");
+        case "stock-direction-day":
+          if (words.length < 3) {
+            System.out.println("Please provide a ticker symbol and date.");
+            break;
+          }
+          boolean isGained;
+          try {
+            isGained = model.stockDirection(words[1], words[2]);
+          } catch (Exception e) {
+            System.out.println(e.getMessage());
+            break;
+          }
+          if (isGained) {
+            System.out.println(words[1] + " gained value.");
+          } else {
+            System.out.println(words[1] + " lost value.");
+          }
           break;
-        }
-        int x;
-        try {
-          x = Integer.parseInt(words[1]);
-        } catch (NumberFormatException e) {
-          System.out.println("Please provide an integer number of days.");
+        case "stock-direction-over-time":
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            break;
+          }
+          try {
+            isGained = model.stockDirection(words[1], words[2], words[3]);
+          } catch (Exception e) {
+            System.out.println(e.getMessage());
+            break;
+          }
+          if (isGained) {
+            System.out.println(words[1] + " gained value.");
+          } else {
+            System.out.println(words[1] + " lost value.");
+          }
           break;
-        }
-        float average = model.movingAverage(x, words[2], words[3]);
-        System.out.println("The " + x + "-day moving average is " + average);
-        break;
-      default:
-        System.out.println("Did not understand the command, please try again");
-        break;
+        case "moving-average":
+          if (words.length < 4) {
+            System.out.println("Please provide a number of days to calculate the average over, a "
+                    + "ticker symbol, and the date of the last day in the desired period.");
+            break;
+          }
+          int x;
+          try {
+            x = Integer.parseInt(words[1]);
+          } catch (NumberFormatException e) {
+            System.out.println("Please provide an integer number of days.");
+            break;
+          }
+          float average = model.movingAverage(x, words[2], words[3]);
+          System.out.println("The " + x + "-day moving average is " + average);
+          break;
+        case "crossovers":
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            break;
+          }
+          String result = model.findCrossovers(words[1], words[2], words[3]);
+          view.showCrossovers(result);
+          break;
+        // * crossovers <ticker_symbol> start_date end_date
+        // * Returns a list of the positive crossovers and negative crossovers within the given time period.
+        // * A crossover day means that the closing price for the day and the closing price for the previous
+        // * day are on opposite sides of the 30-day moving average.
+        default:
+          System.out.println("Did not understand the command, please try again");
+          break;
+      }
+    } catch (DateTimeParseException e) {
+      System.out.println("Date must be in MM/DD/YYYY format. Please try again.");
     }
   }
 

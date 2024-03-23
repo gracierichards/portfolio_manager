@@ -37,4 +37,20 @@ public class View implements ViewInterface{
     System.out.println("Date: " + date);
     System.out.println("Total Value: $" + value);
   }
+
+  @Override
+  public void showCrossovers(String results) {
+    System.out.println("Positive crossovers (days on which the stock value crossed the 30-day "
+            + "moving average to become more than the average):");
+    String positive = results.split(" ")[0];
+    String negative = results.split(" ")[1];
+    for (String date : positive.split(",")) {
+      System.out.println(date);
+    }
+    System.out.println("Negative crossovers (days on which the stock value crossed the 30-day "
+            + "moving average to become less than the average):");
+    for (String date : negative.split(",")) {
+      System.out.println(date);
+    }
+  }
 }
