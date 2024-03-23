@@ -181,8 +181,43 @@ public class Controller implements ControllerInterface {
           System.out.println(words[1] + " lost value.");
         }
         break;
-        //stock-direction-day <ticker_symbol> MM/DD/YYYY
-        // * Tells you whether the given stock gained or lost on the given day.
+      case "stock-direction-over-time":
+        if (words.length < 4) {
+          System.out.println("Please provide a ticker symbol, start date, and end date.");
+          break;
+        }
+        try {
+          isGained = model.stockDirection(words[1], words[2], words[3]);
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+          break;
+        }
+        if (isGained) {
+          System.out.println(words[1] + " gained value.");
+        } else {
+          System.out.println(words[1] + " lost value.");
+        }
+        break;
+      case "moving-average":
+        if (words.length < 4) {
+          System.out.println("Please provide a number of days to calculate the average over, a "
+                  + "ticker symbol, and the date of the last day in the desired period.");
+          break;
+        }
+        int x;
+        try {
+          x = Integer.parseInt(words[1]);
+        } catch (NumberFormatException e) {
+          System.out.println("Please provide an integer number of days.");
+          break;
+        }
+        float average = model.movingAverage(x, words[2], words[3]);
+        System.out.println("The " + x + "-day moving average is " + average);
+        break;
+        //The command for an x-day moving average is:
+      // * moving-average x <ticker_symbol> MM/DD/YYYY
+      // * Calculates the average price for the given stock in the last x days, starting from the given
+      // * date. It includes the last x days for which stock prices are available.
       default:
         System.out.println("Did not understand the command, please try again");
         break;

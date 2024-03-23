@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -46,57 +45,39 @@ public class Model implements ModelInterface {
 
     Portfolio portfolio = new Portfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
-      File file = new File("stockcsvs", tickerSymbols[i] + ".csv");
-      if (file.exists()) {
-        if (isValidTicker(tickerSymbols[i])) {
-          portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
-        } else {
-          System.out.println(tickerSymbols[i] + " is not a valid ticker symbol. Not adding to "
-                  + "portfolio.");
-        }
-        continue;
-      }
-      String csvData = getStockData(tickerSymbols[i]);
-      //Check if it's a valid ticker symbol
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-        writer.write(csvData);
-      } catch (IOException e) {
-        throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
-      }
-      if (csvData.charAt(0) == '{') {
+      if (isValidTicker(tickerSymbols[i])) {
+        portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
+      } else {
         System.out.println(tickerSymbols[i] + " is not a valid ticker symbol. Not adding to "
                 + "portfolio.");
-      } else {
-        portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
       }
     }
     portfolioList.put(portfolioName, portfolio);
-    //System.out.println("Portfolio created successfully.");
   }
 
   @Override
-    public void savePortfolioToFile(String portfolioName, String filename) {
-        Portfolio portfolio = portfolioList.get(portfolioName);
-        if (portfolio == null) {
-            System.out.println("Portfolio not found.");
-            return;
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Portfolio Name: " + portfolio.getName());
-            writer.newLine();
-            writer.write("Stock Composition:");
-            writer.newLine();
-            for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
-                writer.write(entry.getKey() + ": " + entry.getValue());
-                writer.newLine();
-            }
-            //System.out.println("Portfolio saved to file: " + filename);
-          System.out.println("Portfolio saved successfully to file.");
-        } catch (IOException e) {
-            System.out.println("Error saving portfolio to file: " + e.getMessage());
-        }
+  public void savePortfolioToFile(String portfolioName, String filename) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found.");
+      return;
     }
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+      writer.write("Portfolio Name: " + portfolio.getName());
+      writer.newLine();
+      writer.write("Stock Composition:");
+      writer.newLine();
+      for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
+        writer.write(entry.getKey() + ": " + entry.getValue());
+        writer.newLine();
+      }
+      //System.out.println("Portfolio saved to file: " + filename);
+      System.out.println("Portfolio saved successfully to file.");
+    } catch (IOException e) {
+      System.out.println("Error saving portfolio to file: " + e.getMessage());
+    }
+  }
 
 
   @Override
@@ -157,6 +138,7 @@ public class Model implements ModelInterface {
    * that start with the inputted string. This method will query Alpha Vantage for a list of
    * matching results.
    * It will only include results whose type is "Equity" and whose region is "United States".
+   *
    * @param query the partial or full name of a company or ticker symbol being looked up by the
    *              user
    * @return data in csv format of the ticker symbol matches. The columns output by Alpha
@@ -190,8 +172,8 @@ public class Model implements ModelInterface {
       in = url.openStream();
       int b;
 
-      while ((b=in.read())!=-1) {
-        output.append((char)b);
+      while ((b = in.read()) != -1) {
+        output.append((char) b);
       }
 
       //if (output.charAt(0) == '{') {
@@ -225,12 +207,38 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Helper method to determine whether a ticker symbol is valid. Can only be used for tickers that
-   * have been queried at least once to Alpha Vantage by this program.
+   * Helper method to determine whether a ticker symbol is valid.
+   *
+   * @param tickerSymbol the ticker symbol to be checked.
+   * @return whether the ticker symbol is valid.
+   */
+  private boolean isValidTicker(String tickerSymbol) {
+    File file = new File("stockcsvs", tickerSymbol + ".csv");
+    if (file.exists()) {
+      return isQueriedTickerValid(tickerSymbol);
+    }
+    String csvData = getStockData(tickerSymbol);
+    //Check if it's a valid ticker symbol
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+      writer.write(csvData);
+    } catch (IOException e) {
+      throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
+    }
+    if (csvData.charAt(0) == '{') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Helper method used by isValidTicker. Can only be used for tickers that have been queried at
+   * least once to Alpha Vantage by this program.
+   *
    * @param ticker the ticker symbol to be checked.
    * @return whether the ticker symbol is valid.
    */
-  private boolean isValidTicker(String ticker) {
+  private boolean isQueriedTickerValid(String ticker) {
     File file1 = new File("stockcsvs", ticker + ".csv");
     Scanner s = null;
     try {
@@ -253,6 +261,7 @@ public class Model implements ModelInterface {
    * Determines whether two dates are the same date, one date is before the other, or if the date
    * comes after the other. It takes in one date in the format the user provides, which should be
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
+   *
    * @return 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
    * positive number if inputDate is after inputDate.
    */
@@ -270,9 +279,9 @@ public class Model implements ModelInterface {
    * Throws an IllegalArgumentException if the portfolio is not found.
    *
    * @param portfolioName The name of the portfolio where the shares will be purchased.
-   * @param tickerSymbol The ticker symbol of the stock to be purchased.
-   * @param date The date of the purchase.
-   * @param numShares The number of shares to be purchased.
+   * @param tickerSymbol  The ticker symbol of the stock to be purchased.
+   * @param date          The date of the purchase.
+   * @param numShares     The number of shares to be purchased.
    * @throws IllegalArgumentException If the specified portfolio is not found.
    */
   public void purchaseShares(String portfolioName, String tickerSymbol, String date, int numShares)
@@ -305,9 +314,9 @@ public class Model implements ModelInterface {
    * Throws an IllegalArgumentException if the portfolio is not found.
    *
    * @param portfolioName The name of the portfolio from which the shares will be sold.
-   * @param tickerSymbol The ticker symbol of the stock to be sold.
-   * @param date The date of the sale.
-   * @param numShares The number of shares to be sold.
+   * @param tickerSymbol  The ticker symbol of the stock to be sold.
+   * @param date          The date of the sale.
+   * @param numShares     The number of shares to be sold.
    * @throws IllegalArgumentException If the specified portfolio is not found.
    */
   public void sellShares(String portfolioName, String tickerSymbol, String date, int numShares)
@@ -330,12 +339,13 @@ public class Model implements ModelInterface {
   /**
    * Returns the value of the given stock on the given date, or if there is no data for the given
    * date, the value on the last date before the given date.
+   *
    * @param tickerSymbol the ticker symbol of the stock to look up
-   * @param date the date for which you want the value, in MM/DD/YYYY
+   * @param date         the date for which you want the value, in MM/DD/YYYY
    * @return the value of the stock on that day.
    */
+
   protected float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
-    float price = 0;
     try {
       File file1 = new File("stockcsvs", tickerSymbol + ".csv");
       Scanner s = new Scanner(file1);
@@ -363,41 +373,66 @@ public class Model implements ModelInterface {
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
 
-  @Override
-  public boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException {
-    //check if it's a valid ticker symbol or if we need to query Alpha Vantage
-    File file = new File("stockcsvs", tickerSymbol + ".csv");
-    if (file.exists()) {
+    @Override
+    public boolean stockDirection (String tickerSymbol, String date) throws IllegalArgumentException
+    {
+      return stockDirectionHelper(tickerSymbol, date, "");
+    }
+
+    @Override
+    public boolean stockDirection (String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
+      return stockDirectionHelper(tickerSymbol, startDate, endDate);
+    }
+
+    /**
+     * This function handles determining gain or loss for a day or over time. If endDate is the empty
+     * string, then it finds the gain or loss for a single day, the startDate. Otherwise, it finds
+     * the gain or loss over the period of time from startDate to endDate.
+     */
+    private boolean stockDirectionHelper (String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
       if (isValidTicker(tickerSymbol)) {
-        return stockDirectionHelper(tickerSymbol, date);
+        if (endDate.isEmpty()) {
+          return stockDirectionHelperDay(tickerSymbol, startDate);
+        } else {
+          return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
+        }
       } else {
         throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
       }
     }
-    String csvData = getStockData(tickerSymbol);
-    //Check if it's a valid ticker symbol
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-      writer.write(csvData);
-    } catch (IOException e) {
-      throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
+
+    private boolean stockDirectionHelperDay (String tickerSymbol, String date) throws
+    IllegalStateException {
+      float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
+      float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+      if (closingPrice > openingPrice) {
+        return true;
+      } else if (closingPrice < openingPrice) {
+        return false;
+      } else {
+        throw new IllegalStateException("Stock neither gained nor lost in the day.");
+      }
     }
-    if (csvData.charAt(0) == '{') {
-      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-    } else {
-      return stockDirectionHelper(tickerSymbol, date);
+
+    private boolean stockDirectionHelperPeriod (String tickerSymbol, String startDate, String
+    endDate)
+          throws IllegalStateException {
+      float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
+      float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
+      if (endPrice > startPrice) {
+        return true;
+      } else if (endPrice < startPrice) {
+        return false;
+      } else {
+        throw new IllegalStateException("Stock neither gained nor lost in this time period.");
+      }
     }
+
+    //@Override
+    //public float movingAverage(int numDays, String tickerSymbol, String date) {
+
+    //}
   }
 
-  private boolean stockDirectionHelper(String tickerSymbol, String date) throws
-          IllegalStateException {
-    float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
-    float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-    if (closingPrice > openingPrice) {
-      return true;
-    } else if (closingPrice < openingPrice) {
-      return false;
-    } else {
-      throw new IllegalStateException("Stock neither gained nor lost in the day.");
-    }
-  }
-}

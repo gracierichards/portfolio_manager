@@ -46,4 +46,26 @@ public interface ModelInterface {
    * @throws IllegalArgumentException if given an invalid ticker symbol
    */
   boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException;
+
+  /**
+   * Determines whether the given stock gained or lost over the given period of time, from
+   * start_date to end_date (both in MM/DD/YYYY). Uses closing values.
+   * @param tickerSymbol the stock to check
+   * @param startDate the start of the period to check
+   * @param endDate the end of the period to check
+   * @return a boolean, true if the stock gained, false if it lost value
+   * @throws IllegalArgumentException if given an invalid ticker symbol
+   */
+  boolean stockDirection(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException;
+
+  /**
+   * Calculates the average price for the given stock in the last x days, starting from the given
+   * date. It includes the last x days for which stock prices are available.
+   * @param numDays x in the x-day moving average
+   * @param tickerSymbol the stock to calculate the average for
+   * @param date the last date of the desired period, in MM/DD/YYYY
+   * @return the average stock price of the given period
+   */
+  float movingAverage(int numDays, String tickerSymbol, String date);
 }
