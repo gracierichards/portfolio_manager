@@ -181,8 +181,26 @@ public class Controller implements ControllerInterface {
           System.out.println(words[1] + " lost value.");
         }
         break;
-        //stock-direction-day <ticker_symbol> MM/DD/YYYY
-        // * Tells you whether the given stock gained or lost on the given day.
+      case "stock-direction-over-time":
+        if (words.length < 4) {
+          System.out.println("Please provide a ticker symbol, start date, and end date.");
+          break;
+        }
+        try {
+          isGained = model.stockDirection(words[1], words[2], words[3]);
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+          break;
+        }
+        if (isGained) {
+          System.out.println(words[1] + " gained value.");
+        } else {
+          System.out.println(words[1] + " lost value.");
+        }
+        break;
+        //stock-direction-over-time <ticker_symbol> start_date end_date
+              // * Tells you whether the given stock gained or lost over the given period of time, from start_date
+              // * to end_date (both in MM/DD/YYYY)
       default:
         System.out.println("Did not understand the command, please try again");
         break;

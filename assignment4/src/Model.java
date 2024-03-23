@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -352,11 +351,30 @@ public class Model implements ModelInterface {
 
   @Override
   public boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException {
-    //check if it's a valid ticker symbol or if we need to query Alpha Vantage
+    return stockDirectionHelper(tickerSymbol, date, "");
+  }
+
+  @Override
+  public boolean stockDirection(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
+    return stockDirectionHelper(tickerSymbol, startDate, endDate);
+  }
+
+  /**
+   * This function handles determining gain or loss for a day or over time. If endDate is the empty
+   * string, then it finds the gain or loss for a single day, the startDate. Otherwise, it finds
+   * the gain or loss over the period of time from startDate to endDate.
+   */
+  private boolean stockDirectionHelper(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
     File file = new File("stockcsvs", tickerSymbol + ".csv");
     if (file.exists()) {
       if (isValidTicker(tickerSymbol)) {
-        return stockDirectionHelper(tickerSymbol, date);
+        if (endDate.isEmpty()) {
+          return stockDirectionHelperDay(tickerSymbol, startDate);
+        } else {
+          return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
+        }
       } else {
         throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
       }
@@ -371,11 +389,15 @@ public class Model implements ModelInterface {
     if (csvData.charAt(0) == '{') {
       throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     } else {
-      return stockDirectionHelper(tickerSymbol, date);
+      if (endDate.isEmpty()) {
+        return stockDirectionHelperDay(tickerSymbol, startDate);
+      } else {
+        return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
+      }
     }
   }
 
-  private boolean stockDirectionHelper(String tickerSymbol, String date) throws
+  private boolean stockDirectionHelperDay(String tickerSymbol, String date) throws
           IllegalStateException {
     float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
     float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
@@ -385,6 +407,19 @@ public class Model implements ModelInterface {
       return false;
     } else {
       throw new IllegalStateException("Stock neither gained nor lost in the day.");
+    }
+  }
+
+  private boolean stockDirectionHelperPeriod(String tickerSymbol, String startDate, String endDate)
+          throws IllegalStateException {
+    float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
+    float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
+    if (endPrice > startPrice) {
+      return true;
+    } else if (endPrice < startPrice) {
+      return false;
+    } else {
+      throw new IllegalStateException("Stock neither gained nor lost in this time period.");
     }
   }
 }
