@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -7,9 +9,14 @@ import java.util.Set;
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
 public class Portfolio {
+
+  private Model model;
   private final String name; // Name of the portfolio
   private Map<String, Integer> stocks; // Map to store stocks with their corresponding amounts
 
+  protected Map<String, Float> costBasis; // Map to store cost basis of stocks
+
+  private String creationDate; // Field to store the creation date
   /**
    * Constructor to initialize a new Portfolio with a given name.
    *
@@ -18,6 +25,8 @@ public class Portfolio {
   public Portfolio(String name) {
     this.name = name;
     this.stocks = new HashMap<>();
+    this.costBasis = new HashMap<>();
+    this.creationDate = getCurrentDate(); // Automatically set creation date
   }
 
   /**
@@ -35,6 +44,28 @@ public class Portfolio {
       // If the stock is not already in the portfolio, add it
       stocks.put(tickerSymbol, amount);
     }
+    float costBasis = calculateCostBasis(tickerSymbol, amount);
+    this.costBasis.put(tickerSymbol, costBasis);
+  }
+
+  /**
+   * Method to get the current date in the format "MM/DD/YYYY".
+   *
+   * @return The current date.
+   */
+  private String getCurrentDate() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    return LocalDate.now().format(formatter);
+  }
+  private float calculateCostBasis(String tickerSymbol, int numShares) {
+
+    float purchasePrice = model.getStockPrice(tickerSymbol, creationDate, Model.TypeOfPrice.CLOSE);
+
+    // Calculate the cost basis of the purchased shares
+    float costBasis = purchasePrice * numShares;
+
+
+    return costBasis;
   }
 
   /**
@@ -64,6 +95,21 @@ public class Portfolio {
     }
   }
 
+  /**
+   * Method to calculate the total cost basis of the entire portfolio.
+   *
+   * @return The total cost basis of the portfolio.
+   */
+  public float totalCostBasis() {
+    float totalCostBasis = 0;
+    for (Map.Entry<String, Integer> entry : stocks.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      int amount = entry.getValue();
+      float stockCostBasis = costBasis.getOrDefault(tickerSymbol, 0.0f) * amount;
+      totalCostBasis += stockCostBasis;
+    }
+    return totalCostBasis;
+  }
 
   /**
    * Method to retrieve the name of the portfolio.

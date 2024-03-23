@@ -275,7 +275,8 @@ public class Model implements ModelInterface {
    * @param numShares The number of shares to be purchased.
    * @throws IllegalArgumentException If the specified portfolio is not found.
    */
-  public void purchaseShares(String portfolioName, String tickerSymbol, String date, int numShares) throws IllegalArgumentException {
+  public void purchaseShares(String portfolioName, String tickerSymbol, String date, int numShares)
+          throws IllegalArgumentException {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       throw new IllegalArgumentException("Portfolio not found.");
@@ -283,6 +284,17 @@ public class Model implements ModelInterface {
 
     // Add purchase information to the portfolio
     portfolio.addStock(tickerSymbol, numShares);
+
+    float purchasePrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+
+    // Calculate the cost basis of the purchased shares
+    float costBasis = purchasePrice * numShares;
+
+    // Add purchase information to the portfolio
+    portfolio.addStock(tickerSymbol, numShares);
+
+    // Update the cost basis map in the portfolio
+    portfolio.costBasis.put(tickerSymbol, costBasis);
 
     // If necessary, additional logic to record the purchase date could be added here.
   }
@@ -298,7 +310,8 @@ public class Model implements ModelInterface {
    * @param numShares The number of shares to be sold.
    * @throws IllegalArgumentException If the specified portfolio is not found.
    */
-  public void sellShares(String portfolioName, String tickerSymbol, String date, int numShares) throws IllegalArgumentException {
+  public void sellShares(String portfolioName, String tickerSymbol, String date, int numShares)
+          throws IllegalArgumentException {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       throw new IllegalArgumentException("Portfolio not found.");
@@ -310,7 +323,7 @@ public class Model implements ModelInterface {
     // Additional logic to record the sale date could be added here
   }
 
-  private enum TypeOfPrice {
+  protected enum TypeOfPrice {
     OPEN, CLOSE
   }
 
@@ -321,7 +334,7 @@ public class Model implements ModelInterface {
    * @param date the date for which you want the value, in MM/DD/YYYY
    * @return the value of the stock on that day.
    */
-  private float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
+  protected float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
     float price = 0;
     try {
       File file1 = new File("stockcsvs", tickerSymbol + ".csv");
