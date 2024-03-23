@@ -83,4 +83,22 @@ public interface ModelInterface {
    */
   String findCrossovers(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException;
+
+  /**
+   * Returns a list of the positive crossovers and negative crossovers within the given time
+   * period. A moving crossover happens when an x-day moving average crosses from one side to
+   * another side of a y-day moving average, with x lesser than y.
+   * @param tickerSymbol the stock to check for crossovers
+   * @param startDate the start date of the period to check (in MM/DD/YYYY format)
+   * @param endDate the end date of the period to check (in MM/DD/YYYY format)
+   * @param x the number of days in the moving average that is checked if it crosses the other
+   *          moving average
+   * @param y the number of days in the moving average that is the boundary for the other moving
+   *          average to cross
+   * @return a string listing the positive and negative crossovers. For the View to parse into the
+   *     final printed output.
+   * @throws IllegalArgumentException if given an invalid ticker symbol
+   */
+  String findMovingCrossovers(String tickerSymbol, String startDate, String endDate, int x, int y)
+          throws IllegalArgumentException;
 }

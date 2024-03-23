@@ -492,25 +492,64 @@ public class Model implements ModelInterface {
         float stockPrice1 = getStockPrice(tickerSymbol, prevDateString, TypeOfPrice.CLOSE);
         float stockPrice2 = getStockPrice(tickerSymbol, curDateString, TypeOfPrice.CLOSE);
         if ((stockPrice1 < movingAverage30Day && stockPrice2 > movingAverage30Day)) {
-          positiveCrossovers.add(startDateString);
+          positiveCrossovers.add(curDateString);
         } else if ((stockPrice1 > movingAverage30Day && stockPrice2 < movingAverage30Day)) {
-          negativeCrossovers.add(startDateString);
+          negativeCrossovers.add(curDateString);
         }
         prevDateString = curDateString;
         curDate = curDate.plusDays(1);
         curDateString = curDate.format(formatter1);
       }
-      StringBuilder ret = new StringBuilder();
-      for (String d : positiveCrossovers) {
-        ret.append(d).append(",");
-      }
-      ret.append(" ");
-      for (String d : negativeCrossovers) {
-        ret.append(d).append(",");
-      }
-      return ret.toString();
+      return assemblePosNegCrossovers(positiveCrossovers, negativeCrossovers);
     } else {
       throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     }
+  }
+
+  public String findMovingCrossovers(String tickerSymbol, String startDateString,
+                               String endDateString, int x, int y) throws IllegalArgumentException {
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    LocalDate curDate = LocalDate.parse(startDateString, formatter1);
+    LocalDate endDate = LocalDate.parse(endDateString, formatter1);
+    if (endDate.isBefore(curDate)) {
+      throw new IllegalArgumentException("End date cannot be before the start date.");
+    }
+    if (isValidTicker(tickerSymbol)) {
+      ArrayList<String> positiveCrossovers = new ArrayList<>();
+      ArrayList<String> negativeCrossovers = new ArrayList<>();
+      LocalDate prevDate = curDate.minusDays(1);
+      String prevDateString = prevDate.format(formatter1);
+      String curDateString = curDate.format(formatter1);
+      while (!curDateString.equals(endDateString)) {
+        float yDayMovingAverage = movingAverage(y, tickerSymbol, curDateString);
+        float xDayMovingAverage1 = movingAverage(x, tickerSymbol, prevDateString);
+        float xDayMovingAverage2 = movingAverage(x, tickerSymbol, curDateString);
+        if ((xDayMovingAverage1 < yDayMovingAverage && xDayMovingAverage2 > yDayMovingAverage)) {
+          positiveCrossovers.add(curDateString);
+        } else if ((xDayMovingAverage1 > yDayMovingAverage && xDayMovingAverage2 <
+                yDayMovingAverage)) {
+          negativeCrossovers.add(curDateString);
+        }
+        prevDateString = curDateString;
+        curDate = curDate.plusDays(1);
+        curDateString = curDate.format(formatter1);
+      }
+      return assemblePosNegCrossovers(positiveCrossovers, negativeCrossovers);
+    } else {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    }
+  }
+
+  private String assemblePosNegCrossovers(ArrayList<String> positiveCrossovers, ArrayList<String>
+          negativeCrossovers) {
+    StringBuilder ret = new StringBuilder();
+    for (String d : positiveCrossovers) {
+      ret.append(d).append(",");
+    }
+    ret.append(" ");
+    for (String d : negativeCrossovers) {
+      ret.append(d).append(",");
+    }
+    return ret.toString();
   }
 }

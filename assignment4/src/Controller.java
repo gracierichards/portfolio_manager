@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * These are the possible commands the user can provide when using this program.
@@ -45,16 +46,10 @@ import java.util.List;
  * A crossover day means that the closing price for the day and the closing price for the previous
  * day are on opposite sides of the 30-day moving average.
  *
- * moving-crossovers <ticker_symbol>
- * This command will lead to two prompts. The first is "A moving crossover is when a moving average
- * over a shorter period of time (ex. 30 days) crosses the amount of the moving average for a
- * longer period of time (ex. 100 days). Please specify the number of days for the first moving
- * average."
- * After receiving an answer, it will say "Please specify the number of days for the second moving
- * average."
- * If the second amount is not longer than the first amount, then it will say "Invalid values:
- * second amount of days must be greater than the first." and reprompt for the two values. The user
- * may also enter "cancel" to go back and be able to enter commands again.
+ * moving-crossovers <ticker_symbol> start_date end_date
+ * After entering this command, the user will be prompted twice, once for x, the number of days for
+ * the smaller moving average, and then for y, the number of days for the larger moving average.
+ * If the second amount is not longer than the first amount, then it will provide an error message.
  *
  * quit   - to terminate the program.
  */
@@ -222,10 +217,39 @@ public class Controller implements ControllerInterface {
           String result = model.findCrossovers(words[1], words[2], words[3]);
           view.showCrossovers(result);
           break;
-        // * crossovers <ticker_symbol> start_date end_date
-        // * Returns a list of the positive crossovers and negative crossovers within the given time period.
-        // * A crossover day means that the closing price for the day and the closing price for the previous
-        // * day are on opposite sides of the 30-day moving average.
+        case "moving-crossovers":
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            break;
+          }
+          System.out.println("A moving crossover is when a moving average over a shorter period of"
+                  + " time (ex. 30 days) crosses the amount of the moving average for a longer "
+                  + "period of time (ex. 100 days). Please specify the number of days for the first"
+                  + " moving average.");
+          Scanner s = new Scanner(System.in);
+          if (s.hasNextInt()) {
+            x = s.nextInt();
+          } else {
+            System.out.println("Not a valid integer.");
+            break;
+          }
+          System.out.println("Please specify the number of days for the second moving average.");
+          int y;
+          if (s.hasNextInt()) {
+            y = s.nextInt();
+          } else {
+            System.out.println("Not a valid integer.");
+            break;
+          }
+          if (x >= y) {
+            System.out.println("Invalid values: second amount of days must be greater than the " +
+                    "first.");
+            break;
+          }
+          s.close();
+          result = model.findMovingCrossovers(words[1], words[2], words[3], x, y);
+          view.showCrossovers(result);
+          break;
         default:
           System.out.println("Did not understand the command, please try again");
           break;
