@@ -305,6 +305,8 @@ public class Model implements ModelInterface {
     // Update the cost basis map in the portfolio
     portfolio.costBasis.put(tickerSymbol, costBasis);
 
+    portfolio.purchaseDates.put(tickerSymbol,date);
+
     // If necessary, additional logic to record the purchase date could be added here.
   }
 

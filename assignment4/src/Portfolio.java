@@ -17,6 +17,7 @@ public class Portfolio {
   protected Map<String, Float> costBasis; // Map to store cost basis of stocks
 
   private String creationDate; // Field to store the creation date
+  protected Map<String, String> purchaseDates; // Map to store purchase dates of stocks
   /**
    * Constructor to initialize a new Portfolio with a given name.
    *
@@ -27,6 +28,8 @@ public class Portfolio {
     this.stocks = new HashMap<>();
     this.costBasis = new HashMap<>();
     this.creationDate = getCurrentDate(); // Automatically set creation date
+    this.purchaseDates = new HashMap<>();
+
   }
 
   /**
@@ -44,8 +47,9 @@ public class Portfolio {
       // If the stock is not already in the portfolio, add it
       stocks.put(tickerSymbol, amount);
     }
-    float costBasis = calculateCostBasis(tickerSymbol, amount);
+    float costBasis = calculateCostBasis(tickerSymbol, amount, creationDate);
     this.costBasis.put(tickerSymbol, costBasis);
+    this.purchaseDates.put(tickerSymbol, creationDate); // Store purchase date
   }
 
   /**
@@ -57,14 +61,11 @@ public class Portfolio {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     return LocalDate.now().format(formatter);
   }
-  private float calculateCostBasis(String tickerSymbol, int numShares) {
 
-    float purchasePrice = model.getStockPrice(tickerSymbol, creationDate, Model.TypeOfPrice.CLOSE);
-
+  private float calculateCostBasis(String tickerSymbol, int numShares, String purchaseDate) {
+    float purchasePrice = model.getStockPrice(tickerSymbol, purchaseDate, Model.TypeOfPrice.CLOSE);
     // Calculate the cost basis of the purchased shares
     float costBasis = purchasePrice * numShares;
-
-
     return costBasis;
   }
 
@@ -100,16 +101,41 @@ public class Portfolio {
    *
    * @return The total cost basis of the portfolio.
    */
-  public float totalCostBasis() {
+  public float totalCostBasis(String date) {
     float totalCostBasis = 0;
-    for (Map.Entry<String, Integer> entry : stocks.entrySet()) {
+    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
       String tickerSymbol = entry.getKey();
-      int amount = entry.getValue();
-      float stockCostBasis = costBasis.getOrDefault(tickerSymbol, 0.0f) * amount;
-      totalCostBasis += stockCostBasis;
+      String purchaseDate = entry.getValue();
+      if (purchaseDate.compareTo(date) <= 0) {
+        float stockCostBasis = costBasis.getOrDefault(tickerSymbol, 0.0f);
+        totalCostBasis += stockCostBasis;
+      }
     }
     return totalCostBasis;
   }
+
+  /**
+   * Method to calculate the total portfolio value on a specific date using the current market value.
+   *
+   * @param date The date for which the portfolio value is to be determined.
+   * @return The total value of the portfolio based on the current market value of the stocks.
+   */
+  public float portfolioValueOnDate(String date) {
+    float totalValue = 0;
+    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      String purchaseDate = entry.getValue();
+      if (purchaseDate.compareTo(date) <= 0) {
+        // Get the current market price of the stock on the given date
+        float currentPrice = model.getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
+        // Calculate the total value of the stock based on the current market price
+        int numShares = stocks.get(tickerSymbol);
+        totalValue += currentPrice * numShares;
+      }
+    }
+    return totalValue;
+  }
+
 
   /**
    * Method to retrieve the name of the portfolio.
