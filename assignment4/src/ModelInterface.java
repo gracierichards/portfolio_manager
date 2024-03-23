@@ -58,4 +58,14 @@ public interface ModelInterface {
    */
   boolean stockDirection(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException;
+
+  /**
+   * Calculates the average price for the given stock in the last x days, starting from the given
+   * date. It includes the last x days for which stock prices are available.
+   * @param numDays x in the x-day moving average
+   * @param tickerSymbol the stock to calculate the average for
+   * @param date the last date of the desired period, in MM/DD/YYYY
+   * @return the average stock price of the given period
+   */
+  float movingAverage(int numDays, String tickerSymbol, String date);
 }

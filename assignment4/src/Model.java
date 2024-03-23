@@ -45,32 +45,14 @@ public class Model implements ModelInterface {
 
     Portfolio portfolio = new Portfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
-      File file = new File("stockcsvs", tickerSymbols[i] + ".csv");
-      if (file.exists()) {
-        if (isValidTicker(tickerSymbols[i])) {
-          portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
-        } else {
-          System.out.println(tickerSymbols[i] + " is not a valid ticker symbol. Not adding to "
-                  + "portfolio.");
-        }
-        continue;
-      }
-      String csvData = getStockData(tickerSymbols[i]);
-      //Check if it's a valid ticker symbol
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-        writer.write(csvData);
-      } catch (IOException e) {
-        throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
-      }
-      if (csvData.charAt(0) == '{') {
+      if (isValidTicker(tickerSymbols[i])) {
+        portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
+      } else {
         System.out.println(tickerSymbols[i] + " is not a valid ticker symbol. Not adding to "
                 + "portfolio.");
-      } else {
-        portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
       }
     }
     portfolioList.put(portfolioName, portfolio);
-    //System.out.println("Portfolio created successfully.");
   }
 
   @Override
@@ -224,12 +206,36 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Helper method to determine whether a ticker symbol is valid. Can only be used for tickers that
-   * have been queried at least once to Alpha Vantage by this program.
+   * Helper method to determine whether a ticker symbol is valid.
+   * @param tickerSymbol the ticker symbol to be checked.
+   * @return whether the ticker symbol is valid.
+   */
+  private boolean isValidTicker(String tickerSymbol) {
+    File file = new File("stockcsvs", tickerSymbol + ".csv");
+    if (file.exists()) {
+      return isQueriedTickerValid(tickerSymbol);
+    }
+    String csvData = getStockData(tickerSymbol);
+    //Check if it's a valid ticker symbol
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+      writer.write(csvData);
+    } catch (IOException e) {
+      throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
+    }
+    if (csvData.charAt(0) == '{') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Helper method used by isValidTicker. Can only be used for tickers that have been queried at
+   * least once to Alpha Vantage by this program.
    * @param ticker the ticker symbol to be checked.
    * @return whether the ticker symbol is valid.
    */
-  private boolean isValidTicker(String ticker) {
+  private boolean isQueriedTickerValid(String ticker) {
     File file1 = new File("stockcsvs", ticker + ".csv");
     Scanner s = null;
     try {
@@ -321,7 +327,6 @@ public class Model implements ModelInterface {
    * @return the value of the stock on that day.
    */
   private float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
-    float price = 0;
     try {
       File file1 = new File("stockcsvs", tickerSymbol + ".csv");
       Scanner s = new Scanner(file1);
@@ -367,33 +372,14 @@ public class Model implements ModelInterface {
    */
   private boolean stockDirectionHelper(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException {
-    File file = new File("stockcsvs", tickerSymbol + ".csv");
-    if (file.exists()) {
-      if (isValidTicker(tickerSymbol)) {
-        if (endDate.isEmpty()) {
-          return stockDirectionHelperDay(tickerSymbol, startDate);
-        } else {
-          return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
-        }
-      } else {
-        throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-      }
-    }
-    String csvData = getStockData(tickerSymbol);
-    //Check if it's a valid ticker symbol
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-      writer.write(csvData);
-    } catch (IOException e) {
-      throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
-    }
-    if (csvData.charAt(0) == '{') {
-      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-    } else {
+    if (isValidTicker(tickerSymbol)) {
       if (endDate.isEmpty()) {
         return stockDirectionHelperDay(tickerSymbol, startDate);
       } else {
         return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
       }
+    } else {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     }
   }
 
@@ -422,4 +408,9 @@ public class Model implements ModelInterface {
       throw new IllegalStateException("Stock neither gained nor lost in this time period.");
     }
   }
+
+  //@Override
+  //public float movingAverage(int numDays, String tickerSymbol, String date) {
+
+  //}
 }
