@@ -214,10 +214,6 @@ public class Controller implements ControllerInterface {
         float average = model.movingAverage(x, words[2], words[3]);
         System.out.println("The " + x + "-day moving average is " + average);
         break;
-        //The command for an x-day moving average is:
-      // * moving-average x <ticker_symbol> MM/DD/YYYY
-      // * Calculates the average price for the given stock in the last x days, starting from the given
-      // * date. It includes the last x days for which stock prices are available.
       default:
         System.out.println("Did not understand the command, please try again");
         break;

@@ -373,66 +373,100 @@ public class Model implements ModelInterface {
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
 
-    @Override
-    public boolean stockDirection (String tickerSymbol, String date) throws IllegalArgumentException
-    {
-      return stockDirectionHelper(tickerSymbol, date, "");
-    }
-
-    @Override
-    public boolean stockDirection (String tickerSymbol, String startDate, String endDate)
-          throws IllegalArgumentException {
-      return stockDirectionHelper(tickerSymbol, startDate, endDate);
-    }
-
-    /**
-     * This function handles determining gain or loss for a day or over time. If endDate is the empty
-     * string, then it finds the gain or loss for a single day, the startDate. Otherwise, it finds
-     * the gain or loss over the period of time from startDate to endDate.
-     */
-    private boolean stockDirectionHelper (String tickerSymbol, String startDate, String endDate)
-          throws IllegalArgumentException {
-      if (isValidTicker(tickerSymbol)) {
-        if (endDate.isEmpty()) {
-          return stockDirectionHelperDay(tickerSymbol, startDate);
-        } else {
-          return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
-        }
-      } else {
-        throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-      }
-    }
-
-    private boolean stockDirectionHelperDay (String tickerSymbol, String date) throws
-    IllegalStateException {
-      float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
-      float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-      if (closingPrice > openingPrice) {
-        return true;
-      } else if (closingPrice < openingPrice) {
-        return false;
-      } else {
-        throw new IllegalStateException("Stock neither gained nor lost in the day.");
-      }
-    }
-
-    private boolean stockDirectionHelperPeriod (String tickerSymbol, String startDate, String
-    endDate)
-          throws IllegalStateException {
-      float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
-      float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
-      if (endPrice > startPrice) {
-        return true;
-      } else if (endPrice < startPrice) {
-        return false;
-      } else {
-        throw new IllegalStateException("Stock neither gained nor lost in this time period.");
-      }
-    }
-
-    //@Override
-    //public float movingAverage(int numDays, String tickerSymbol, String date) {
-
-    //}
+  @Override
+  public boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException {
+    return stockDirectionHelper(tickerSymbol, date, "");
   }
 
+  @Override
+  public boolean stockDirection(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
+    return stockDirectionHelper(tickerSymbol, startDate, endDate);
+  }
+
+  /**
+   * This function handles determining gain or loss for a day or over time. If endDate is the empty
+   * string, then it finds the gain or loss for a single day, the startDate. Otherwise, it finds
+   * the gain or loss over the period of time from startDate to endDate.
+   */
+  private boolean stockDirectionHelper(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
+    if (isValidTicker(tickerSymbol)) {
+      if (endDate.isEmpty()) {
+        return stockDirectionHelperDay(tickerSymbol, startDate);
+      } else {
+        return stockDirectionHelperPeriod(tickerSymbol, startDate, endDate);
+      }
+    } else {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    }
+  }
+
+  private boolean stockDirectionHelperDay(String tickerSymbol, String date) throws
+          IllegalStateException {
+    float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
+    float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+    if (closingPrice > openingPrice) {
+      return true;
+    } else if (closingPrice < openingPrice) {
+      return false;
+    } else {
+      throw new IllegalStateException("Stock neither gained nor lost in the day.");
+    }
+  }
+
+  private boolean stockDirectionHelperPeriod(String tickerSymbol, String startDate, String
+          endDate)
+          throws IllegalStateException {
+    float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
+    float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
+    if (endPrice > startPrice) {
+      return true;
+    } else if (endPrice < startPrice) {
+      return false;
+    } else {
+      throw new IllegalStateException("Stock neither gained nor lost in this time period.");
+    }
+  }
+
+  @Override
+  public float movingAverage(int numDays, String tickerSymbol, String date) {
+    if (isValidTicker(tickerSymbol)) {
+      try {
+        File file1 = new File("stockcsvs", tickerSymbol + ".csv");
+        Scanner s = new Scanner(file1);
+        String line;
+        //skip first line, which is the header
+        if (s.hasNextLine()) {
+          line = s.nextLine();
+        }
+        while (s.hasNextLine()) {
+          line = s.nextLine();
+          String csvDate = line.split(",")[0];
+          //the same as saying if the value is equal to 0 or 1
+          if (compareDates(date, csvDate) >= 0) {
+            float sum = 0;
+            int numAdded = 0;
+            for (int i = 0; i < numDays; i++) {
+              float closingPrice = Float.parseFloat(line.split(",")[4]);
+              sum += closingPrice;
+              numAdded++;
+              if (s.hasNextLine()) {
+                line = s.nextLine();
+              } else {
+                break;
+              }
+            }
+            return sum / numAdded;
+          }
+        }
+        s.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
+      }
+      throw new RuntimeException("Reached end of file. Stock price not found in file.");
+    } else {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    }
+  }
+}
