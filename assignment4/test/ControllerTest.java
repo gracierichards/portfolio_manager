@@ -181,4 +181,24 @@ public class ControllerTest {
     controller.processCommand(input);
     String output = outContent.toString();
   }
+
+  @Test
+  public void testProcessCommand_MovingCrossovers() {
+    float yavg1 = model.movingAverage(30, "T", "03/14/2024"); // = 17.094
+    float yavg2 = model.movingAverage(30, "T", "03/15/2024"); // = 17.061
+    float yavg3 = model.movingAverage(30, "T", "03/18/2024"); // = 17.043
+    float xavg1 = model.movingAverage(3, "T", "03/14/2024"); // = 17.133
+    float xavg2 = model.movingAverage(3, "T", "03/15/2024"); // = 17.083
+    float xavg3 = model.movingAverage(3, "T", "03/18/2024"); // = 17.12
+    String input = "moving-crossovers T 03/14/2024 03/18/2024" + System.lineSeparator() + "3"
+            + System.lineSeparator() + "30";
+    controller.processCommand(input);
+    String output = outContent.toString();
+    //assertEquals("Positive crossovers:" + System.lineSeparator() + "None"
+    //        + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
+    //        + "3/14/2024" + System.lineSeparator(), outContent.toString());
+    //input = "crossovers T 02/13/2024 03/13/2024";
+    //controller.processCommand(input);
+    //output = outContent.toString();
+  }
 }
