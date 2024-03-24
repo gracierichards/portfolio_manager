@@ -263,7 +263,7 @@ public class Model implements ModelInterface {
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
    *
    * @return 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
-   * positive number if inputDate is after inputDate.
+   * positive number if inputDate is after csvDate.
    */
   int compareDates(String inputDate, String csvDate) throws DateTimeParseException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
@@ -420,6 +420,14 @@ public class Model implements ModelInterface {
   private boolean stockDirectionHelperPeriod(String tickerSymbol, String startDate, String
           endDate)
           throws IllegalStateException {
+    //Checking if endDate is after startDate
+    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
+    LocalDate startDateDate = LocalDate.parse(startDate, formatter1);
+    LocalDate endDateDate = LocalDate.parse(endDate, formatter1);
+    if (endDateDate.isBefore(startDateDate)) {
+      throw new IllegalStateException("End date cannot be before the start date.");
+    }
+
     float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
     float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
     if (endPrice > startPrice) {
@@ -487,7 +495,7 @@ public class Model implements ModelInterface {
       LocalDate prevDate = curDate.minusDays(1);
       String prevDateString = prevDate.format(formatter1);
       String curDateString = curDate.format(formatter1);
-      while (!curDateString.equals(endDateString)) {
+      while (!curDate.isAfter(endDate)) {
         float movingAverage30Day = movingAverage(30, tickerSymbol, curDateString);
         float stockPrice1 = getStockPrice(tickerSymbol, prevDateString, TypeOfPrice.CLOSE);
         float stockPrice2 = getStockPrice(tickerSymbol, curDateString, TypeOfPrice.CLOSE);
@@ -511,7 +519,7 @@ public class Model implements ModelInterface {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
     LocalDate curDate = LocalDate.parse(startDateString, formatter1);
     LocalDate endDate = LocalDate.parse(endDateString, formatter1);
-    if (endDate.isBefore(curDate)) {
+    if (!curDate.isAfter(endDate)) {
       throw new IllegalArgumentException("End date cannot be before the start date.");
     }
     if (isValidTicker(tickerSymbol)) {
@@ -520,7 +528,7 @@ public class Model implements ModelInterface {
       LocalDate prevDate = curDate.minusDays(1);
       String prevDateString = prevDate.format(formatter1);
       String curDateString = curDate.format(formatter1);
-      while (!curDateString.equals(endDateString)) {
+      while (!curDate.isEqual(endDate)) {
         float yDayMovingAverage = movingAverage(y, tickerSymbol, curDateString);
         float xDayMovingAverage1 = movingAverage(x, tickerSymbol, prevDateString);
         float xDayMovingAverage2 = movingAverage(x, tickerSymbol, curDateString);
@@ -543,12 +551,20 @@ public class Model implements ModelInterface {
   private String assemblePosNegCrossovers(ArrayList<String> positiveCrossovers, ArrayList<String>
           negativeCrossovers) {
     StringBuilder ret = new StringBuilder();
-    for (String d : positiveCrossovers) {
-      ret.append(d).append(",");
+    if (positiveCrossovers.isEmpty()) {
+      ret.append("None");
+    } else {
+      for (String d : positiveCrossovers) {
+        ret.append(d).append(",");
+      }
     }
     ret.append(" ");
-    for (String d : negativeCrossovers) {
-      ret.append(d).append(",");
+    if (negativeCrossovers.isEmpty()) {
+      ret.append("None");
+    } else {
+      for (String d : negativeCrossovers) {
+        ret.append(d).append(",");
+      }
     }
     return ret.toString();
   }
