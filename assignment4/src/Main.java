@@ -1,3 +1,4 @@
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 /**
@@ -14,8 +15,9 @@ public class Main {
   public static void main(String[] args) {
     Model model = new Model();
     View view = new View();
-    Controller controller = new Controller(model, view);
-    Scanner s = new Scanner(System.in);
+    Readable rd = new InputStreamReader(System.in);
+    Scanner s = new Scanner(rd);
+    Controller controller = new Controller(model, view, s);
     System.out.println("Please specify an action to take. See SETUP-README.txt for available "
             + "commands and usage.");
     while (true) {

@@ -61,15 +61,17 @@ import java.util.Scanner;
 public class Controller implements ControllerInterface {
   private Model model;
   private View view;
+  private Scanner scanner;
 
   /**
    * Instantiates the Controller.
    * @param m the Model
    * @param v the View
    */
-  public Controller(Model m, View v) {
+  public Controller(Model m, View v, Scanner scanner) {
     this.model = m;
     this.view = v;
+    this.scanner = scanner;
   }
 
   public void processCommand(String input) {
@@ -227,17 +229,16 @@ public class Controller implements ControllerInterface {
                   + " time (ex. 30 days) crosses the amount of the moving average for a longer "
                   + "period of time (ex. 100 days). Please specify the number of days for the first"
                   + " moving average.");
-          Scanner s = new Scanner(System.in);
-          if (s.hasNextInt()) {
-            x = s.nextInt();
+          if (scanner.hasNextInt()) {
+            x = scanner.nextInt();
           } else {
             System.out.println("Not a valid integer.");
             break;
           }
           System.out.println("Please specify the number of days for the second moving average.");
           int y;
-          if (s.hasNextInt()) {
-            y = s.nextInt();
+          if (scanner.hasNextInt()) {
+            y = scanner.nextInt();
           } else {
             System.out.println("Not a valid integer.");
             break;
@@ -247,7 +248,6 @@ public class Controller implements ControllerInterface {
                     "first.");
             break;
           }
-          s.close();
           result = model.findMovingCrossovers(words[1], words[2], words[3], x, y);
           view.showCrossovers(result);
           break;

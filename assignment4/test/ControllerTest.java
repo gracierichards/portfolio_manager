@@ -5,8 +5,12 @@ import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class ControllerTest {
 
@@ -20,7 +24,8 @@ public class ControllerTest {
   public void setUp() {
     model = new Model();
     view = new View();
-    controller = new Controller(model, view);
+    Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream("".getBytes())));
+    controller = new Controller(model, view, s);
     System.setOut(new PrintStream(outContent));
   }
 
@@ -187,18 +192,24 @@ public class ControllerTest {
     float yavg1 = model.movingAverage(30, "T", "03/14/2024"); // = 17.094
     float yavg2 = model.movingAverage(30, "T", "03/15/2024"); // = 17.061
     float yavg3 = model.movingAverage(30, "T", "03/18/2024"); // = 17.043
-    float xavg1 = model.movingAverage(3, "T", "03/14/2024"); // = 17.133
-    float xavg2 = model.movingAverage(3, "T", "03/15/2024"); // = 17.083
-    float xavg3 = model.movingAverage(3, "T", "03/18/2024"); // = 17.12
-    String input = "moving-crossovers T 03/14/2024 03/18/2024" + System.lineSeparator() + "3"
-            + System.lineSeparator() + "30";
+    float xavg1 = model.movingAverage(3, "T", "03/13/2024"); // = 17.24
+    float xavg2 = model.movingAverage(3, "T", "03/14/2024"); // = 17.133
+    float xavg3 = model.movingAverage(3, "T", "03/15/2024"); // = 17.083
+    float xavg4 = model.movingAverage(3, "T", "03/18/2024"); // = 17.12
+    String input = "moving-crossovers T 03/14/2024 03/18/2024";
+    String followUpInput = "3" + System.lineSeparator() + "30";
+    Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(followUpInput.getBytes())));
+    controller = new Controller(model, view, s);
+    controller.processCommand(input);
+    assertTrue(outContent.toString().contains("Positive crossovers:" + System.lineSeparator() + "None"
+            + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
+            + "None" + System.lineSeparator()));
+
+    input = "moving-crossovers T 02/13/2024 03/13/2024";
+    followUpInput = "3" + System.lineSeparator() + "30";
+    s = new Scanner(new InputStreamReader(new ByteArrayInputStream(followUpInput.getBytes())));
+    controller = new Controller(model, view, s);
     controller.processCommand(input);
     String output = outContent.toString();
-    //assertEquals("Positive crossovers:" + System.lineSeparator() + "None"
-    //        + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
-    //        + "3/14/2024" + System.lineSeparator(), outContent.toString());
-    //input = "crossovers T 02/13/2024 03/13/2024";
-    //controller.processCommand(input);
-    //output = outContent.toString();
   }
 }

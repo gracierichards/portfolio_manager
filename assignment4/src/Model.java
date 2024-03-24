@@ -518,7 +518,7 @@ public class Model implements ModelInterface {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
     LocalDate curDate = LocalDate.parse(startDateString, formatter1);
     LocalDate endDate = LocalDate.parse(endDateString, formatter1);
-    if (!curDate.isAfter(endDate)) {
+    if (curDate.isAfter(endDate)) {
       throw new IllegalArgumentException("End date cannot be before the start date.");
     }
     if (isValidTicker(tickerSymbol)) {
