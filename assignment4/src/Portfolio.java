@@ -14,6 +14,8 @@ public class Portfolio {
   private final String name; // Name of the portfolio
   protected Map<String, Integer> stocks; // Map to store stocks with their corresponding amounts
   private String creationDate; // Field to store the creation date
+  protected Map<String, String> purchaseDates; // Map to store purchase dates of stocks
+  protected Map<String, Float> costBasisMap; // Map to store cost basis of stocks
 
   /**
    * Constructor to initialize a new Portfolio with a given name.
@@ -23,6 +25,8 @@ public class Portfolio {
   public Portfolio(String name) {
     this.name = name;
     this.stocks = new HashMap<>();
+    this.purchaseDates = new HashMap<>();
+    this.costBasisMap = new HashMap<>();
     this.creationDate = getCurrentDate(); // Automatically set creation date
   }
 
@@ -47,8 +51,8 @@ public class Portfolio {
     }
     setModel();
     float costBasis = model.calculateCostBasis(tickerSymbol, amount, creationDate);
-    this.model.costBasisMap.put(tickerSymbol, costBasis);
-    this.model.purchaseDates.put(tickerSymbol, creationDate); // Store purchase date
+    costBasisMap.put(tickerSymbol, costBasis);
+    purchaseDates.put(tickerSymbol, creationDate); // Store purchase date
   }
 
   /**

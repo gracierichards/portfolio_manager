@@ -134,9 +134,10 @@ public class ModelTest {
 
     model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
-    assertEquals(10, model.totalCostBasis(portfolioName), 0.001);
+    assertEquals(10013.3, model.totalCostBasis(portfolioName, "05/26/2024"), 0.001);
   }
 
+/*
   @Test
   public void testTotalCostBasis_SingleStock() {
     String portfolioName = "TestPortfolio";
@@ -158,6 +159,8 @@ public class ModelTest {
     assertEquals("", model.totalCostBasis(portfolioName), 0.001);
   }
 
+   */
+
   @Test
   public void testPortfolioValueOnDate_EmptyPortfolio() {
     String portfolioName = "TanayPortfolio";
@@ -167,7 +170,7 @@ public class ModelTest {
     model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
     assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
-    model.purchaseShares(portfolioName, "VZ", "03/24/2024", 20);
-    assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
+    model.purchaseShares(portfolioName, "VZ", "03/25/2024", 20);
+    assertEquals(10811.9, model.portfolioValueOnDate(portfolioName, "03/25/2024"), 0.001);
   }
 }

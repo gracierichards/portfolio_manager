@@ -51,4 +51,25 @@ public class View implements ViewInterface{
       System.out.println(date);
     }
   }
+
+  /**
+   * Display the total cost basis for a portfolio.
+   *
+   * @param portfolioName The name of the portfolio.
+   * @param totalCostBasis The total cost basis for the portfolio.
+   */
+  public void displayTotalCostBasis(String portfolioName, float totalCostBasis) {
+    System.out.println("Total cost basis for portfolio " + portfolioName + ": " + totalCostBasis);
+  }
+
+  /**
+   * Display the portfolio value on a specific date.
+   *
+   * @param portfolioName The name of the portfolio.
+   * @param date The date for which the portfolio value is calculated.
+   * @param portfolioValue The total value of the portfolio on the specified date.
+   */
+  public void displayPortfolioValueOnDate(String portfolioName, String date, float portfolioValue) {
+    System.out.println("Portfolio value for " + portfolioName + " on " + date + ": " + portfolioValue);
+  }
 }

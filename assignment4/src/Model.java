@@ -23,15 +23,15 @@ import java.util.Scanner;
 public class Model implements ModelInterface {
   protected Map<String, Portfolio> portfolioList;
 
-  protected Map<String, String> purchaseDates; // Map to store purchase dates of stocks
 
-  protected Map<String, Float> costBasisMap; // Map to store cost basis of stocks
+
+
 
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
-    this.purchaseDates = new HashMap<>();
-    this.costBasisMap = new HashMap<>();
+
+
   }
 
   Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
@@ -302,9 +302,9 @@ public class Model implements ModelInterface {
     float costBasis = calculateCostBasis(tickerSymbol, numShares, date);
 
     // Update the cost basis map in the portfolio
-    costBasisMap.put(tickerSymbol, costBasis);
+    portfolio.costBasisMap.put(tickerSymbol, costBasis);
 
-    purchaseDates.put(tickerSymbol,date);
+    portfolio.purchaseDates.put(tickerSymbol,date);
 
     // If necessary, additional logic to record the purchase date could be added here.
   }
@@ -581,18 +581,25 @@ public class Model implements ModelInterface {
    *
    * @return The total cost basis of the portfolio.
    */
-  public float totalCostBasis(String date) {
+
+  public float totalCostBasis(String portfolioName, String date) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found.");
+      return 0;
+    }
     float totalCostBasis = 0;
-    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
+    for (Map.Entry<String, String> entry : portfolio.purchaseDates.entrySet()) {
       String tickerSymbol = entry.getKey();
       String purchaseDate = entry.getValue();
       if (purchaseDate.compareTo(date) <= 0) {
-        float stockCostBasis = costBasisMap.getOrDefault(tickerSymbol, 0f);
+        float stockCostBasis = portfolio.costBasisMap.getOrDefault(tickerSymbol, 0f);
         totalCostBasis += stockCostBasis;
       }
     }
     return totalCostBasis;
   }
+
 
   /**
    * Method to calculate the total portfolio value on a specific date using the current market value.
@@ -608,7 +615,7 @@ public class Model implements ModelInterface {
     }
 
     float totalValue = 0;
-    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
+    for (Map.Entry<String, String> entry : portfolio.purchaseDates.entrySet()) {
       String tickerSymbol = entry.getKey();
       String purchaseDate = entry.getValue();
       if (purchaseDate.compareTo(date) <= 0) {

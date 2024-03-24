@@ -251,6 +251,22 @@ public class Controller implements ControllerInterface {
           result = model.findMovingCrossovers(words[1], words[2], words[3], x, y);
           view.showCrossovers(result);
           break;
+        case "CostBasis":
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name and date.");
+            break;
+          }
+          float CostBasis = model.totalCostBasis(words[1], words[2]);
+          view.displayTotalCostBasis(words[1], CostBasis);
+          break;
+        case "portfolioValueOnDate":
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name and a date.");
+            break;
+          }
+          float portfolioValue = model.portfolioValueOnDate(words[1], words[2]);
+          view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
+          break;
         default:
           System.out.println("Did not understand the command, please try again");
           break;
