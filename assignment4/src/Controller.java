@@ -71,6 +71,7 @@ public class Controller implements ControllerInterface {
     this.model = m;
     this.view = v;
   }
+
   public void processCommand(String input) {
     try {
       String[] words = input.split(" ");

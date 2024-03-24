@@ -115,7 +115,7 @@ public class ModelTest {
     model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     model.purchaseShares(portfolioName, "VZ", "03/21/2024", 10);
     model.purchaseShares(portfolioName, "AAPL", "03/21/2024", 30);
-    model.sellShares(portfolioName,"MSFT", "03/21/2024", 30 );
+    model.sellShares(portfolioName,"MSFT", "03/21/2024", 10 );
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
 
   }
@@ -125,4 +125,49 @@ public class ModelTest {
     model.findCrossovers("AAPL", "03/08/2024", "03/12/2024");
     model.findCrossovers("AAPL", "03/04/2024", "03/08/2024");
   }
-}
+
+  @Test
+  public void testTotalCostBasis_EmptyPortfolio() {
+    String portfolioName = "TanayPortfolio";
+    String[] tickerSymbols = {"AAPL", "MSFT"};
+    float[] stockAmounts = {10.0f, 20.0f};
+
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
+    assertEquals(10, model.totalCostBasis(portfolioName), 0.001);
+  }
+
+  @Test
+  public void testTotalCostBasis_SingleStock() {
+    String portfolioName = "TestPortfolio";
+    Portfolio portfolio = new Portfolio(portfolioName);
+    portfolio.addStock("AAPL", 10);
+    model.portfolioList.put(portfolioName, portfolio);
+
+    assertEquals("", model.totalCostBasis(portfolioName), 0.001);
+  }
+
+  @Test
+  public void testTotalCostBasis_MultipleStocks() {
+    String portfolioName = "TestPortfolio";
+    Portfolio portfolio = new Portfolio(portfolioName);
+    portfolio.addStock("AAPL", 10);
+    portfolio.addStock("GOOG", 5);
+    model.portfolioList.put(portfolioName, portfolio);
+
+    assertEquals("", model.totalCostBasis(portfolioName), 0.001);
+  }
+
+  @Test
+  public void testPortfolioValueOnDate_EmptyPortfolio() {
+    String portfolioName = "TanayPortfolio";
+    String[] tickerSymbols = {"AAPL", "MSFT"};
+    float[] stockAmounts = {10.0f, 20.0f};
+
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
+    assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
+    model.purchaseShares(portfolioName,"VZ", "03/24/2024", 20 );
+    assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
+  }
+

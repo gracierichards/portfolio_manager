@@ -23,9 +23,15 @@ import java.util.Scanner;
 public class Model implements ModelInterface {
   protected Map<String, Portfolio> portfolioList;
 
+  protected Map<String, String> purchaseDates; // Map to store purchase dates of stocks
+
+  protected Map<String, Float> costBasisMap; // Map to store cost basis of stocks
+
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
+    this.purchaseDates = new HashMap<>();
+    this.costBasisMap = new HashMap<>();
   }
 
   Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
@@ -293,19 +299,12 @@ public class Model implements ModelInterface {
 
     // Add purchase information to the portfolio
     portfolio.addStock(tickerSymbol, numShares);
-
-    float purchasePrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-
-    // Calculate the cost basis of the purchased shares
-    float costBasis = purchasePrice * numShares;
-
-    // Add purchase information to the portfolio
-    portfolio.addStock(tickerSymbol, numShares);
+    float costBasis = calculateCostBasis(tickerSymbol, numShares, date);
 
     // Update the cost basis map in the portfolio
-    portfolio.costBasis.put(tickerSymbol, costBasis);
+    costBasisMap.put(tickerSymbol, costBasis);
 
-    portfolio.purchaseDates.put(tickerSymbol,date);
+    purchaseDates.put(tickerSymbol,date);
 
     // If necessary, additional logic to record the purchase date could be added here.
   }
@@ -552,4 +551,75 @@ public class Model implements ModelInterface {
     }
     return ret.toString();
   }
+
+
+  protected float calculateCostBasis(String tickerSymbol, int numShares, String purchaseDate) {
+    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, Model.TypeOfPrice.CLOSE);
+    // Calculate the cost basis of the purchased shares
+    float costBasis = purchasePrice * numShares;
+    return costBasis;
+  }
+
+  /**
+   * Method to calculate the total cost basis of the entire portfolio.
+   *
+   * @return The total cost basis of the portfolio.
+   */
+  public float totalCostBasis(String date) {
+    float totalCostBasis = 0;
+    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      String purchaseDate = entry.getValue();
+      if (purchaseDate.compareTo(date) <= 0) {
+        float stockCostBasis = costBasisMap.getOrDefault(tickerSymbol, 0f);
+        totalCostBasis += stockCostBasis;
+      }
+    }
+    return totalCostBasis;
+  }
+
+  /**
+   * Method to calculate the total portfolio value on a specific date using the current market value.
+   *
+   * @param date The date for which the portfolio value is to be determined.
+   * @return The total value of the portfolio based on the current market value of the stocks.
+   */
+  public float portfolioValueOnDate(String portfolioName, String date) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found.");
+      return 0;
+    }
+
+    float totalValue = 0;
+    for (Map.Entry<String, String> entry : purchaseDates.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      String purchaseDate = entry.getValue();
+      if (purchaseDate.compareTo(date) <= 0) {
+        // Purchase date is on or before the given date
+        int numShares = portfolio.getStocks().getOrDefault(tickerSymbol, 0);
+        float currentPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
+        totalValue += currentPrice * numShares;
+      }
+    }
+    return totalValue;
+  }
+  /*
+  public float portfolioValueOnDate(String portfolioName, String date) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found.");
+      return 0;
+    }
+
+    float totalValue = 0;
+    for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
+      String tickerSymbol = entry.getKey();
+      int numShares = entry.getValue();
+      float currentPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
+      totalValue += currentPrice * numShares;
+    }
+    return totalValue;
+  }
+  */
 }
