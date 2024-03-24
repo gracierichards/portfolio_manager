@@ -115,7 +115,7 @@ public class ModelTest {
     model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     model.purchaseShares(portfolioName, "VZ", "03/21/2024", 10);
     model.purchaseShares(portfolioName, "AAPL", "03/21/2024", 30);
-    model.sellShares(portfolioName,"MSFT", "03/21/2024", 10 );
+    model.sellShares(portfolioName, "MSFT", "03/21/2024", 10);
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
 
   }
@@ -167,7 +167,7 @@ public class ModelTest {
     model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     model.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
     assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
-    model.purchaseShares(portfolioName,"VZ", "03/24/2024", 20 );
+    model.purchaseShares(portfolioName, "VZ", "03/24/2024", 20);
     assertEquals(10013.3, model.portfolioValueOnDate(portfolioName, "03/24/2024"), 0.001);
   }
-
+}

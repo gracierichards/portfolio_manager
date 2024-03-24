@@ -124,4 +124,61 @@ public class ControllerTest {
                     + System.lineSeparator() + "Portfolio created successfully."
                     + System.lineSeparator(), outContent.toString());
   }
+
+  @Test
+  public void testProcessCommand_StockDirectionDay() {
+    String input = "stock-direction-day T 03/15/2024";
+    controller.processCommand(input);
+    assertEquals("T gained value." + System.lineSeparator(), outContent.toString());
+    input = "stock-direction-day VZ 03/14/2024";
+    controller.processCommand(input);
+    input = "stock-direction-day T 03/09/2024";
+    controller.processCommand(input);
+    assertEquals("T gained value." + System.lineSeparator() + "VZ lost value."
+            + System.lineSeparator() + "T gained value." + System.lineSeparator(),
+            outContent.toString());
+  }
+
+  @Test
+  public void testProcessCommand_StockDirectionOverTime() {
+    String input = "stock-direction-over-time T 03/15/2024 03/13/2024";
+    controller.processCommand(input);
+    input = "stock-direction-over-time T 03/11/2024 03/18/2024";
+    controller.processCommand(input);
+    input = "stock-direction-over-time VZ 02/26/2024 03/18/2024";
+    controller.processCommand(input);
+    assertEquals("End date cannot be before the start date." + System.lineSeparator()
+                    + "T lost value." + System.lineSeparator() + "VZ gained value."
+                    + System.lineSeparator(), outContent.toString());
+  }
+
+  @Test
+  public void testProcessCommand_MovingAverage() {
+    String input = "moving-average 2.5 T 03/15/2024";
+    controller.processCommand(input);
+    input = "moving-average 3 T 03/15/2024";
+    controller.processCommand(input);
+    input = "moving-average 4 VZ 03/11/2024";
+    controller.processCommand(input);
+    assertEquals("Please provide an integer number of days." + System.lineSeparator()
+            + "The 3-day moving average is 17.083334" + System.lineSeparator() + "The 4-day moving "
+            + "average is 39.775"
+            + System.lineSeparator(), outContent.toString());
+  }
+
+  @Test
+  public void testProcessCommand_Crossovers() {
+    float avg1 = model.movingAverage(30, "T", "03/14/2024"); // = 17.094
+    float avg2 = model.movingAverage(30, "T", "03/15/2024"); // = 17.061
+    float avg3 = model.movingAverage(30, "T", "03/18/2024"); // = 17.043
+    String input = "crossovers T 03/14/2024 03/18/2024";
+    controller.processCommand(input);
+    // 03/18 should be a positive crossover
+    assertEquals("Positive crossovers:" + System.lineSeparator() + "None"
+            + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
+            + "3/14/2024" + System.lineSeparator(), outContent.toString());
+    input = "crossovers T 02/13/2024 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
 }
