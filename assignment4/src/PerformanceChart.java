@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * PortfolioPerformanceChart class generates a text-based bar chart to visualize the performance of a portfolio over a specified time range.
+ * PortfolioPerformanceChart class generates a text-based bar chart to visualize the performance of
+ * a portfolio over a specified time range.
  */
 public class PerformanceChart {
 
@@ -20,14 +21,16 @@ public class PerformanceChart {
   }
 
   /**
-   * Generates a text-based bar chart to visualize the performance of a portfolio over a specified time range.
+   * Generates a text-based bar chart to visualize the performance of a portfolio over a specified
+   * time range.
    *
    * @param portfolioName The name of the portfolio.
    * @param startDate     The start time of the time range.
    * @param endDate       The end time of the time range.
    * @return The text-based bar chart as a string.
    */
-  public static String generatePerformanceChart(String portfolioName, String startDate, String endDate, Model model) {
+  public static String generatePerformanceChart(String portfolioName, String startDate,
+                                                String endDate, Model model) {
     Portfolio portfolio = model.portfolioList.get(portfolioName);
     if (portfolio == null) {
       return "Portfolio not found.";
@@ -96,12 +99,21 @@ public class PerformanceChart {
     if (totalDays <= 30) {
       timeSpan = "days";
       interval = 1;
-    } else if (totalDays <= 365) {
+    } else if (totalDays <= 120) {
+      timeSpan = "week";
+      interval = 7;
+    } else if (totalDays <= 900) {
       timeSpan = "months";
-      interval = Math.toIntExact(totalDays / 30); // Approximate number of months
+      //interval = Math.toIntExact(totalDays / 30); // Approximate number of months
+      interval = 1; //because below we use interval to add this many months I think?
+    } else if (totalDays <= 1490) {
+      timeSpan = "2months";
+      //interval = 2 * Math.toIntExact(totalDays / 30);
+      interval = 2;
     } else {
       timeSpan = "years";
-      interval = Math.toIntExact(totalDays / 365); // Approximate number of years
+      //interval = Math.toIntExact(totalDays / 365); // Approximate number of years
+      interval = 1;
     }
 
     // Generate timestamps at regular intervals
@@ -112,7 +124,13 @@ public class PerformanceChart {
         case "days":
           current = current.plusDays(interval);
           break;
+        case "week":
+          current = current.plusDays(interval);
+          break;
         case "months":
+          current = current.plusMonths(interval);
+          break;
+        case "2months":
           current = current.plusMonths(interval);
           break;
         case "years":

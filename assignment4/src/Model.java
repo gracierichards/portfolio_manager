@@ -34,7 +34,7 @@ public class Model implements ModelInterface {
 
   }
 
-  Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
+  protected Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
     if (!portfolioList.containsKey(portfolioName)) {
       throw new FileNotFoundException();
     }
