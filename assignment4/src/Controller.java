@@ -59,6 +59,16 @@ import java.util.Scanner;
  * possible commands this program accepts - see SETUP-README.txt for documentation of commands.
  */
 public class Controller implements ControllerInterface {
+  /**
+   * Unlike in Assignment 4, the controller now takes in the scanner created by Main. This is
+   * because for one of the commands, moving-crossovers, the controller has to prompt the user
+   * for two ints, x and y, after entering the initial command. Therefore, the controller needs
+   * access to the scanner for user input.
+   * The scanner being instantiated in Main was kept, so Main can check whether the command says
+   * quit and terminate the program from there. The controller does not take in something general
+   * like an InputStream, because this would not be compatible with the scanner taking input in
+   * Main.
+   */
   private Model model;
   private View view;
   private Scanner scanner;

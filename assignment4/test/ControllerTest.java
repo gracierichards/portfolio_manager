@@ -24,6 +24,8 @@ public class ControllerTest {
   public void setUp() {
     model = new Model();
     view = new View();
+    //Next line is just a placeholder, controller only needs input for the moving-crossovers
+    //command. The test for this command initializes the controller with the input to be tested.
     Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream("".getBytes())));
     controller = new Controller(model, view, s);
     System.setOut(new PrintStream(outContent));

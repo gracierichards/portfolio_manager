@@ -41,6 +41,17 @@ public class Model implements ModelInterface {
     return portfolioList.get(portfolioName);
   }
 
+  /**
+   * createPortfolio has changed slightly compared to the version from Assignment 4. The difference
+   * is that the logic for checking if a ticker symbol is a valid stock has been abstracted away
+   * into a helper function called isValidTicker. This is different from isValidTicker in Assignment
+   * 4, which could only check validity in certain cases, and the old method is used as a helper for
+   * the new isValidTicker. The new method is a general function that any method in Model can use to
+   * determine if a ticker symbol is valid.
+   * This is an improvement over the original design because functionality that is required for
+   * many parts of the program, determining if a ticker symbol is valid, is now in a separate
+   * method, and createPortfolio does not duplicate code in this new method.
+   */
   @Override
   public void createPortfolio(String portfolioName, String[] tickerSymbols, float[] stockAmounts)
           throws IllegalArgumentException {
@@ -161,7 +172,9 @@ public class Model implements ModelInterface {
    * getTickerMatches.
    */
   private String getAlphaVantageData(String urlPart) {
-    String apiKey = "8FDS9CHM4YROZVC5";
+    //old low volume api key
+    //String apiKey = "8FDS9CHM4YROZVC5";
+    String apiKey = "QEHLSEQZWQ0SZGJA";
     URL url = null;
     try {
       url = new URL("https://www.alphavantage" + ".co/query?" + urlPart + "&apikey="
@@ -197,6 +210,15 @@ public class Model implements ModelInterface {
     return output.toString();
   }
 
+  /**
+   * determineValue has changed slightly compared to the version from Assignment 4. The difference
+   * is that much of the code has been abstracted away into a helper function called getStockPrice.
+   * Now any class in this package can use this method to find the price of a given stock on a given
+   * date, and specify whether they want the opening or closing price.
+   * This is an improvement over the original design because functionality that is required for
+   * many parts of the program, finding the price of a stock, is now in a method accessible by the
+   * rest of the program, and determineValue does not duplicate code in this new method.
+   */
   @Override
   public float determineValue(String portfolioName, String date) {
     Portfolio p = portfolioList.get(portfolioName);
