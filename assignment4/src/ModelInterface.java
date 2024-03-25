@@ -101,4 +101,15 @@ public interface ModelInterface {
    */
   String findMovingCrossovers(String tickerSymbol, String startDate, String endDate, int x, int y)
           throws IllegalArgumentException;
+
+  /**
+   * Creates a horizontal bar chart of the performance of a portfolio over time. It has bars for
+   * regular time intervals from startDate to endDate, and the bar is made up of asterisks, with
+   * each asterisk representing the number of dollars indicated in the scale.
+   * @param portfolioName the portfolio to chart the performance for
+   * @param startDate the beginning of the time period to be included in the graph
+   * @param endDate the end of the time period to be included in the graph
+   * @return the final graph as text
+   */
+  String chartPerformance(String portfolioName, String startDate, String endDate);
 }

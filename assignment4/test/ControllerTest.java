@@ -214,4 +214,68 @@ public class ControllerTest {
     controller.processCommand(input);
     String output = outContent.toString();
   }
+
+  @Test
+  public void testProcessCommand_chart1() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 03/09/2024 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testProcessCommand_chart2() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 03/07/2024 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testProcessCommand_chart3() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 02/12/2024 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+    //should be 30 bars
+  }
+
+  @Test
+  public void testProcessCommand_chart4() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 12/13/2023 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testProcessCommand_chart5() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 09/13/2022 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testProcessCommand_chart6() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 03/13/2019 03/13/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testProcessCommand_chart7() {
+    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"}, new
+            float[]{10.0f, 20.0f});
+    String input = "chart TestPortfolio 01/01/2021 01/01/2024";
+    controller.processCommand(input);
+    String output = outContent.toString();
+  }
 }

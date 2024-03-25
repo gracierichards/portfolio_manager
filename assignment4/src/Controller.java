@@ -51,6 +51,12 @@ import java.util.Scanner;
  * the smaller moving average, and then for y, the number of days for the larger moving average.
  * If the second amount is not longer than the first amount, then it will provide an error message.
  *
+ * CostBasis <portfolio-name> MM/DD/YYYY
+ *
+ * portfolioValueOnDate <portfolio-name> MM/DD/YYYY
+ *
+ * chart <portfolio-name> start_date end_date
+ *
  * quit   - to terminate the program.
  */
 
@@ -277,6 +283,12 @@ public class Controller implements ControllerInterface {
           float portfolioValue = model.portfolioValueOnDate(words[1], words[2]);
           view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
           break;
+        case "chart":
+          if (words.length < 4) {
+            System.out.println("Please provide a portfolio name, start date, and end date.");
+            break;
+          }
+          System.out.println(model.chartPerformance(words[1], words[2], words[3]));
         default:
           System.out.println("Did not understand the command, please try again");
           break;

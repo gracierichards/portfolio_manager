@@ -8,18 +8,6 @@ import java.util.List;
  * a portfolio over a specified time range.
  */
 public class PerformanceChart {
-
-  private final Model model;
-
-  /**
-   * Constructs a PortfolioPerformanceChart object with the specified Model instance.
-   *
-   * @param model The Model instance to use for retrieving portfolio data.
-   */
-  public PerformanceChart(Model model) {
-    this.model = model;
-  }
-
   /**
    * Generates a text-based bar chart to visualize the performance of a portfolio over a specified
    * time range.
@@ -89,8 +77,8 @@ public class PerformanceChart {
     LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
     LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 
-    // Ensure end date is inclusive
-    end = end.plusDays(1);
+    // Inclusive of end date without this
+    // end = end.plusDays(1);
 
     // Determine interval based on the difference between start and end dates
     long totalDays = java.time.temporal.ChronoUnit.DAYS.between(start, end);

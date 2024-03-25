@@ -667,4 +667,8 @@ public class Model implements ModelInterface {
     return totalValue;
   }
   */
+
+  public String chartPerformance(String portfolioName, String startDate, String endDate) {
+    return PerformanceChart.generatePerformanceChart(portfolioName, startDate, endDate, this);
+  }
 }
