@@ -233,7 +233,7 @@ public class Model implements ModelInterface {
    * @param tickerSymbol the ticker symbol to be checked.
    * @return whether the ticker symbol is valid.
    */
-  private boolean isValidTicker(String tickerSymbol) {
+  protected boolean isValidTicker(String tickerSymbol) {
     File file = new File("stockcsvs", tickerSymbol + ".csv");
     if (file.exists()) {
       return isQueriedTickerValid(tickerSymbol);
@@ -657,17 +657,15 @@ public class Model implements ModelInterface {
     }
     return totalValue;
   }
-
-  /**
-   * Generates a performance chart for a specified portfolio within a given date range.
-   *
-   * @param portfolioName The name of the portfolio.
-   * @param startDate     The start date of the performance chart in the format "yyyy-MM-dd".
-   * @param endDate       The end date of the performance chart in the format "yyyy-MM-dd".
-   * @return A string representing the generated performance chart.
-   */
+  
   @Override
   public String chartPerformance(String portfolioName, String startDate, String endDate) {
     return PerformanceChart.generatePerformanceChart(portfolioName, startDate, endDate, this);
+  }
+
+  @Override
+  public String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException {
+    return PerformanceChart.generatePerformanceChartStock(tickerSymbol, startDate, endDate, this);
   }
 }

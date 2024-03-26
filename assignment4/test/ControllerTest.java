@@ -217,7 +217,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart1() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 03/09/2024 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 03/09/2024 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements
@@ -229,7 +229,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart2() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 03/07/2024 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 03/07/2024 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements
@@ -241,7 +241,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart3() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 02/12/2024 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 02/12/2024 03/13/2024");
     String output = outContent.toString();
     //should be 30 bars
 
@@ -254,7 +254,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart4() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 12/13/2023 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 12/13/2023 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements
@@ -266,7 +266,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart5() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 09/13/2022 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 09/13/2022 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements
@@ -279,7 +279,7 @@ public class ControllerTest {
   public void testProcessCommand_chart6() {
     //yearly
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 03/13/2019 03/13/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 03/13/2019 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements
@@ -291,7 +291,13 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_chart7() {
     testChartSetup();
-    controller.processCommand("chart TestPortfolio 01/01/2021 01/01/2024");
+    controller.processCommand("chart-portfolio TestPortfolio 01/01/2021 01/01/2024");
+    String output = outContent.toString();
+  }
+
+  @Test
+  public void testChartStock() {
+    controller.processCommand("chart-stock AAPL 02/12/2024 03/13/2024");
     String output = outContent.toString();
 
     //to pass the Handin grader's requirements

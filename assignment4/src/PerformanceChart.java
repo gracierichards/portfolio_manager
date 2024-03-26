@@ -65,6 +65,60 @@ public class PerformanceChart {
   }
 
   /**
+   * Generates a text-based bar chart to visualize the performance of a stock over a specified
+   * time range.
+   *
+   * @param tickerSymbol The name of the stock.
+   * @param startDate     The start time of the time range.
+   * @param endDate       The end time of the time range.
+   * @return The text-based bar chart as a string.
+   */
+  public static String generatePerformanceChartStock(String tickerSymbol, String startDate,
+                                    String endDate, Model model) throws IllegalArgumentException {
+    if (!model.isValidTicker(tickerSymbol)) {
+      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
+    }
+
+    StringBuilder chart = new StringBuilder();
+
+    // Calculate performance for each timestamp in the range
+    List<String> timestamps = getTimeStampsInRange(startDate, endDate);
+    if (timestamps.isEmpty()) {
+      return "No timestamps found in the specified range.";
+    }
+
+    // Determine the scale for the chart
+    float maxValue = 0;
+    for (String timestamp : timestamps) {
+      float value = model.getStockPrice(tickerSymbol, timestamp, Model.TypeOfPrice.CLOSE);
+      if (value > maxValue) {
+        maxValue = value;
+      }
+    }
+    int scale = Math.max(1, (int) (maxValue / 50));
+
+    // Add title to the chart
+    chart.append("Performance of stock ").append(tickerSymbol).append(" from ")
+            .append(startDate).append(" to ").append(endDate).append("\n");
+
+    // Add data lines to the chart
+    for (String timestamp : timestamps) {
+      float value = model.getStockPrice(tickerSymbol, timestamp, Model.TypeOfPrice.CLOSE);
+      int asterisks = Math.max(1, (int) (value / scale));
+      chart.append(timestamp).append(": ");
+      for (int i = 0; i < asterisks; i++) {
+        chart.append("*");
+      }
+      chart.append("\n");
+    }
+
+    // Add scale to the chart
+    chart.append("Scale: * = ").append(scale);
+
+    return chart.toString();
+  }
+
+  /**
    * Generates timestamps at regular intervals within the specified time span.
    *
    * @param startDate The start date of the time range.

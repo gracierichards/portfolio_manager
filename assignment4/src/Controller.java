@@ -55,7 +55,9 @@ import java.util.Scanner;
  * <p>
  * portfolioValueOnDate <portfolio-name> MM/DD/YYYY
  * <p>
- * chart <portfolio-name> start_date end_date
+ * chart-portfolio <portfolio-name> start_date end_date
+ * <p>
+ * chart-stock <ticker_symbol> start_date end_date
  * <p>
  * purchase <portfolio_name> <ticker_symbol> <date> <numShares>
  * for buying stocks and adding them to the portfolio
@@ -294,12 +296,23 @@ public class Controller implements ControllerInterface {
           float portfolioValue = model.portfolioValueOnDate(words[1], words[2]);
           view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
           break;
-        case "chart":
+        case "chart-portfolio":
           if (words.length < 4) {
             System.out.println("Please provide a portfolio name, start date, and end date.");
             break;
           }
           System.out.println(model.chartPerformance(words[1], words[2], words[3]));
+          break;
+        case "chart-stock":
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            break;
+          }
+          try {
+            System.out.println(model.chartPerformanceStock(words[1], words[2], words[3]));
+          } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+          }
           break;
         case "purchase":
           if (words.length < 5) {

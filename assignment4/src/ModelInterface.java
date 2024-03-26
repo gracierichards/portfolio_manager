@@ -112,4 +112,16 @@ public interface ModelInterface {
    * @return the final graph as text
    */
   String chartPerformance(String portfolioName, String startDate, String endDate);
+
+  /**
+   * Creates a horizontal bar chart of the performance of a stock over time. It has bars for
+   * regular time intervals from startDate to endDate, and the bar is made up of asterisks, with
+   * each asterisk representing the number of dollars indicated in the scale.
+   * @param tickerSymbol the stock to chart the performance for
+   * @param startDate the beginning of the time period to be included in the graph
+   * @param endDate the end of the time period to be included in the graph
+   * @return the final graph as text
+   */
+  String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
+          throws IllegalArgumentException;
 }
