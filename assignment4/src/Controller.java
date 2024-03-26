@@ -276,7 +276,7 @@ public class Controller implements ControllerInterface {
           date = words[3];
           numShares = Integer.parseInt(words[4]);
           model.sellShares(portfolioName, tickerSymbol, date, numShares);
-          System.out.println("Shares bought successfully");
+          System.out.println("Shares sold successfully");
           break;
         default:
           System.out.println("Did not understand the command, please try again");

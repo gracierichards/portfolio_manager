@@ -228,7 +228,8 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Helper method to determine whether a ticker symbol is valid.
+   * Helper method to determine whether a ticker symbol is valid. Also downloads the stock data if
+   * it has not been downloaded yet.
    *
    * @param tickerSymbol the ticker symbol to be checked.
    * @return whether the ticker symbol is valid.
@@ -363,6 +364,7 @@ public class Model implements ModelInterface {
    */
 
   protected float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
+    isValidTicker(tickerSymbol);
     try {
       File file1 = new File("stockcsvs", tickerSymbol + ".csv");
       Scanner s = new Scanner(file1);
@@ -386,6 +388,7 @@ public class Model implements ModelInterface {
       s.close();
     } catch (FileNotFoundException e) {
       System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
+      return -1;
     }
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
