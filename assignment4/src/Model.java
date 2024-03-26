@@ -23,15 +23,9 @@ import java.util.Scanner;
 public class Model implements ModelInterface {
   protected Map<String, Portfolio> portfolioList;
 
-
-
-
-
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
-
-
   }
 
   protected Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
@@ -327,8 +321,6 @@ public class Model implements ModelInterface {
     portfolio.costBasisMap.put(tickerSymbol, costBasis);
 
     portfolio.purchaseDates.put(tickerSymbol,date);
-
-    // If necessary, additional logic to record the purchase date could be added here.
   }
 
   /**

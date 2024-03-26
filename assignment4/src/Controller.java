@@ -289,6 +289,30 @@ public class Controller implements ControllerInterface {
             break;
           }
           System.out.println(model.chartPerformance(words[1], words[2], words[3]));
+        case "purchase":
+          if (words.length < 5) {
+            System.out.println("Invalid purchase command. Usage: purchase <portfolio_name> <ticker_symbol> <date> <numShares>");
+            break;
+          }
+          String portfolioName1 = words[1];
+          String tickerSymbol = words[2];
+          String date = words[3];
+          int numShares = Integer.parseInt(words[4]);
+          model.purchaseShares(portfolioName1, tickerSymbol, date, numShares);
+          System.out.println("Shares bought successfully");
+          break;
+        case "sell":
+          if (words.length < 5) {
+            System.out.println("Invalid sell command. Usage: sell <portfolio_name> <ticker_symbol> <date> <numShares>");
+            break;
+          }
+          portfolioName = words[1];
+          tickerSymbol = words[2];
+          date = words[3];
+          numShares = Integer.parseInt(words[4]);
+          model.sellShares(portfolioName, tickerSymbol, date, numShares);
+          System.out.println("Shares bought successfully");
+          break;
         default:
           System.out.println("Did not understand the command, please try again");
           break;
