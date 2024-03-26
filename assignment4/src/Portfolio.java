@@ -72,7 +72,7 @@ public class Portfolio {
    * @param tickerSymbol The ticker symbol of the stock to be removed.
    * @param numShares    The number of shares to be removed.
    * @throws IllegalArgumentException If the stock is not found in the portfolio or if the number
-   *     of shares to remove exceeds the available shares.
+   *                                  of shares to remove exceeds the available shares.
    */
   public void removeStock(String tickerSymbol, int numShares) throws IllegalArgumentException {
     if (!stocks.containsKey(tickerSymbol)) {

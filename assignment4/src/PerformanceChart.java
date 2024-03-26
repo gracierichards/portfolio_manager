@@ -69,12 +69,12 @@ public class PerformanceChart {
    * time range.
    *
    * @param tickerSymbol The name of the stock.
-   * @param startDate     The start time of the time range.
-   * @param endDate       The end time of the time range.
+   * @param startDate    The start time of the time range.
+   * @param endDate      The end time of the time range.
    * @return The text-based bar chart as a string.
    */
   public static String generatePerformanceChartStock(String tickerSymbol, String startDate,
-                                    String endDate, Model model) throws IllegalArgumentException {
+                                     String endDate, Model model) throws IllegalArgumentException {
     if (!model.isValidTicker(tickerSymbol)) {
       throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     }
