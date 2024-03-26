@@ -5,7 +5,7 @@ DESIGN CHANGES
 OVERVIEW
 
   The Portfolio Management System is designed to provide users with tools for managing investment portfolios. It allows users to create portfolios, 
-  add stocks to them, save portfolios to files, load portfolios from files, examine portfolio composition, determine portfolio values, and search 
+  add stocks to them, save portfolios to files, load portfolios from files, examine portfolio composition, determine portfolio values, search
   for ticker symbols, purchase and sell stocks/shares, find the cost basis and portfolio value on a particular date, the net gain/loss over a day 
   and over a period of time, find out the moving averages, crossovers and moving crossovers and also creates a performance chart of a portfolio on
   a give date. The system is designed with a Model-View-Controller (MVC) architecture to ensure modularity and separation of concerns.

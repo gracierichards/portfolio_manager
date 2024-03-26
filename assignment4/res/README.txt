@@ -38,7 +38,7 @@ FEATURES
 
        17. Moving Crossovers: Gives a list of the positive crossovers and negative crossovers within the given time period. A moving crossover happens when an x-day moving average 		   crosses from one side to another side of a y-day moving average, with x lesser than y.
 
-       18. Performance Chart: Users can create horizontal bar chart of the performance of a portfolio over time. It has bars for regular time intervals from startDate to endDate, and the 	   bar is made up of asterisks, with each asterisk representing the number of dollars indicated in the scale.
+       18. Performance Chart: Users can create horizontal bar chart of the performance of a portfolio or stock over time. It has bars for regular time intervals from startDate to endDate, and the 	   bar is made up of asterisks, with each asterisk representing the number of dollars indicated in the scale.
 
 II. Incomplete Features:
 

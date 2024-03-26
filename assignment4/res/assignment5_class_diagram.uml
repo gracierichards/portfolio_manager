@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/Users/gracierichards/Desktop/CS 5010/group/assignment4/src</OriginalElement>
+  <nodes>
+    <node x="70.5" y="826.0">View</node>
+    <node x="418.5" y="1069.5">Model</node>
+    <node x="505.0" y="1982.0">PerformanceChart</node>
+    <node x="577.5" y="393.5">ModelInterface</node>
+    <node x="-98.0" y="1418.5">ControllerInterface</node>
+    <node x="326.0" y="-18.5">Portfolio</node>
+    <node x="229.0" y="1969.5">Model.TypeOfPrice</node>
+    <node x="-87.0" y="1952.5">Controller</node>
+    <node x="-42.0" y="2246.0">Main</node>
+    <node x="-49.5" y="458.5">ViewInterface</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Model" target="ModelInterface" relationship="REALIZATION">
+      <point x="194.0" y="-380.5" />
+      <point x="855.0" y="1030.0" />
+      <point x="781.0" y="1030.0" />
+      <point x="0.0" y="156.5" />
+    </edge>
+    <edge source="Model.TypeOfPrice" target="Model" relationship="INNER_CLASS">
+      <point x="0.0" y="-80.5" />
+      <point x="341.0" y="1930.0" />
+      <point x="661.0" y="1930.0" />
+      <point x="0.0" y="380.5" />
+    </edge>
+    <edge source="Model" target="Portfolio" relationship="TO_MANY">
+      <point x="-194.0" y="-380.5" />
+      <point x="467.0" y="810.0" />
+      <point x="359.75" y="810.0" />
+      <point x="-101.25" y="188.5" />
+    </edge>
+    <edge source="Portfolio" target="Model" relationship="TO_ONE">
+      <point x="-33.75" y="188.5" />
+      <point x="427.25" y="790.0" />
+      <point x="564.0" y="790.0" />
+      <point x="-97.0" y="-380.5" />
+    </edge>
+    <edge source="Main" target="Model" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="41.0" y="2210.0" />
+      <point x="481.0" y="2210.0" />
+      <point x="481.0" y="1970.0" />
+      <point x="822.6666666666667" y="1970.0" />
+      <point x="161.66666666666669" y="380.5" />
+    </edge>
+    <edge source="View" target="ViewInterface" relationship="REALIZATION">
+      <point x="0.0" y="-104.0" />
+      <point x="261.0" y="790.0" />
+      <point x="141.0" y="790.0" />
+      <point x="0.0" y="91.5" />
+    </edge>
+    <edge source="Controller" target="ControllerInterface" relationship="REALIZATION">
+      <point x="-64.0" y="-97.5" />
+      <point x="-23.0" y="1930.0" />
+      <point x="21.0" y="1930.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="Portfolio" target="Model" relationship="CREATE">
+      <point x="33.75" y="188.5" />
+      <point x="494.75" y="770.0" />
+      <point x="661.0" y="770.0" />
+      <point x="0.0" y="-380.5" />
+    </edge>
+    <edge source="Model" target="Portfolio" relationship="CREATE">
+      <point x="97.0" y="-380.5" />
+      <point x="758.0" y="750.0" />
+      <point x="562.25" y="750.0" />
+      <point x="101.25" y="188.5" />
+    </edge>
+    <edge source="Controller" target="View" relationship="TO_ONE">
+      <point x="64.0" y="-97.5" />
+      <point x="105.0" y="1930.0" />
+      <point x="161.0" y="1930.0" />
+      <point x="161.0" y="1890.0" />
+      <point x="165.75" y="1890.0" />
+      <point x="-95.25" y="104.0" />
+    </edge>
+    <edge source="Controller" target="Model" relationship="TO_ONE">
+      <point x="64.0" y="-97.5" />
+      <point x="105.0" y="1930.0" />
+      <point x="161.0" y="1930.0" />
+      <point x="161.0" y="1890.0" />
+      <point x="499.33333333333326" y="1890.0" />
+      <point x="-161.66666666666669" y="380.5" />
+    </edge>
+    <edge source="Main" target="Controller" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="Main" target="View" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="41.0" y="2210.0" />
+      <point x="201.0" y="2210.0" />
+      <point x="201.0" y="1910.0" />
+      <point x="356.25" y="1910.0" />
+      <point x="95.25" y="104.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.47830854143415175" showDependencies="true" x="619.99212942919" y="665.7044776119403" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
