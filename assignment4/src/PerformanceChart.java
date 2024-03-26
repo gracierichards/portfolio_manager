@@ -84,17 +84,17 @@ public class PerformanceChart {
     long totalDays = java.time.temporal.ChronoUnit.DAYS.between(start, end);
     String timeSpan;
     int interval;
-    if (totalDays <= 30) {
+    if (totalDays < 30) {
       timeSpan = "days";
       interval = 1;
-    } else if (totalDays <= 120) {
+    } else if (totalDays < 120) {
       timeSpan = "week";
       interval = 7;
-    } else if (totalDays <= 900) {
+    } else if (totalDays < 900) {
       timeSpan = "months";
       //interval = Math.toIntExact(totalDays / 30); // Approximate number of months
       interval = 1; //because below we use interval to add this many months I think?
-    } else if (totalDays <= 1490) {
+    } else if (totalDays < 1490) {
       timeSpan = "2months";
       //interval = 2 * Math.toIntExact(totalDays / 30);
       interval = 2;

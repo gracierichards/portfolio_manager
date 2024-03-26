@@ -57,6 +57,12 @@ import java.util.Scanner;
  *
  * chart <portfolio-name> start_date end_date
  *
+ * purchase <portfolio_name> <ticker_symbol> <date> <numShares>
+ * for buying stocks and adding them to the portfolio
+ *
+ * sell <portfolio_name> <ticker_symbol> <date> <numShares>
+ * for selling stocks in a portfolio
+ *
  * quit   - to terminate the program.
  */
 
@@ -289,6 +295,7 @@ public class Controller implements ControllerInterface {
             break;
           }
           System.out.println(model.chartPerformance(words[1], words[2], words[3]));
+          break;
         case "purchase":
           if (words.length < 5) {
             System.out.println("Invalid purchase command. Usage: purchase <portfolio_name> <ticker_symbol> <date> <numShares>");
