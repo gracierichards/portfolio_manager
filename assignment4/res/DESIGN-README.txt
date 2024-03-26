@@ -1,8 +1,14 @@
+DESIGN CHANGES
+
+  There are no design changes.
+
 OVERVIEW
 
   The Portfolio Management System is designed to provide users with tools for managing investment portfolios. It allows users to create portfolios, 
   add stocks to them, save portfolios to files, load portfolios from files, examine portfolio composition, determine portfolio values, and search 
-  for ticker symbols. The system is designed with a Model-View-Controller (MVC) architecture to ensure modularity and separation of concerns.
+  for ticker symbols, purchase and sell stocks/shares, find the cost basis and portfolio value on a particular date, the net gain/loss over a day 
+  and over a period of time, find out the moving averages, crossovers and moving crossovers and also creates a performance chart of a portfolio on
+  a give date. The system is designed with a Model-View-Controller (MVC) architecture to ensure modularity and separation of concerns.
 
 __________________________________________________________________________________________________________________________________________________________
 
@@ -10,9 +16,11 @@ COMPONENTS
 
 Model
 1.The Model component represents the core logic of the system. It encapsulates data and business logic related to portfolios, stocks, and interactions
-  with external data sources such as stock price APIs. It stores portfolios as a HashMap of portfolio names to corresponding Portfolio objects. Key classes in the Model component include:
+  with external data sources such as stock price APIs. It stores portfolios as a HashMap of portfolio names to corresponding Portfolio objects. 
+  Key classes in the Model component include:
 
-2.Portfolio: Represents a user's investment portfolio, containing a collection of stocks. Stocks are represented as a string containing the ticker symbol of the stock, which maps to the amount of the stock in the portfolio.
+2.Portfolio: Represents a user's investment portfolio, containing a collection of stocks, the purchase dates of each stock and the cost basis of these 
+  stocks. Stocks are represented as a string containing the ticker symbol of the stock, which maps to the amount of the stock in the portfolio.
    
 3.Model: Implements the core functionality of the system, including portfolio creation, management, and data retrieval.
 
@@ -20,11 +28,13 @@ Model
 View
 
   The View component handles user interface elements and presentation logic. It provides visual representations of portfolio data and interacts with users 
-  through a command-line interface (CLI) or graphical user interface (GUI). Key classes in the View component include:
+  through a command-line interface (CLI). Key classes in the View component include:
 
-  View: Implements methods for displaying portfolio data, ticker symbol matches, and portfolio values to users.
+  View: Implements methods for displaying portfolio data, ticker symbol matches, portfolio values to users, shows crossovers, displays the cost basis and
+  portfolio value on given dates to the user.
 
-Main: Instantiates the Model, View, and Controller. Implements a command-line interface for user interaction, continuously accepting input from the command-line, and passes commands to the controller.
+Main: Instantiates the Model, View, and Controller. Implements a command-line interface for user interaction, continuously accepting input from the
+      command-line, and passes commands to the controller.
 
 Controller
 
@@ -56,6 +66,8 @@ ________________________________________________________________________________
 
 MISCELLANEOUS
 
-1. Each time the program queries the stock prices from Alpha Vantage, it stores the data in a csv file in the stockcsvs folder. The daily price info for each stock is in a separate file. The stockcsvs folder is located in the same folder as the .jar file. When the program needs data for a stock, it checks if the csv file for the stock exists before querying Alpha Vantage.
+1. Each time the program queries the stock prices from Alpha Vantage, it stores the data in a csv file in the stockcsvs folder. The daily price info for each 
+   stock is in a separate file. The stockcsvs folder is located in the same folder as the .jar file. When the program needs data for a stock, it checks if the
+   csv file for the stock exists before querying Alpha Vantage.
 
 2. It has some flexibility in the commands it accepts, for example omitting the word "portfolio" for the load portfolio command.
