@@ -1,8 +1,39 @@
 DESIGN CHANGES
 
-  1. Evey stock added to portflio is now assosciated with a purchase date which is stored in a new hashmap, purchaseDates<>, along with their tickersymbols.
+  1. Evey stock added to portfolio is now associated with a purchase date which is stored in a new hashmap, purchaseDates<>, along with their tickersymbols.
      Stock added at the date of creation of the portfolio are assigned the creation Date as their purchase date and other additional stocks purchased later
-     require the user to manually enter a date of purchase. 
+     require the user to manually enter a date of purchase.
+
+  2. Unlike in Assignment 4, the controller now takes in the scanner created by Main. This is
+     because for one of the commands, moving-crossovers, the controller has to prompt the user for
+     two ints, x and y, after entering the initial command. Therefore, the controller needs access
+     to the scanner for user input.
+         The design of the scanner being instantiated in Main was kept, so Main can check whether
+     the command says quit and terminate the program from there. The controller does not take in a
+     more general input like an InputStream, because this would not be compatible with the scanner
+     taking input in Main.
+
+  3. The logic for checking if a ticker symbol is a valid stock has been taken out of
+     createPortfolio and abstracted into a helper function called isValidTicker. This is different
+     from isValidTicker in Assignment 4, which could only check validity in certain cases, and the
+     old method has been renamed and is now used as a helper for the new isValidTicker. The new
+     method is a general function that any method in Model can use to determine if a ticker symbol
+     is valid or download stock data.
+         This is an improvement over the original design because functionality that is required for
+     many parts of the program, determining if a ticker symbol is valid, is now in a separate
+     method. And it ensures that the stock data is always downloaded before it is needed, because
+     isValidTicker will always be called when the program receives a ticker symbol as input.
+
+  4. The logic for finding the price of a stock on a certain date has been taken out of
+     determineValue and abstracted into a helper function called getStockPrice. Now any class in
+     this package can use this method to find the price of stock. It takes in a newly created ENUM
+     that specifies whether to return the opening or closing price.
+         This is an improvement over the original design because functionality that is required for
+     many parts of the program, finding the price of a stock, is now in a method accessible by the
+     rest of the program.
+
+
+>>>>>>> 0066514 (Design readme)
 
 OVERVIEW
 

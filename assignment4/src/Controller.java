@@ -15,9 +15,9 @@ public class Controller implements ControllerInterface {
    * for two ints, x and y, after entering the initial command. Therefore, the controller needs
    * access to the scanner for user input.
    * The scanner being instantiated in Main was kept, so Main can check whether the command says
-   * quit and terminate the program from there. The controller does not take in something general
-   * like an InputStream, because this would not be compatible with the scanner taking input in
-   * Main.
+   * quit and terminate the program from there. The controller does not take in a more general
+   * input like an InputStream, because this would not be compatible with the scanner taking input
+   * in Main.
    */
   private Model model;
   private View view;

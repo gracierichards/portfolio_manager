@@ -362,7 +362,6 @@ public class Model implements ModelInterface {
    * @param date         the date for which you want the value, in MM/DD/YYYY
    * @return the value of the stock on that day.
    */
-
   protected float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
     isValidTicker(tickerSymbol);
     try {
