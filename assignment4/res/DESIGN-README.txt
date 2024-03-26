@@ -1,6 +1,8 @@
 DESIGN CHANGES
 
-  There are no design changes.
+  1. Evey stock added to portflio is now assosciated with a purchase date which is stored in a new hashmap, purchaseDates<>, along with their tickersymbols.
+     Stock added at the date of creation of the portfolio are assigned the creation Date as their purchase date and other additional stocks purchased later
+     require the user to manually enter a date of purchase. 
 
 OVERVIEW
 
