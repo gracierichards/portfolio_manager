@@ -1,4 +1,3 @@
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
 /**
@@ -10,6 +9,7 @@ public class Main {
    * The method that starts running the program. It instantiates the Model, View, and Controller.
    * It also continuously accepts input from the command line, and passes commands to the
    * controller.
+   *
    * @param args not used
    */
   public static void main(String[] args) {

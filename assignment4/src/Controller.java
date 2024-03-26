@@ -6,67 +6,65 @@ import java.util.Scanner;
 
 /**
  * These are the possible commands the user can provide when using this program.
- *
+ * <p>
  * create portfolio <portfolio_name> MSFT:20 AAPL:10 NVDA:30
  * for a user who wants to make a new portfolio with 20 shares of MSFT, 10 shares of AAPL, and 30
- * shares of NVDA
- *
+ * shares of NVDA.
+ * <p>
  * The load portfolio from file command is:
  * load portfolio <portfolio_name> <filename>
- *
+ * <p>
  * The save portfolio to file command is:
  * save <portfolio_name> <filename>
- *
+ * <p>
  * The command to examine the composition of a portfolio is:
  * list <portfolio_name>
- *
+ * <p>
  * The command to determine the total value of a portfolio on a given date is:
  * value <portfolio_name> MM/DD/YYYY
- *
+ * <p>
  * There is an optional command for the user to look up ticker symbols that match the name of a
  * company, or all ticker symbols that start with the inputted string. It is in the format:
  * search <company_name>
  * OR
  * search <ticker_symbol>
- *
+ * <p>
  * stock-direction-day <ticker_symbol> MM/DD/YYYY
  * Tells you whether the given stock gained or lost on the given day.
- *
+ * <p>
  * stock-direction-over-time <ticker_symbol> start_date end_date
  * Tells you whether the given stock gained or lost over the given period of time, from start_date
  * to end_date (both in MM/DD/YYYY)
- *
+ * <p>
  * The command for an x-day moving average is:
  * moving-average x <ticker_symbol> MM/DD/YYYY
  * Calculates the average price for the given stock in the last x days, starting from the given
  * date. It includes the last x days for which stock prices are available.
- *
+ * <p>
  * crossovers <ticker_symbol> start_date end_date
  * Returns a list of the positive crossovers and negative crossovers within the given time period.
  * A crossover day means that the closing price for the day and the closing price for the previous
  * day are on opposite sides of the 30-day moving average.
- *
+ * <p>
  * moving-crossovers <ticker_symbol> start_date end_date
  * After entering this command, the user will be prompted twice, once for x, the number of days for
  * the smaller moving average, and then for y, the number of days for the larger moving average.
  * If the second amount is not longer than the first amount, then it will provide an error message.
- *
+ * <p>
  * CostBasis <portfolio-name> MM/DD/YYYY
- *
+ * <p>
  * portfolioValueOnDate <portfolio-name> MM/DD/YYYY
- *
+ * <p>
  * chart <portfolio-name> start_date end_date
- *
+ * <p>
  * purchase <portfolio_name> <ticker_symbol> <date> <numShares>
  * for buying stocks and adding them to the portfolio
- *
- * sell <portfolio_name> <ticker_symbol> <date> <numShares>
- * for selling stocks in a portfolio
- *
+ * <p>
+ * sell {portfolio_name} {ticker_symbol} {date} {numShares}
+ * for buying stocks and adding them to the portfolio
+ * <p>
  * quit   - to terminate the program.
- */
-
-/**
+ * <p>
  * The implementation of Controller. Its processCommand method handles the cases for each of the
  * possible commands this program accepts - see SETUP-README.txt for documentation of commands.
  */
@@ -87,6 +85,7 @@ public class Controller implements ControllerInterface {
 
   /**
    * Instantiates the Controller.
+   *
    * @param m the Model
    * @param v the View
    */
@@ -96,7 +95,13 @@ public class Controller implements ControllerInterface {
     this.scanner = scanner;
   }
 
+  /**
+   * Processes the given command input.
+   *
+   * @param input The command input to process.
+   */
   public void processCommand(String input) {
+
     try {
       String[] words = input.split(" ");
       switch (words[0]) {
@@ -278,8 +283,8 @@ public class Controller implements ControllerInterface {
             System.out.println("Please provide a portfolio name and date.");
             break;
           }
-          float CostBasis = model.totalCostBasis(words[1], words[2]);
-          view.displayTotalCostBasis(words[1], CostBasis);
+          float costBasis = model.totalCostBasis(words[1], words[2]);
+          view.displayTotalCostBasis(words[1], costBasis);
           break;
         case "portfolioValueOnDate":
           if (words.length < 3) {
@@ -298,7 +303,8 @@ public class Controller implements ControllerInterface {
           break;
         case "purchase":
           if (words.length < 5) {
-            System.out.println("Invalid purchase command. Usage: purchase <portfolio_name> <ticker_symbol> <date> <numShares>");
+            System.out.println("Invalid purchase command. Usage: purchase <portfolio_name>"
+                    + " <ticker_symbol> <date> <numShares>");
             break;
           }
           String portfolioName1 = words[1];
@@ -310,7 +316,8 @@ public class Controller implements ControllerInterface {
           break;
         case "sell":
           if (words.length < 5) {
-            System.out.println("Invalid sell command. Usage: sell <portfolio_name> <ticker_symbol> <date> <numShares>");
+            System.out.println("Invalid sell command. Usage: sell <portfolio_name> "
+                    + "<ticker_symbol> <date> <numShares>");
             break;
           }
           portfolioName = words[1];

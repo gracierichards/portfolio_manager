@@ -8,14 +8,15 @@ import java.util.List;
  * a portfolio over a specified time range.
  */
 public class PerformanceChart {
+
   /**
-   * Generates a text-based bar chart to visualize the performance of a portfolio over a specified
-   * time range.
+   * Generates a performance chart for the specified portfolio within the given date range.
    *
    * @param portfolioName The name of the portfolio.
-   * @param startDate     The start time of the time range.
-   * @param endDate       The end time of the time range.
-   * @return The text-based bar chart as a string.
+   * @param startDate     The start date of the performance chart in the format "yyyy-MM-dd".
+   * @param endDate       The end date of the performance chart in the format "yyyy-MM-dd".
+   * @param model         The model containing the portfolio and necessary data.
+   * @return A string representing the generated performance chart.
    */
   public static String generatePerformanceChart(String portfolioName, String startDate,
                                                 String endDate, Model model) {
@@ -123,6 +124,9 @@ public class PerformanceChart {
           break;
         case "years":
           current = current.plusYears(interval);
+          break;
+        default:
+          System.out.println("Unexpected time span: " + timeSpan);
           break;
       }
     }

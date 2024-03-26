@@ -5,7 +5,7 @@ import java.util.Map;
  * provides visual representations of portfolio data and interacts with users through a
  * command-line interface (CLI)
  */
-public class View implements ViewInterface{
+public class View implements ViewInterface {
 
   @Override
   public void examineComposition(Portfolio p) {
@@ -52,24 +52,14 @@ public class View implements ViewInterface{
     }
   }
 
-  /**
-   * Display the total cost basis for a portfolio.
-   *
-   * @param portfolioName The name of the portfolio.
-   * @param totalCostBasis The total cost basis for the portfolio.
-   */
+  @Override
   public void displayTotalCostBasis(String portfolioName, float totalCostBasis) {
     System.out.println("Total cost basis for portfolio " + portfolioName + ": " + totalCostBasis);
   }
 
-  /**
-   * Display the portfolio value on a specific date.
-   *
-   * @param portfolioName The name of the portfolio.
-   * @param date The date for which the portfolio value is calculated.
-   * @param portfolioValue The total value of the portfolio on the specified date.
-   */
+  @Override
   public void displayPortfolioValueOnDate(String portfolioName, String date, float portfolioValue) {
-    System.out.println("Portfolio value for " + portfolioName + " on " + date + ": " + portfolioValue);
+    System.out.println("Portfolio value for " + portfolioName + " on " + date + ": "
+            + portfolioValue);
   }
 }

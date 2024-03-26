@@ -150,11 +150,10 @@ public class Model implements ModelInterface {
    * matching results.
    * It will only include results whose type is "Equity" and whose region is "United States".
    *
-   * @param query the partial or full name of a company or ticker symbol being looked up by the
-   *              user
-   * @return data in csv format of the ticker symbol matches. The columns output by Alpha
-   * Vantage are symbol, name, type, region, marketOpen, marketClose, timezone, currency, and
-   * matchScore.
+   * @param query the partial or full name of a company or ticker symbol being looked up by the user
+   * @return data in csv format of the ticker symbol matches.
+   *     The columns output by AlphaVantage are symbol, name, type, region, marketOpen, marketClose,
+   *     timezone, currency, and matchScore.
    */
   String getTickerMatches(String query) {
     return getAlphaVantageData("function=SYMBOL_SEARCH"
@@ -246,11 +245,14 @@ public class Model implements ModelInterface {
     } catch (IOException e) {
       throw new RuntimeException("Error writing stock data to file. " + e.getMessage());
     }
+    /*
     if (csvData.charAt(0) == '{') {
       return false;
     } else {
       return true;
     }
+     */
+    return csvData.charAt(0) != '{';
   }
 
   /**
@@ -272,11 +274,14 @@ public class Model implements ModelInterface {
     if (s.hasNextLine()) {
       line = s.nextLine();
     }
+    /*
     if (line.equals("{")) {
       return false;
     } else {
       return true;
     }
+     */
+    return !line.equals("{");
   }
 
   /**
@@ -284,8 +289,8 @@ public class Model implements ModelInterface {
    * comes after the other. It takes in one date in the format the user provides, which should be
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
    *
-   * @return 0 if the dates are the same, a negative number if inputDate is before csvDate, and a
-   * positive number if inputDate is after csvDate.
+   * @return 0 if the dates are the same, a negative number if inputDate is before csvDate,
+   *     and a positive number if inputDate is after csvDate.
    */
   int compareDates(String inputDate, String csvDate) throws DateTimeParseException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
@@ -320,7 +325,7 @@ public class Model implements ModelInterface {
     // Update the cost basis map in the portfolio
     portfolio.costBasisMap.put(tickerSymbol, costBasis);
 
-    portfolio.purchaseDates.put(tickerSymbol,date);
+    portfolio.purchaseDates.put(tickerSymbol, date);
   }
 
   /**
@@ -340,11 +345,8 @@ public class Model implements ModelInterface {
     if (portfolio == null) {
       throw new IllegalArgumentException("Portfolio not found.");
     }
-
     // Remove sold shares from the portfolio
     portfolio.removeStock(tickerSymbol, numShares);
-
-    // Additional logic to record the sale date could be added here
   }
 
   protected enum TypeOfPrice {
@@ -527,8 +529,21 @@ public class Model implements ModelInterface {
     }
   }
 
+  /**
+   * Finds moving average crossovers for a given ticker symbol within a specified date range.
+   *
+   * @param tickerSymbol    The ticker symbol of the stock.
+   * @param startDateString The start date of the date range in the format "M/d/yyyy".
+   * @param endDateString   The end date of the date range in the format "M/d/yyyy".
+   * @param x               The number of days for the first moving average.
+   * @param y               The number of days for the second moving average.
+   * @return A string containing positive and negative crossover dates separated by commas.
+   * @throws IllegalArgumentException If the end date is before the start date or if the ticker
+   *                                  symbol is invalid.
+   */
   public String findMovingCrossovers(String tickerSymbol, String startDateString,
-                               String endDateString, int x, int y) throws IllegalArgumentException {
+                                     String endDateString, int x, int y)
+          throws IllegalArgumentException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
     LocalDate curDate = LocalDate.parse(startDateString, formatter1);
     LocalDate endDate = LocalDate.parse(endDateString, formatter1);
@@ -591,11 +606,12 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Method to calculate the total cost basis of the entire portfolio.
+   * Calculates the total cost basis of stocks in a specified portfolio up to a given date.
    *
-   * @return The total cost basis of the portfolio.
+   * @param portfolioName The name of the portfolio.
+   * @param date          The date up to which the cost basis is calculated.
+   * @return The total cost basis of the stocks in the portfolio up to the specified date.
    */
-
   public float totalCostBasis(String portfolioName, String date) {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
@@ -614,12 +630,12 @@ public class Model implements ModelInterface {
     return totalCostBasis;
   }
 
-
   /**
-   * Method to calculate the total portfolio value on a specific date using the current market value.
+   * Calculates the total value of a portfolio on a specified date.
    *
-   * @param date The date for which the portfolio value is to be determined.
-   * @return The total value of the portfolio based on the current market value of the stocks.
+   * @param portfolioName The name of the portfolio.
+   * @param date          The date for which the portfolio value is calculated.
+   * @return The total value of the portfolio on the specified date.
    */
   public float portfolioValueOnDate(String portfolioName, String date) {
     Portfolio portfolio = portfolioList.get(portfolioName);
@@ -641,25 +657,16 @@ public class Model implements ModelInterface {
     }
     return totalValue;
   }
-  /*
-  public float portfolioValueOnDate(String portfolioName, String date) {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      System.out.println("Portfolio not found.");
-      return 0;
-    }
 
-    float totalValue = 0;
-    for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
-      String tickerSymbol = entry.getKey();
-      int numShares = entry.getValue();
-      float currentPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
-      totalValue += currentPrice * numShares;
-    }
-    return totalValue;
-  }
-  */
-
+  /**
+   * Generates a performance chart for a specified portfolio within a given date range.
+   *
+   * @param portfolioName The name of the portfolio.
+   * @param startDate     The start date of the performance chart in the format "yyyy-MM-dd".
+   * @param endDate       The end date of the performance chart in the format "yyyy-MM-dd".
+   * @return A string representing the generated performance chart.
+   */
+  @Override
   public String chartPerformance(String portfolioName, String startDate, String endDate) {
     return PerformanceChart.generatePerformanceChart(portfolioName, startDate, endDate, this);
   }
