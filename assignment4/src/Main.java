@@ -17,9 +17,8 @@ public class Main {
     View view = new View();
     Scanner s = new Scanner(System.in);
     Controller controller = new Controller(model, view, s);
-    System.out.println("Please specify an action to take. See SETUP-README.txt for available "
-            + "commands and usage.");
     while (true) {
+      view.printMenu();
       String command = s.nextLine();
       if (command.equals("quit")) {
         break;

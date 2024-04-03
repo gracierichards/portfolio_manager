@@ -32,9 +32,6 @@ DESIGN CHANGES
      many parts of the program, finding the price of a stock, is now in a method accessible by the
      rest of the program.
 
-
->>>>>>> 0066514 (Design readme)
-
 OVERVIEW
 
   The Portfolio Management System is designed to provide users with tools for managing investment portfolios. It allows users to create portfolios, 

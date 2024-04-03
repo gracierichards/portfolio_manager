@@ -62,4 +62,32 @@ public class View implements ViewInterface {
     System.out.println("Portfolio value for " + portfolioName + " on " + date + ": "
             + portfolioValue);
   }
+
+  @Override
+  public void printMenu() {
+    System.out.println(System.lineSeparator() + "\tPlease enter a command. See SETUP-README.txt "
+            + "for full explanations of commands and their usage."
+            + System.lineSeparator() + "\tcreate portfolio <portfolio_name> "
+            + "<ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]"
+            + System.lineSeparator() + "\tload portfolio <portfolio_name> <filename>"
+            + System.lineSeparator() + "\tsave <portfolio_name> <filename>"
+            + System.lineSeparator() + "\tlist <portfolio_name>"
+            + System.lineSeparator() + "\tvalue <portfolio_name> MM/DD/YYYY"
+            + System.lineSeparator() + "\tsearch <company_name>"
+            + System.lineSeparator() + "\tsearch <ticker_symbol>"
+            + System.lineSeparator() + "\tstock-direction-day <ticker_symbol> MM/DD/YYYY"
+            + System.lineSeparator() + "\tstock-direction-over-time <ticker_symbol> start_date "
+            + "end_date"
+            + System.lineSeparator() + "\tmoving-average x <ticker_symbol> MM/DD/YYYY"
+            + System.lineSeparator() + "\tcrossovers <ticker_symbol> start_date end_date"
+            + System.lineSeparator() + "\tmoving-crossovers <ticker_symbol> start_date end_date"
+            + System.lineSeparator() + "\tCostBasis <portfolio-name> MM/DD/YYYY"
+            + System.lineSeparator() + "\tportfolioValueOnDate <portfolio-name> MM/DD/YYYY"
+            + System.lineSeparator() + "\tchart-portfolio <portfolio-name> start_date end_date"
+            + System.lineSeparator() + "\tchart-stock <ticker_symbol> start_date end_date"
+            + System.lineSeparator() + "\tpurchase <portfolio_name> <ticker_symbol> <date> "
+            + "<numShares>"
+            + System.lineSeparator() + "\tsell {portfolio_name} {ticker_symbol} {date} {numShares}"
+            + System.lineSeparator() + "\tquit");
+  }
 }

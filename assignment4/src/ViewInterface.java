@@ -57,4 +57,9 @@ public interface ViewInterface {
    * @param portfolioValue The total value of the portfolio on the specified date.
    */
   void displayPortfolioValueOnDate(String portfolioName, String date, float portfolioValue);
+
+  /**
+   * Prints the menu of possible options.
+   */
+  void printMenu();
 }
