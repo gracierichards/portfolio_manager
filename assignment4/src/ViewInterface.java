@@ -1,7 +1,6 @@
 /**
- * Interface for the View. The view handles user interface elements and presentation logic. It
- * provides visual representations of portfolio data and interacts with users through a
- * command-line interface (CLI)
+ * Interface for the View. The view handles user interface elements and presentation logic. This
+ * interface contains the common functionality between the command-line user interface and the GUI.
  */
 public interface ViewInterface {
   /**
