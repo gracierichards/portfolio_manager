@@ -22,7 +22,7 @@ public class Controller implements ControllerInterface {
    * in Main.
    */
   private Model model;
-  private View view;
+  private ViewInterface view;
   private Scanner scanner;
 
   /**
@@ -31,7 +31,7 @@ public class Controller implements ControllerInterface {
    * @param m the Model
    * @param v the View
    */
-  public Controller(Model m, View v, Scanner scanner) {
+  public Controller(Model m, ViewInterface v, Scanner scanner) {
     this.model = m;
     this.view = v;
     this.scanner = scanner;
