@@ -10,8 +10,8 @@ public class View implements ViewInterface {
   @Override
   public void examineComposition(Portfolio p) {
     System.out.println("Portfolio: " + p.getName());
-    Map<String, Integer> stocks = p.getStocks();
-    for (Map.Entry<String, Integer> entry : stocks.entrySet()) {
+    Map<String, Float> stocks = p.getStocks();
+    for (Map.Entry<String, Float> entry : stocks.entrySet()) {
       System.out.println(entry.getKey() + ": " + entry.getValue());
     }
   }

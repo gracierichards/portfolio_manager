@@ -12,7 +12,7 @@ public class Portfolio {
 
   private Model model;
   private final String name; // Name of the portfolio
-  protected Map<String, Integer> stocks; // Map to store stocks with their corresponding amounts
+  protected Map<String, Float> stocks; // Map to store stocks with their corresponding amounts
   private String creationDate; // Field to store the creation date
   protected Map<String, String> purchaseDates; // Map to store purchase dates of stocks
   protected Map<String, Float> costBasisMap; // Map to store cost basis of stocks
@@ -43,7 +43,22 @@ public class Portfolio {
   public void addStock(String tickerSymbol, int amount) {
     if (stocks.containsKey(tickerSymbol)) {
       // If the stock already exists in the portfolio, update the amount
-      int currentAmount = stocks.get(tickerSymbol);
+      float currentAmount = stocks.get(tickerSymbol);
+      stocks.put(tickerSymbol, currentAmount + amount);
+    } else {
+      // If the stock is not already in the portfolio, add it
+      stocks.put(tickerSymbol, (float)amount);
+    }
+    setModel();
+    float costBasis = model.calculateCostBasis(tickerSymbol, amount, creationDate);
+    costBasisMap.put(tickerSymbol, costBasis);
+    purchaseDates.put(tickerSymbol, creationDate); // Store purchase date
+  }
+
+  public void addStock(String tickerSymbol, float amount) {
+    if (stocks.containsKey(tickerSymbol)) {
+      // If the stock already exists in the portfolio, update the amount
+      float currentAmount = stocks.get(tickerSymbol);
       stocks.put(tickerSymbol, currentAmount + amount);
     } else {
       // If the stock is not already in the portfolio, add it
@@ -74,17 +89,17 @@ public class Portfolio {
    * @throws IllegalArgumentException If the stock is not found in the portfolio or if the number
    *                                  of shares to remove exceeds the available shares.
    */
-  public void removeStock(String tickerSymbol, int numShares) throws IllegalArgumentException {
+  public void removeStock(String tickerSymbol, float numShares) throws IllegalArgumentException {
     if (!stocks.containsKey(tickerSymbol)) {
       throw new IllegalArgumentException("Stock not found in portfolio.");
     }
 
-    int currentShares = stocks.get(tickerSymbol);
+    float currentShares = stocks.get(tickerSymbol);
     if (currentShares < numShares) {
       throw new IllegalArgumentException("Not enough shares to sell.");
     }
 
-    int remainingShares = currentShares - numShares;
+    float remainingShares = currentShares - numShares;
     if (remainingShares == 0) {
       // If no shares left, remove the stock from the portfolio
       stocks.remove(tickerSymbol);
@@ -108,7 +123,7 @@ public class Portfolio {
    *
    * @return A map containing the stocks and their amounts.
    */
-  public Map<String, Integer> getStocks() {
+  public Map<String, Float> getStocks() {
     return stocks;
   }
 

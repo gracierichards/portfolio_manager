@@ -79,7 +79,7 @@ public class Model implements ModelInterface {
       writer.newLine();
       writer.write("Stock Composition:");
       writer.newLine();
-      for (Map.Entry<String, Integer> entry : portfolio.getStocks().entrySet()) {
+      for (Map.Entry<String, Float> entry : portfolio.getStocks().entrySet()) {
         writer.write(entry.getKey() + ": " + entry.getValue());
         writer.newLine();
       }
@@ -220,7 +220,7 @@ public class Model implements ModelInterface {
       return 0;
     }
     float sum = 0;
-    for (Map.Entry<String, Integer> entry : p.getStocks().entrySet()) {
+    for (Map.Entry<String, Float> entry : p.getStocks().entrySet()) {
       float price = getStockPrice(entry.getKey(), date, TypeOfPrice.CLOSE);
       sum += price * entry.getValue();
     }
@@ -327,6 +327,24 @@ public class Model implements ModelInterface {
     portfolio.costBasisMap.put(tickerSymbol, costBasis);
 
     portfolio.purchaseDates.put(tickerSymbol, date);
+  }
+
+  public String purchaseShares(String portfolioName, String tickerSymbol, String date, float numShares)
+          throws IllegalArgumentException {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      throw new IllegalArgumentException("Portfolio not found.");
+    }
+
+    // Add purchase information to the portfolio
+    portfolio.addStock(tickerSymbol, numShares);
+    float costBasis = calculateCostBasis(tickerSymbol, numShares, date);
+
+    // Update the cost basis map in the portfolio
+    portfolio.costBasisMap.put(tickerSymbol, costBasis);
+
+    portfolio.purchaseDates.put(tickerSymbol, date);
+    return "Shares purchased succesfully";
   }
 
   /**
@@ -607,6 +625,13 @@ public class Model implements ModelInterface {
     return costBasis;
   }
 
+  protected float calculateCostBasis(String tickerSymbol, float numShares, String purchaseDate) {
+    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, Model.TypeOfPrice.CLOSE);
+    // Calculate the cost basis of the purchased shares
+    float costBasis = purchasePrice * numShares;
+    return costBasis;
+  }
+
   /**
    * Calculates the total cost basis of stocks in a specified portfolio up to a given date.
    *
@@ -652,7 +677,7 @@ public class Model implements ModelInterface {
       String purchaseDate = entry.getValue();
       if (purchaseDate.compareTo(date) <= 0) {
         // Purchase date is on or before the given date
-        int numShares = portfolio.getStocks().getOrDefault(tickerSymbol, 0);
+        float numShares = portfolio.getStocks().getOrDefault(tickerSymbol, 0.0f);
         float currentPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
         totalValue += currentPrice * numShares;
       }
@@ -669,5 +694,38 @@ public class Model implements ModelInterface {
   public String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException {
     return PerformanceChart.generatePerformanceChartStock(tickerSymbol, startDate, endDate, this);
+  }
+
+  public String investFixedAmount(String portfolioName, float amount, String date, Map<String, Float> weightDistribution) {
+    Portfolio portfolio = portfolioList.get(portfolioName);
+    if (portfolio == null) {
+      return "Portfolio not found.";
+    }
+
+    // Calculate the total weight sum
+    float totalWeight = 0;
+    for (float weight : weightDistribution.values()) {
+      totalWeight += weight;
+    }
+
+    // Calculate the amount to be invested in each stock
+    Map<String, Float> investments = new HashMap<>();
+    for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      float weight = entry.getValue();
+      float amountToInvest = (weight / totalWeight) * amount;
+      investments.put(tickerSymbol, amountToInvest);
+    }
+
+    // Purchase shares for each stock in the portfolio
+    StringBuilder result = new StringBuilder();
+    for (Map.Entry<String, Float> entry : investments.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      float amountToInvest = entry.getValue();
+      String purchaseResult = purchaseShares(portfolioName, tickerSymbol, date, amountToInvest);
+      result.append(purchaseResult).append("\n");
+    }
+
+    return result.toString().trim();
   }
 }

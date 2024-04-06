@@ -1,7 +1,9 @@
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -35,7 +37,20 @@ public class Controller implements ControllerInterface {
     this.scanner = scanner;
     //this.view.addFeatures(new Features());
   }
-
+  private boolean isInteger1(String[] inputs) {
+    for (String input : inputs) {
+      try {
+        Integer.parseInt(input);
+        // Check if the input contains a decimal point
+        if (input.contains(".")) {
+          return false; // Return false if the input contains a decimal point
+        }
+      } catch (NumberFormatException e) {
+        return false;
+      }
+    }
+    return true;
+  }
   /**
    * Processes the given command input.
    *
@@ -45,6 +60,7 @@ public class Controller implements ControllerInterface {
 
     try {
       String[] words = input.split(" ");
+      isInteger1(words);
       switch (words[0]) {
         case "create":
           createCommand(words);
@@ -112,6 +128,9 @@ public class Controller implements ControllerInterface {
   }
 
   private void createCommand(String[] words) {
+
+    isInteger1(words);
+
     List<String> tickerSymbols = new ArrayList<>();
     List<Float> stockAmounts = new ArrayList<>();
     String portfolioName;
@@ -153,6 +172,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void loadCommand(String[] words) {
+    isInteger1(words);
     int startIndex;
     if (words[1].equals("portfolio")) {
       startIndex = 2;
@@ -163,6 +183,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void saveCommand(String[] words) {
+    isInteger1(words);
     int startIndex;
     if (words[1].equals("portfolio")) {
       startIndex = 2;
@@ -174,6 +195,7 @@ public class Controller implements ControllerInterface {
 
   private void listCommand(String[] words) {
     Portfolio p = null;
+    isInteger1(words);
     try {
       p = model.getPortfolio(words[1]);
     } catch (FileNotFoundException e) {
@@ -184,6 +206,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void valueCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a date.");
       return;
@@ -198,6 +221,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void stockDirectionDay(String[] words) {
+    isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a ticker symbol and date.");
       return;
@@ -217,6 +241,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void stockDirectionOverTime(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
       return;
@@ -236,6 +261,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void movingAverageCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a number of days to calculate the average over, a "
               + "ticker symbol, and the date of the last day in the desired period.");
@@ -253,6 +279,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void crossoversCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
       return;
@@ -262,6 +289,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void movingCrossoversCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
       return;
@@ -295,6 +323,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void costBasisCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and date.");
       return;
@@ -304,6 +333,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void portfolioValueOnDate(String[] words) {
+    isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and a date.");
       return;
@@ -313,6 +343,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void chartPortfolioCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a portfolio name, start date, and end date.");
       return;
@@ -321,6 +352,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void chartStockCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
       return;
@@ -333,6 +365,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void purchaseCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 5) {
       System.out.println("Invalid purchase command. Usage: purchase <portfolio_name>"
               + " <ticker_symbol> <date> <numShares>");
@@ -347,6 +380,7 @@ public class Controller implements ControllerInterface {
   }
 
   private void sellCommand(String[] words) {
+    isInteger1(words);
     if (words.length < 5) {
       System.out.println("Invalid sell command. Usage: sell <portfolio_name> "
               + "<ticker_symbol> <date> <numShares>");
@@ -359,4 +393,32 @@ public class Controller implements ControllerInterface {
     model.sellShares(portfolioName, tickerSymbol, date, numShares);
     System.out.println("Shares sold successfully");
   }
+
+  public void investFixedAmountCommand(String[] words) {
+    isInteger1(words);
+    if (words.length < 5) {
+      System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> <ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
+      return;
+    }
+
+    String portfolioName = words[1];
+    float amount = Float.parseFloat(words[2]);
+    String date = words[3];
+
+    Map<String, Float> weightDistribution = new HashMap<>();
+    for (int i = 4; i < words.length; i++) {
+      String[] pair = words[i].split(":");
+      if (pair.length != 2) {
+        System.out.println("Invalid ticker symbol:weight pair: " + words[i]);
+        continue;
+      }
+      String tickerSymbol = pair[0];
+      float weight = Float.parseFloat(pair[1]);
+      weightDistribution.put(tickerSymbol, weight);
+    }
+
+    String result = model.investFixedAmount(portfolioName, amount, date, weightDistribution);
+    System.out.println(result);
+  }
+
 }
