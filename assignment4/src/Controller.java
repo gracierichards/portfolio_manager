@@ -33,6 +33,7 @@ public class Controller implements ControllerInterface {
     this.model = m;
     this.view = v;
     this.scanner = scanner;
+    //this.view.addFeatures(new Features());
   }
 
   /**

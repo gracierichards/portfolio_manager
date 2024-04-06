@@ -3,4 +3,5 @@
  * the GUI is involved.
  */
 public interface GUIViewInterface extends ViewInterface {
+  void addFeatures(Features features);
 }
