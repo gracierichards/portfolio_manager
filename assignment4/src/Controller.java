@@ -35,7 +35,6 @@ public class Controller implements ControllerInterface {
     this.model = m;
     this.view = v;
     this.scanner = scanner;
-    //this.view.addFeatures(new Features());
   }
   private boolean isInteger1(String[] inputs) {
     for (String input : inputs) {
