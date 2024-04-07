@@ -13,7 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * An implementation of GUIViewInterface. An object of this class should be used for all GUI
  * construction and interaction.
  */
-public class GUIView extends JFrame implements GUIViewInterface {
+public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   //Drop down menu of options for commands
   private JLabel comboboxDisplay;
   JComboBox<String> combobox;
@@ -36,6 +36,7 @@ public class GUIView extends JFrame implements GUIViewInterface {
 
     makeMainMenu();
     makePortfolioMenu();
+    bottomRightPanel();
 
     setContentPane(mainPanel);
     //pack();
@@ -57,7 +58,8 @@ public class GUIView extends JFrame implements GUIViewInterface {
       public void actionPerformed(ActionEvent e) {
         JComboBox<String> cb = (JComboBox<String>)e.getSource();
         String selectedItem = (String)cb.getSelectedItem();
-        showCorrespondingComponents(selectedItem);
+        CardLayout cl = (CardLayout)(cards.getLayout());
+        cl.show(cards, selectedItem);
         mainPanel.revalidate();
       }
     });
@@ -96,44 +98,54 @@ public class GUIView extends JFrame implements GUIViewInterface {
     mainPanel.add(selectionListPanel);
   }
 
-  private void showCorrespondingComponents(String menuItem) {
-    switch (menuItem) {
-      case "Create a new portfolio":
-        JTextArea textBox1 = new JTextArea(1, 10);
-        textBox1.setBorder(BorderFactory.createTitledBorder("Enter name for portfolio"));
-        mainPanel.add(textBox1);
-        JTextArea textBox2 = new JTextArea(1, 10);
-        textBox2.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
-                + "amounts in the following format: MSFT:20 AAPL:10 NVDA:30"));
-        mainPanel.add(textBox2);
-        break;
-      case "Load portfolio from file":
-        textBox1 = new JTextArea(1, 10);
-        textBox1.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded "
-                + "portfolio"));
-        mainPanel.add(textBox1);
+  private void bottomRightPanel() {
+    JPanel createPortfolioPane = new JPanel();
+    JTextArea textBox1 = new JTextArea(1, 50);
+    textBox1.setBorder(BorderFactory.createTitledBorder("Enter name for portfolio"));
+    createPortfolioPane.add(textBox1);
 
-        JPanel fileopenPanel = new JPanel();
-        fileopenPanel.setLayout(new FlowLayout());
-        JButton fileOpenButton = new JButton("Select the file with the portfolio data");
-        fileOpenButton.setActionCommand("Open file");
-        fileOpenButton.addActionListener(new AbstractAction() {
-          public void actionPerformed(ActionEvent e) {
-            final JFileChooser fchooser = new JFileChooser(".");
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("txt files",
-                    "txt");
-            fchooser.setFileFilter(filter);
-            int retvalue = fchooser.showOpenDialog(GUIView.this);
-            if (retvalue == JFileChooser.APPROVE_OPTION) {
-              File f = fchooser.getSelectedFile();
-              //Use this to get the user selected file path: f.getAbsolutePath()
-            }
-          }
-        });
-        fileopenPanel.add(fileOpenButton);
-        mainPanel.add(fileopenPanel);
-        break;
-    }
+    JTextArea textBox2 = new JTextArea(1, 60);
+    textBox2.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
+            + "amounts in the following format: MSFT:20 AAPL:10 NVDA:30"));
+    createPortfolioPane.add(textBox2);
+
+    JPanel loadPortfolioPane = new JPanel();
+    JTextArea textBox3 = new JTextArea(1, 10);
+    textBox3.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded "
+            + "portfolio"));
+    loadPortfolioPane.add(textBox3);
+
+    JPanel fileopenPanel = new JPanel();
+    fileopenPanel.setLayout(new FlowLayout());
+    JButton fileOpenButton = new JButton("Select the file with the portfolio data");
+    fileOpenButton.setActionCommand("Open file");
+    fileOpenButton.addActionListener(new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        final JFileChooser fchooser = new JFileChooser(".");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("txt files",
+                "txt");
+        fchooser.setFileFilter(filter);
+        int retvalue = fchooser.showOpenDialog(GUIView.this);
+        if (retvalue == JFileChooser.APPROVE_OPTION) {
+          File f = fchooser.getSelectedFile();
+          //Use this to get the user selected file path: f.getAbsolutePath()
+        }
+      }
+    });
+    fileopenPanel.add(fileOpenButton);
+    loadPortfolioPane.add(fileopenPanel);
+
+    cards = new JPanel(new CardLayout());
+    cards.add(createPortfolioPane, "Create a new portfolio");
+    cards.add(loadPortfolioPane, "Load portfolio from file");
+
+    mainPanel.add(cards);
+  }
+
+  @Override
+  public void itemStateChanged(ItemEvent evt) {
+    CardLayout cl = (CardLayout)(cards.getLayout());
+    cl.show(cards, (String)evt.getItem());
   }
 
   @Override
