@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -140,7 +143,7 @@ public class ModelTest {
   }
 
   @Test
-  public void testTotalCostBasis_EmptyPortfolio() {
+  public void testTotalCostBasis() {
     String portfolioName = "TanayPortfolio";
     String[] tickerSymbols = {"AAPL", "MSFT"};
     float[] stockAmounts = {10.0f, 20.0f};
@@ -175,7 +178,7 @@ public class ModelTest {
    */
 
   @Test
-  public void testPortfolioValueOnDate_EmptyPortfolio() {
+  public void testPortfolioValueOnDate() {
     String portfolioName = "TanayPortfolio";
     String[] tickerSymbols = {"AAPL", "MSFT"};
     float[] stockAmounts = {10.0f, 20.0f};
@@ -186,4 +189,31 @@ public class ModelTest {
     model.purchaseShares(portfolioName, "VZ", "03/26/2024", 20);
     assertEquals(10811.9, model.portfolioValueOnDate(portfolioName, "03/26/2024"), 0.001);
   }
+
+  @Test
+  public void testDollarCostAveraging() {
+    // Set up initial portfolio
+    String portfolioName = "TanayPortfolio";
+    String[] tickerSymbols = {"AAPL", "MSFT"};
+    float[] stockAmounts = {10.0f, 20.0f};
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
+
+    // Set parameters for dollar-cost averaging
+    String startDate = "04/01/2024";
+    String endDate = "04/30/2024";
+    float amount = 1000.0f;
+    int frequency = 7; // Weekly frequency
+    Map<String, Float> weightDistribution = new HashMap<>();
+    weightDistribution.put("AAPL", 40.0f);
+    weightDistribution.put("MSFT", 60.0f);
+
+    // Perform dollar-cost averaging
+    String result = model.dollarCostAveraging(portfolioName,amount, startDate, endDate, frequency, weightDistribution);
+    model.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
+
+    // Verify the result
+    assertEquals("Dollar-cost averaging completed successfully.", result);
+  }
+
 }

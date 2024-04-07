@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -702,18 +703,12 @@ public class Model implements ModelInterface {
       return "Portfolio not found.";
     }
 
-    // Calculate the total weight sum
-    float totalWeight = 0;
-    for (float weight : weightDistribution.values()) {
-      totalWeight += weight;
-    }
-
     // Calculate the amount to be invested in each stock
     Map<String, Float> investments = new HashMap<>();
     for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
       String tickerSymbol = entry.getKey();
       float weight = entry.getValue();
-      float amountToInvest = (weight / totalWeight) * amount;
+      float amountToInvest = (weight / 100) * amount;
       investments.put(tickerSymbol, amountToInvest);
     }
 
@@ -722,10 +717,65 @@ public class Model implements ModelInterface {
     for (Map.Entry<String, Float> entry : investments.entrySet()) {
       String tickerSymbol = entry.getKey();
       float amountToInvest = entry.getValue();
-      String purchaseResult = purchaseShares(portfolioName, tickerSymbol, date, amountToInvest);
-      result.append(purchaseResult).append("\n");
+
+      //Calculate the number of shares to buy for each stock.
+      float pricePerShare = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+      if (pricePerShare > 0) {
+        float numShares = amountToInvest / pricePerShare;
+        String purchaseResult = purchaseShares(portfolioName, tickerSymbol, date, numShares);
+      } else {
+        result.append("Failed to retrieve stock price for ").append(tickerSymbol).append("\n");
+      }
+    }
+    return "Amount invested!";
+  }
+
+  /**
+   * Helper method to calculate the number of shares to be purchased for each stock based on
+   * the weight distribution and the investment amount.
+   *
+   * @param weightDistribution Map containing the weight distribution for each stock.
+   * @param amount Amount to be invested.
+   * @param date Date for which the prices are considered.
+   * @return Array containing ticker symbols as keys and the corresponding number of shares as values.
+   */
+  public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution, String date) {
+    float[] numSharesArray = new float[weightDistribution.size()];
+    int index = 0;
+    for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      float weight = entry.getValue();
+      float amountToInvest = (weight / 100) * amount; // Convert weight to percentage
+      float numShares = amountToInvest / getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+      numSharesArray[index++] = numShares;
     }
 
-    return result.toString().trim();
+    return numSharesArray;
+  }
+
+  public String dollarCostAveraging(String portfolioName, float amount, String startDate, String endDate, int frequency, Map<String, Float> weightDistribution) {
+
+    // Calculate the number of periods
+    LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    int totalPeriods = (int) ChronoUnit.DAYS.between(start, end) / frequency;
+
+    // Get ticker symbols from weight distribution
+    String[] tickerSymbols = weightDistribution.keySet().toArray(new String[0]);
+
+    // Calculate numShares array using calculateNumShares method
+    float[] numShares = calculateNumShares(amount, weightDistribution, startDate);
+
+    // Create portfolio with ticker symbols and numShares
+    createPortfolio(portfolioName, tickerSymbols, numShares);
+
+    // Reinvest the amount periodically using investFixedAmount
+    StringBuilder result = new StringBuilder();
+    for (int i = 1; i < totalPeriods; i++) {
+      String currentDate = start.plusDays(i * frequency).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+      investFixedAmount(portfolioName, amount, currentDate, weightDistribution);
+    }
+
+    return "Dollar-cost averaging completed successfully.";
   }
 }

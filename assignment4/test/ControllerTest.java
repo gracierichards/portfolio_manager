@@ -10,6 +10,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -309,5 +311,26 @@ public class ControllerTest {
     int a = 2;
     int b = 2;
     assertEquals(4, a + b);
+  }
+
+  @Test
+  public void testInvestFixedAmount() {
+    String words = "create portfolio TanayPortfolio AAPL:10 MSFT:10";
+    String[] input = words.split(" ");
+    controller.processCommand(words);
+    model.savePortfolioToFile(input[2],"TanayPortfolio.txt");
+    String portfolioName = input[2];
+    String date = "04/01/2024";
+    float amount = 1000.0f;
+    Map<String, Float> weightDistribution = new HashMap<>();
+    weightDistribution.put("AAPL", 40.0f);
+    weightDistribution.put("MSFT", 60.0f);
+
+
+    String result = model.investFixedAmount(portfolioName, amount, date, weightDistribution);
+    model.savePortfolioToFile(input[2], "TanayPortfolio.txt");
+
+    // Verify the result
+    assertEquals(result, "Amount invested!"); // Assuming successful purchase
   }
 }

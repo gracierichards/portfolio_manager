@@ -394,7 +394,6 @@ public class Controller implements ControllerInterface {
   }
 
   public void investFixedAmountCommand(String[] words) {
-    isInteger1(words);
     if (words.length < 5) {
       System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> <ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
       return;

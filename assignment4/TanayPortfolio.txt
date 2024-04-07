@@ -1,0 +1,4 @@
+Portfolio Name: TanayPortfolio
+Stock Composition:
+MSFT: 24.336304
+AAPL: 17.076305
