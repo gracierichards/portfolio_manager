@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -9,12 +11,15 @@ import javax.swing.event.ListSelectionListener;
  * An implementation of GUIViewInterface. An object of this class should be used for all GUI
  * construction and interaction.
  */
-public class GUIView extends JFrame implements GUIViewInterface {
+public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   //Drop down menu of options for commands
   private JLabel comboboxDisplay;
   JComboBox<String> combobox;
   //private JLabel portfolioMenuDisplay;
   private JPanel mainPanel;
+
+  //The bottom right panel that changes depending on the menu option
+  JPanel cards;
   private JList<String> portfoliosInMenu;
   public GUIView(String caption) {
     super(caption);
@@ -29,6 +34,7 @@ public class GUIView extends JFrame implements GUIViewInterface {
 
     makeMainMenu();
     makePortfolioMenu();
+    bottomRightPanel();
 
     setContentPane(mainPanel);
     //pack();
@@ -58,8 +64,10 @@ public class GUIView extends JFrame implements GUIViewInterface {
     combobox.setActionCommand("Menu");
     combobox.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        JComboBox<String> cb = (JComboBox<String>)e.getSource();
-        String selectedItem = (String)cb.getSelectedItem();
+        //JComboBox<String> cb = (JComboBox<String>)e.getSource();
+        //String selectedItem = (String)cb.getSelectedItem();
+        //CardLayout cl = (CardLayout)(cards.getLayout());
+        //cl.show(cards, (String)e.getSource());
       }
     });
     for (int i = 0; i < options.length; i++) {
@@ -95,6 +103,34 @@ public class GUIView extends JFrame implements GUIViewInterface {
     selectionListPanel.add(portfoliosInMenu);
     //setContentPane(selectionListPanel);
     mainPanel.add(selectionListPanel);
+  }
+
+  private void bottomRightPanel() {
+    JPanel createPortfolioPane = new JPanel();
+    JTextArea textBox1 = new JTextArea(1, 50);
+    textBox1.setBorder(BorderFactory.createTitledBorder("Enter name of portfolio"));
+    createPortfolioPane.add(textBox1);
+
+    JTextArea textBox2 = new JTextArea(1, 60);
+    textBox2.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
+            + "amounts in the following format: MSFT:20 AAPL:10 NVDA:30"));
+    createPortfolioPane.add(textBox2);
+
+    JPanel stockStatisticsPane = new JPanel();
+    stockStatisticsPane.add(new JTextArea(10, 10));
+    stockStatisticsPane.add(new JTextArea(10, 10));
+
+    cards = new JPanel(new CardLayout());
+    cards.add(createPortfolioPane, "Create portfolio");
+    cards.add(stockStatisticsPane, "Stock statistics");
+
+    mainPanel.add(cards);
+  }
+
+  @Override
+  public void itemStateChanged(ItemEvent evt) {
+    CardLayout cl = (CardLayout)(cards.getLayout());
+    cl.show(cards, (String)evt.getItem());
   }
 
   @Override
