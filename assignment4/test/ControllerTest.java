@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class ControllerTest {
 
   private Model model;
+  private FlexiblePortfolioModel fleximodel;
   private View view;
   private Controller controller;
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -169,9 +170,9 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_Crossovers() {
-    float avg1 = model.movingAverage(30, "T", "03/14/2024"); // = 17.094
-    float avg2 = model.movingAverage(30, "T", "03/15/2024"); // = 17.061
-    float avg3 = model.movingAverage(30, "T", "03/18/2024"); // = 17.043
+    float avg1 = fleximodel.movingAverage(30, "T", "03/14/2024"); // = 17.094
+    float avg2 = fleximodel.movingAverage(30, "T", "03/15/2024"); // = 17.061
+    float avg3 = fleximodel.movingAverage(30, "T", "03/18/2024"); // = 17.043
     String input = "crossovers T 03/14/2024 03/18/2024";
     controller.processCommand(input);
     // 03/18 should be a positive crossover
@@ -185,13 +186,13 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_MovingCrossovers() {
-    float yavg1 = model.movingAverage(30, "T", "03/14/2024"); // = 17.094
-    float yavg2 = model.movingAverage(30, "T", "03/15/2024"); // = 17.061
-    float yavg3 = model.movingAverage(30, "T", "03/18/2024"); // = 17.043
-    float xavg1 = model.movingAverage(3, "T", "03/13/2024"); // = 17.24
-    float xavg2 = model.movingAverage(3, "T", "03/14/2024"); // = 17.133
-    float xavg3 = model.movingAverage(3, "T", "03/15/2024"); // = 17.083
-    float xavg4 = model.movingAverage(3, "T", "03/18/2024"); // = 17.12
+    float yavg1 = fleximodel.movingAverage(30, "T", "03/14/2024"); // = 17.094
+    float yavg2 = fleximodel.movingAverage(30, "T", "03/15/2024"); // = 17.061
+    float yavg3 = fleximodel.movingAverage(30, "T", "03/18/2024"); // = 17.043
+    float xavg1 = fleximodel.movingAverage(3, "T", "03/13/2024"); // = 17.24
+    float xavg2 = fleximodel.movingAverage(3, "T", "03/14/2024"); // = 17.133
+    float xavg3 = fleximodel.movingAverage(3, "T", "03/15/2024"); // = 17.083
+    float xavg4 = fleximodel.movingAverage(3, "T", "03/18/2024"); // = 17.12
     String input = "moving-crossovers T 03/14/2024 03/18/2024";
     String followUpInput = "3" + System.lineSeparator() + "30";
     Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(
@@ -205,7 +206,7 @@ public class ControllerTest {
     input = "moving-crossovers T 02/13/2024 03/13/2024";
     followUpInput = "3" + System.lineSeparator() + "30";
     s = new Scanner(new InputStreamReader(new ByteArrayInputStream(followUpInput.getBytes())));
-    controller = new Controller(model, view, s);
+    controller = new Controller(fleximodel, view, s);
     controller.processCommand(input);
     String output = outContent.toString();
   }
@@ -318,7 +319,7 @@ public class ControllerTest {
     String words = "create portfolio TanayPortfolio AAPL:10 MSFT:10";
     String[] input = words.split(" ");
     controller.processCommand(words);
-    model.savePortfolioToFile(input[2],"TanayPortfolio.txt");
+    fleximodel.savePortfolioToFile(input[2],"TanayPortfolio.txt");
     String portfolioName = input[2];
     String date = "04/01/2024";
     float amount = 1000.0f;
@@ -327,8 +328,8 @@ public class ControllerTest {
     weightDistribution.put("MSFT", 60.0f);
 
 
-    String result = model.investFixedAmount(portfolioName, amount, date, weightDistribution);
-    model.savePortfolioToFile(input[2], "TanayPortfolio.txt");
+    String result = fleximodel.investFixedAmount(portfolioName, amount, date, weightDistribution);
+    fleximodel.savePortfolioToFile(input[2], "TanayPortfolio.txt");
 
     // Verify the result
     assertEquals(result, "Amount invested!"); // Assuming successful purchase

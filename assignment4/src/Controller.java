@@ -22,6 +22,7 @@ public class Controller implements ControllerInterface {
    * in Main.
    */
   private Model model;
+  private FlexiblePortfolioModel fleximodel;
   private ViewInterface view;
   private Scanner scanner;
 
@@ -134,7 +135,7 @@ public class Controller implements ControllerInterface {
     List<Float> stockAmounts = new ArrayList<>();
     String portfolioName;
     int startIndex;
-    if (words[1].equals("portfolio")) {
+    if (words[1].equals("portfolio") || words[1].equals("inflexibleportfolio")) {
       startIndex = 2;
     } else {
       startIndex = 1;
@@ -164,8 +165,14 @@ public class Controller implements ControllerInterface {
       for (int i = 0; i < stockAmounts.size(); i++) {
         amountsArray[i] = stockAmounts.get(i);
       }
-      model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
-              amountsArray);
+      if (words[1].equals("inflexibleportfolio")) {
+        model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
+                amountsArray);
+      } else {
+        fleximodel.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
+                amountsArray);
+      }
+
       System.out.println("Portfolio created successfully.");
     }
   }
@@ -175,25 +182,35 @@ public class Controller implements ControllerInterface {
     int startIndex;
     if (words[1].equals("portfolio")) {
       startIndex = 2;
-    } else {
+      fleximodel.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
+    } else if (words[1].equals("inflexibleportfolio")) {
+      startIndex = 2;
+      model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
+    }
+    else {
       startIndex = 1;
     }
-    model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
+
   }
 
   private void saveCommand(String[] words) {
     isInteger1(words);
     int startIndex;
-    if (words[1].equals("portfolio")) {
+    if (words[1].equals("portfolio") || words[1].equals("inflexibleportfolio")) {
       startIndex = 2;
     } else {
       startIndex = 1;
     }
-    model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
+    if (words[1].equals("portfolio")) {
+      fleximodel.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
+    } else if (words[1].equals("inflexibleportfolio")) {
+      model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
+    }
+
   }
 
   private void listCommand(String[] words) {
-    Portfolio p = null;
+    InflexiblePortfolio p = null;
     isInteger1(words);
     try {
       p = model.getPortfolio(words[1]);
@@ -273,7 +290,7 @@ public class Controller implements ControllerInterface {
       System.out.println("Please provide an integer number of days.");
       return;
     }
-    float average = model.movingAverage(x, words[2], words[3]);
+    float average = fleximodel.movingAverage(x, words[2], words[3]);
     System.out.println("The " + x + "-day moving average is " + average);
   }
 
@@ -283,7 +300,7 @@ public class Controller implements ControllerInterface {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
       return;
     }
-    String result = model.findCrossovers(words[1], words[2], words[3]);
+    String result = fleximodel.findCrossovers(words[1], words[2], words[3]);
     view.showCrossovers(result);
   }
 
@@ -317,7 +334,7 @@ public class Controller implements ControllerInterface {
               "first.");
       return;
     }
-    String result = model.findMovingCrossovers(words[1], words[2], words[3], x, y);
+    String result = fleximodel.findMovingCrossovers(words[1], words[2], words[3], x, y);
     view.showCrossovers(result);
   }
 
@@ -327,7 +344,7 @@ public class Controller implements ControllerInterface {
       System.out.println("Please provide a portfolio name and date.");
       return;
     }
-    float costBasis = model.totalCostBasis(words[1], words[2]);
+    float costBasis = fleximodel.totalCostBasis(words[1], words[2]);
     view.displayTotalCostBasis(words[1], costBasis);
   }
 
@@ -337,7 +354,7 @@ public class Controller implements ControllerInterface {
       System.out.println("Please provide a portfolio name and a date.");
       return;
     }
-    float portfolioValue = model.portfolioValueOnDate(words[1], words[2]);
+    float portfolioValue = fleximodel.portfolioValueOnDate(words[1], words[2]);
     view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
   }
 
@@ -347,7 +364,7 @@ public class Controller implements ControllerInterface {
       System.out.println("Please provide a portfolio name, start date, and end date.");
       return;
     }
-    System.out.println(model.chartPerformance(words[1], words[2], words[3]));
+    System.out.println(fleximodel.chartPerformance(words[1], words[2], words[3]));
   }
 
   private void chartStockCommand(String[] words) {
@@ -357,7 +374,7 @@ public class Controller implements ControllerInterface {
       return;
     }
     try {
-      System.out.println(model.chartPerformanceStock(words[1], words[2], words[3]));
+      System.out.println(fleximodel.chartPerformanceStock(words[1], words[2], words[3]));
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -374,7 +391,11 @@ public class Controller implements ControllerInterface {
     String tickerSymbol = words[2];
     String date = words[3];
     int numShares = Integer.parseInt(words[4]);
-    model.purchaseShares(portfolioName1, tickerSymbol, date, numShares);
+    if (numShares < 0) {
+      System.out.println("Number of shares cannot be negative!");
+      return;
+    }
+    fleximodel.purchaseShares(portfolioName1, tickerSymbol, date, numShares);
     System.out.println("Shares bought successfully");
   }
 
@@ -389,7 +410,11 @@ public class Controller implements ControllerInterface {
     String tickerSymbol = words[2];
     String date = words[3];
     int numShares = Integer.parseInt(words[4]);
-    model.sellShares(portfolioName, tickerSymbol, date, numShares);
+    if (numShares < 0) {
+      System.out.println("Number of shares cannot be negative!");
+      return;
+    }
+    fleximodel.sellShares(portfolioName, tickerSymbol, date, numShares);
     System.out.println("Shares sold successfully");
   }
 
@@ -415,7 +440,7 @@ public class Controller implements ControllerInterface {
       weightDistribution.put(tickerSymbol, weight);
     }
 
-    String result = model.investFixedAmount(portfolioName, amount, date, weightDistribution);
+    String result = fleximodel.investFixedAmount(portfolioName, amount, date, weightDistribution);
     System.out.println(result);
   }
 

@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +21,14 @@ import java.util.Scanner;
  * portfolio on a given date.
  */
 public class Model implements ModelInterface {
-  protected Map<String, Portfolio> portfolioList;
+  protected Map<String, InflexiblePortfolio> portfolioList;
 
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
   }
 
-  protected Portfolio getPortfolio(String portfolioName) throws FileNotFoundException {
+  protected InflexiblePortfolio getPortfolio(String portfolioName) throws FileNotFoundException {
     if (!portfolioList.containsKey(portfolioName)) {
       throw new FileNotFoundException();
     }
@@ -55,7 +54,7 @@ public class Model implements ModelInterface {
       return;
     }
 
-    Portfolio portfolio = new Portfolio(portfolioName);
+    InflexiblePortfolio portfolio = new InflexiblePortfolio(portfolioName);
     for (int i = 0; i < tickerSymbols.length; i++) {
       if (isValidTicker(tickerSymbols[i])) {
         portfolio.addStock(tickerSymbols[i], (int) stockAmounts[i]);
@@ -69,7 +68,7 @@ public class Model implements ModelInterface {
 
   @Override
   public void savePortfolioToFile(String portfolioName, String filename) {
-    Portfolio portfolio = portfolioList.get(portfolioName);
+    InflexiblePortfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       System.out.println("Portfolio not found.");
       return;
@@ -132,7 +131,6 @@ public class Model implements ModelInterface {
     System.out.println("Portfolio loaded successfully from file.");
   }
 
-
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
    * with the given ticker symbol on the given date. Returns all the data as a String in csv
@@ -153,8 +151,8 @@ public class Model implements ModelInterface {
    *
    * @param query the partial or full name of a company or ticker symbol being looked up by the user
    * @return data in csv format of the ticker symbol matches.
-   *     The columns output by AlphaVantage are symbol, name, type, region, marketOpen, marketClose,
-   *     timezone, currency, and matchScore.
+   * The columns output by AlphaVantage are symbol, name, type, region, marketOpen, marketClose,
+   * timezone, currency, and matchScore.
    */
   String getTickerMatches(String query) {
     return getAlphaVantageData("function=SYMBOL_SEARCH"
@@ -215,17 +213,21 @@ public class Model implements ModelInterface {
    */
   @Override
   public float determineValue(String portfolioName, String date) {
-    Portfolio p = portfolioList.get(portfolioName);
+    InflexiblePortfolio p = portfolioList.get(portfolioName);
     if (p == null) {
       System.out.println("Portfolio not found.");
       return 0;
     }
     float sum = 0;
     for (Map.Entry<String, Float> entry : p.getStocks().entrySet()) {
-      float price = getStockPrice(entry.getKey(), date, TypeOfPrice.CLOSE);
+      float price = getStockPrice(entry.getKey(), date, Model.TypeOfPrice.CLOSE);
       sum += price * entry.getValue();
     }
     return sum;
+  }
+
+  protected enum TypeOfPrice {
+    OPEN, CLOSE
   }
 
   /**
@@ -292,7 +294,7 @@ public class Model implements ModelInterface {
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
    *
    * @return 0 if the dates are the same, a negative number if inputDate is before csvDate,
-   *     and a positive number if inputDate is after csvDate.
+   * and a positive number if inputDate is after csvDate.
    */
   int compareDates(String inputDate, String csvDate) throws DateTimeParseException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
@@ -303,77 +305,6 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Purchase a specified number of shares of a stock with the given ticker symbol
-   * for the specified portfolio and date.
-   * Throws an IllegalArgumentException if the portfolio is not found.
-   *
-   * @param portfolioName The name of the portfolio where the shares will be purchased.
-   * @param tickerSymbol  The ticker symbol of the stock to be purchased.
-   * @param date          The date of the purchase.
-   * @param numShares     The number of shares to be purchased.
-   * @throws IllegalArgumentException If the specified portfolio is not found.
-   */
-  public void purchaseShares(String portfolioName, String tickerSymbol, String date, int numShares)
-          throws IllegalArgumentException {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      throw new IllegalArgumentException("Portfolio not found.");
-    }
-
-    // Add purchase information to the portfolio
-    portfolio.addStock(tickerSymbol, numShares);
-    float costBasis = calculateCostBasis(tickerSymbol, numShares, date);
-
-    // Update the cost basis map in the portfolio
-    portfolio.costBasisMap.put(tickerSymbol, costBasis);
-
-    portfolio.purchaseDates.put(tickerSymbol, date);
-  }
-
-  public String purchaseShares(String portfolioName, String tickerSymbol, String date, float numShares)
-          throws IllegalArgumentException {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      throw new IllegalArgumentException("Portfolio not found.");
-    }
-
-    // Add purchase information to the portfolio
-    portfolio.addStock(tickerSymbol, numShares);
-    float costBasis = calculateCostBasis(tickerSymbol, numShares, date);
-
-    // Update the cost basis map in the portfolio
-    portfolio.costBasisMap.put(tickerSymbol, costBasis);
-
-    portfolio.purchaseDates.put(tickerSymbol, date);
-    return "Shares purchased successfully";
-  }
-
-  /**
-   * Sell a specified number of shares of a stock with the given ticker symbol
-   * from the specified portfolio and date.
-   * Throws an IllegalArgumentException if the portfolio is not found.
-   *
-   * @param portfolioName The name of the portfolio from which the shares will be sold.
-   * @param tickerSymbol  The ticker symbol of the stock to be sold.
-   * @param date          The date of the sale.
-   * @param numShares     The number of shares to be sold.
-   * @throws IllegalArgumentException If the specified portfolio is not found.
-   */
-  public void sellShares(String portfolioName, String tickerSymbol, String date, int numShares)
-          throws IllegalArgumentException {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      throw new IllegalArgumentException("Portfolio not found.");
-    }
-    // Remove sold shares from the portfolio
-    portfolio.removeStock(tickerSymbol, numShares);
-  }
-
-  protected enum TypeOfPrice {
-    OPEN, CLOSE
-  }
-
-  /**
    * Returns the value of the given stock on the given date, or if there is no data for the given
    * date, the value on the last date before the given date.
    *
@@ -381,7 +312,7 @@ public class Model implements ModelInterface {
    * @param date         the date for which you want the value, in MM/DD/YYYY
    * @return the value of the stock on that day.
    */
-  protected float getStockPrice(String tickerSymbol, String date, TypeOfPrice typeOfPrice) {
+  protected float getStockPrice(String tickerSymbol, String date, Model.TypeOfPrice typeOfPrice) {
     isValidTicker(tickerSymbol);
     try {
       File file1 = new File("stockcsvs", tickerSymbol + ".csv");
@@ -396,7 +327,7 @@ public class Model implements ModelInterface {
         String csvDate = line.split(",")[0];
         //the same as saying if the value is equal to 0 or 1
         if (compareDates(date, csvDate) >= 0) {
-          if (typeOfPrice == TypeOfPrice.OPEN) {
+          if (typeOfPrice == Model.TypeOfPrice.OPEN) {
             return Float.parseFloat(line.split(",")[1]);
           } else {
             return Float.parseFloat(line.split(",")[4]);
@@ -422,6 +353,7 @@ public class Model implements ModelInterface {
     return stockDirectionHelper(tickerSymbol, startDate, endDate);
   }
 
+
   /**
    * This function handles determining gain or loss for a day or over time. If endDate is the empty
    * string, then it finds the gain or loss for a single day, the startDate. Otherwise, it finds
@@ -442,8 +374,8 @@ public class Model implements ModelInterface {
 
   private boolean stockDirectionHelperDay(String tickerSymbol, String date) throws
           IllegalStateException {
-    float openingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.OPEN);
-    float closingPrice = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+    float openingPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.OPEN);
+    float closingPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
     if (closingPrice > openingPrice) {
       return true;
     } else if (closingPrice < openingPrice) {
@@ -464,8 +396,8 @@ public class Model implements ModelInterface {
       throw new IllegalStateException("End date cannot be before the start date.");
     }
 
-    float startPrice = getStockPrice(tickerSymbol, startDate, TypeOfPrice.CLOSE);
-    float endPrice = getStockPrice(tickerSymbol, endDate, TypeOfPrice.CLOSE);
+    float startPrice = getStockPrice(tickerSymbol, startDate, Model.TypeOfPrice.CLOSE);
+    float endPrice = getStockPrice(tickerSymbol, endDate, Model.TypeOfPrice.CLOSE);
     if (endPrice > startPrice) {
       return true;
     } else if (endPrice < startPrice) {
@@ -473,316 +405,5 @@ public class Model implements ModelInterface {
     } else {
       throw new IllegalStateException("Stock neither gained nor lost in this time period.");
     }
-  }
-
-  @Override
-  public float movingAverage(int numDays, String tickerSymbol, String date) {
-    if (isValidTicker(tickerSymbol)) {
-      try {
-        File file1 = new File("stockcsvs", tickerSymbol + ".csv");
-        Scanner s = new Scanner(file1);
-        String line;
-        //skip first line, which is the header
-        if (s.hasNextLine()) {
-          line = s.nextLine();
-        }
-        while (s.hasNextLine()) {
-          line = s.nextLine();
-          String csvDate = line.split(",")[0];
-          //the same as saying if the value is equal to 0 or 1
-          if (compareDates(date, csvDate) >= 0) {
-            float sum = 0;
-            int numAdded = 0;
-            for (int i = 0; i < numDays; i++) {
-              float closingPrice = Float.parseFloat(line.split(",")[4]);
-              sum += closingPrice;
-              numAdded++;
-              if (s.hasNextLine()) {
-                line = s.nextLine();
-              } else {
-                break;
-              }
-            }
-            return sum / numAdded;
-          }
-        }
-        s.close();
-      } catch (FileNotFoundException e) {
-        System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
-      }
-      throw new RuntimeException("Reached end of file. Stock price not found in file.");
-    } else {
-      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-    }
-  }
-
-  @Override
-  public String findCrossovers(String tickerSymbol, String startDateString, String endDateString)
-          throws IllegalArgumentException {
-    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
-    LocalDate curDate = LocalDate.parse(startDateString, formatter1);
-    LocalDate endDate = LocalDate.parse(endDateString, formatter1);
-    if (endDate.isBefore(curDate)) {
-      throw new IllegalArgumentException("End date cannot be before the start date.");
-    }
-    if (isValidTicker(tickerSymbol)) {
-      ArrayList<String> positiveCrossovers = new ArrayList<>();
-      ArrayList<String> negativeCrossovers = new ArrayList<>();
-      LocalDate prevDate = curDate.minusDays(1);
-      String prevDateString = prevDate.format(formatter1);
-      String curDateString = curDate.format(formatter1);
-      while (!curDate.isAfter(endDate)) {
-        float movingAverage30Day = movingAverage(30, tickerSymbol, curDateString);
-        float stockPrice1 = getStockPrice(tickerSymbol, prevDateString, TypeOfPrice.CLOSE);
-        float stockPrice2 = getStockPrice(tickerSymbol, curDateString, TypeOfPrice.CLOSE);
-        if ((stockPrice1 < movingAverage30Day && stockPrice2 > movingAverage30Day)) {
-          positiveCrossovers.add(curDateString);
-        } else if ((stockPrice1 > movingAverage30Day && stockPrice2 < movingAverage30Day)) {
-          negativeCrossovers.add(curDateString);
-        }
-        prevDateString = curDateString;
-        curDate = curDate.plusDays(1);
-        curDateString = curDate.format(formatter1);
-      }
-      return assemblePosNegCrossovers(positiveCrossovers, negativeCrossovers);
-    } else {
-      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-    }
-  }
-
-  /**
-   * Finds moving average crossovers for a given ticker symbol within a specified date range.
-   *
-   * @param tickerSymbol    The ticker symbol of the stock.
-   * @param startDateString The start date of the date range in the format "M/d/yyyy".
-   * @param endDateString   The end date of the date range in the format "M/d/yyyy".
-   * @param x               The number of days for the first moving average.
-   * @param y               The number of days for the second moving average.
-   * @return A string containing positive and negative crossover dates separated by commas.
-   * @throws IllegalArgumentException If the end date is before the start date or if the ticker
-   *                                  symbol is invalid.
-   */
-  public String findMovingCrossovers(String tickerSymbol, String startDateString,
-                                     String endDateString, int x, int y)
-          throws IllegalArgumentException {
-    DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
-    LocalDate curDate = LocalDate.parse(startDateString, formatter1);
-    LocalDate endDate = LocalDate.parse(endDateString, formatter1);
-    if (curDate.isAfter(endDate)) {
-      throw new IllegalArgumentException("End date cannot be before the start date.");
-    }
-    if (isValidTicker(tickerSymbol)) {
-      ArrayList<String> positiveCrossovers = new ArrayList<>();
-      ArrayList<String> negativeCrossovers = new ArrayList<>();
-      LocalDate prevDate = curDate.minusDays(1);
-      String prevDateString = prevDate.format(formatter1);
-      String curDateString = curDate.format(formatter1);
-      while (!curDate.isEqual(endDate)) {
-        float yDayMovingAverage = movingAverage(y, tickerSymbol, curDateString);
-        float xDayMovingAverage1 = movingAverage(x, tickerSymbol, prevDateString);
-        float xDayMovingAverage2 = movingAverage(x, tickerSymbol, curDateString);
-        if ((xDayMovingAverage1 < yDayMovingAverage && xDayMovingAverage2 > yDayMovingAverage)) {
-          positiveCrossovers.add(curDateString);
-        } else if ((xDayMovingAverage1 > yDayMovingAverage && xDayMovingAverage2 <
-                yDayMovingAverage)) {
-          negativeCrossovers.add(curDateString);
-        }
-        prevDateString = curDateString;
-        curDate = curDate.plusDays(1);
-        curDateString = curDate.format(formatter1);
-      }
-      return assemblePosNegCrossovers(positiveCrossovers, negativeCrossovers);
-    } else {
-      throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
-    }
-  }
-
-  private String assemblePosNegCrossovers(ArrayList<String> positiveCrossovers, ArrayList<String>
-          negativeCrossovers) {
-    StringBuilder ret = new StringBuilder();
-    if (positiveCrossovers.isEmpty()) {
-      ret.append("None");
-    } else {
-      for (String d : positiveCrossovers) {
-        ret.append(d).append(",");
-      }
-    }
-    ret.append(" ");
-    if (negativeCrossovers.isEmpty()) {
-      ret.append("None");
-    } else {
-      for (String d : negativeCrossovers) {
-        ret.append(d).append(",");
-      }
-    }
-    return ret.toString();
-  }
-
-
-  protected float calculateCostBasis(String tickerSymbol, int numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, Model.TypeOfPrice.CLOSE);
-    // Calculate the cost basis of the purchased shares
-    float costBasis = purchasePrice * numShares;
-    return costBasis;
-  }
-
-  protected float calculateCostBasis(String tickerSymbol, float numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, Model.TypeOfPrice.CLOSE);
-    // Calculate the cost basis of the purchased shares
-    float costBasis = purchasePrice * numShares;
-    return costBasis;
-  }
-
-  /**
-   * Calculates the total cost basis of stocks in a specified portfolio up to a given date.
-   *
-   * @param portfolioName The name of the portfolio.
-   * @param date          The date up to which the cost basis is calculated.
-   * @return The total cost basis of the stocks in the portfolio up to the specified date.
-   */
-  public float totalCostBasis(String portfolioName, String date) {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      System.out.println("Portfolio not found.");
-      return 0;
-    }
-    float totalCostBasis = 0;
-    for (Map.Entry<String, String> entry : portfolio.purchaseDates.entrySet()) {
-      String tickerSymbol = entry.getKey();
-      String purchaseDate = entry.getValue();
-      if (purchaseDate.compareTo(date) <= 0) {
-        float stockCostBasis = portfolio.costBasisMap.getOrDefault(tickerSymbol, 0f);
-        totalCostBasis += stockCostBasis;
-      }
-    }
-    return totalCostBasis;
-  }
-
-  /**
-   * Calculates the total value of a portfolio on a specified date.
-   *
-   * @param portfolioName The name of the portfolio.
-   * @param date          The date for which the portfolio value is calculated.
-   * @return The total value of the portfolio on the specified date.
-   */
-  public float portfolioValueOnDate(String portfolioName, String date) {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      System.out.println("Portfolio not found.");
-      return 0;
-    }
-
-    float totalValue = 0;
-    for (Map.Entry<String, String> entry : portfolio.purchaseDates.entrySet()) {
-      String tickerSymbol = entry.getKey();
-      String purchaseDate = entry.getValue();
-      if (purchaseDate.compareTo(date) <= 0) {
-        // Purchase date is on or before the given date
-        float numShares = portfolio.getStocks().getOrDefault(tickerSymbol, 0.0f);
-        float currentPrice = getStockPrice(tickerSymbol, date, Model.TypeOfPrice.CLOSE);
-        totalValue += currentPrice * numShares;
-      }
-    }
-    return totalValue;
-  }
-
-  @Override
-  public String chartPerformance(String portfolioName, String startDate, String endDate) {
-    return PerformanceChart.generatePerformanceChart(portfolioName, startDate, endDate, this);
-  }
-
-  @Override
-  public String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
-          throws IllegalArgumentException {
-    return PerformanceChart.generatePerformanceChartStock(tickerSymbol, startDate, endDate, this);
-  }
-
-  public String investFixedAmount(String portfolioName, float amount, String date, Map<String, Float> weightDistribution) {
-    Portfolio portfolio = portfolioList.get(portfolioName);
-    if (portfolio == null) {
-      return "Portfolio not found.";
-    }
-
-    // Calculate the amount to be invested in each stock
-    Map<String, Float> investments = new HashMap<>();
-    for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
-      String tickerSymbol = entry.getKey();
-      float weight = entry.getValue();
-      float amountToInvest = (weight / 100) * amount;
-      investments.put(tickerSymbol, amountToInvest);
-    }
-
-    // Purchase shares for each stock in the portfolio
-    StringBuilder result = new StringBuilder();
-    for (Map.Entry<String, Float> entry : investments.entrySet()) {
-      String tickerSymbol = entry.getKey();
-      float amountToInvest = entry.getValue();
-
-      //Calculate the number of shares to buy for each stock.
-      float pricePerShare = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-      if (pricePerShare > 0) {  
-        float numShares = amountToInvest / pricePerShare;
-        purchaseShares(portfolioName, tickerSymbol, date, numShares);
-      } else {
-        result.append("Failed to retrieve stock price for ").append(tickerSymbol).append("\n");
-      }
-    }
-    return amount + "Amount invested!";
-  }
-
-  /**
-   * Helper method to calculate the number of shares to be purchased for each stock based on
-   * the weight distribution and the investment amount.
-   *
-   * @param weightDistribution Map containing the weight distribution for each stock.
-   * @param amount Amount to be invested.
-   * @param date Date for which the prices are considered.
-   * @return Array containing ticker symbols as keys and the corresponding number of shares as values.
-   */
-  public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution, String date) {
-    float[] numSharesArray = new float[weightDistribution.size()];
-    int index = 0;
-    for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
-      String tickerSymbol = entry.getKey();
-      float weight = entry.getValue();
-      float amountToInvest = (weight / 100) * amount; // Convert weight to percentage
-      float numShares = amountToInvest / getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-      numSharesArray[index++] = numShares;
-    }
-
-    return numSharesArray;
-  }
-
-  public String dollarCostAveraging(String portfolioName, float amount, String startDate, String endDate, int frequency, Map<String, Float> weightDistribution) {
-
-    // Calculate the number of periods
-    LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-    LocalDate end;
-    if (endDate == null) {
-      // If endDate is null, set end to the current date
-      end = LocalDate.now();
-    } else {
-      // Otherwise, parse the endDate string
-      end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-    }
-    int totalPeriods = (int) ChronoUnit.DAYS.between(start, end) / frequency;
-
-    // Get ticker symbols from weight distribution
-    String[] tickerSymbols = weightDistribution.keySet().toArray(new String[0]);
-
-    // Calculate numShares array using calculateNumShares method
-    float[] numShares = calculateNumShares(amount, weightDistribution, startDate);
-
-    // Create portfolio with ticker symbols and numShares
-    createPortfolio(portfolioName, tickerSymbols, numShares);
-    float totalInvestment = amount;
-    // Reinvest the amount periodically using investFixedAmount
-    for (int i = 1; i < totalPeriods; i++) {
-      String currentDate = start.plusDays(i * frequency).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-      investFixedAmount(portfolioName, amount, currentDate, weightDistribution);
-      totalInvestment += amount;
-    }
-
-    return "Dollar-cost averaging completed successfully. Total money invested: " + totalInvestment;
   }
 }

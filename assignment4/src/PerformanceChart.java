@@ -15,12 +15,12 @@ public class PerformanceChart {
    * @param portfolioName The name of the portfolio.
    * @param startDate     The start date of the performance chart in the format "yyyy-MM-dd".
    * @param endDate       The end date of the performance chart in the format "yyyy-MM-dd".
-   * @param model         The model containing the portfolio and necessary data.
+   * @param fleximodel         The model containing the portfolio and necessary data.
    * @return A string representing the generated performance chart.
    */
   public static String generatePerformanceChart(String portfolioName, String startDate,
-                                                String endDate, Model model) {
-    Portfolio portfolio = model.portfolioList.get(portfolioName);
+                                                String endDate, FlexiblePortfolioModel fleximodel) {
+    Portfolio portfolio = fleximodel.portfolioList.get(portfolioName);
     if (portfolio == null) {
       return "Portfolio not found.";
     }
@@ -36,7 +36,7 @@ public class PerformanceChart {
     // Determine the scale for the chart
     float maxValue = 0;
     for (String timestamp : timestamps) {
-      float value = model.portfolioValueOnDate(portfolioName, timestamp);
+      float value = fleximodel.portfolioValueOnDate(portfolioName, timestamp);
       if (value > maxValue) {
         maxValue = value;
       }
@@ -49,7 +49,7 @@ public class PerformanceChart {
 
     // Add data lines to the chart
     for (String timestamp : timestamps) {
-      float value = model.portfolioValueOnDate(portfolioName, timestamp);
+      float value = fleximodel.portfolioValueOnDate(portfolioName, timestamp);
       int asterisks = Math.max(1, (int) (value / scale));
       chart.append(timestamp).append(": ");
       for (int i = 0; i < asterisks; i++) {

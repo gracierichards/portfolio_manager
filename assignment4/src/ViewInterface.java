@@ -8,7 +8,7 @@ public interface ViewInterface {
    *
    * @param p the name of the portfolio
    */
-  void examineComposition(Portfolio p);
+  void examineComposition(InflexiblePortfolio p);
 
   /**
    * The user can look up ticker symbols that match the name of a company, or all ticker symbols

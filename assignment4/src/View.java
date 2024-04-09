@@ -8,7 +8,7 @@ import java.util.Map;
 public class View implements ViewInterface {
 
   @Override
-  public void examineComposition(Portfolio p) {
+  public void examineComposition(InflexiblePortfolio p) {
     System.out.println("Portfolio: " + p.getName());
     Map<String, Float> stocks = p.getStocks();
     for (Map.Entry<String, Float> entry : stocks.entrySet()) {

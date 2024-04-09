@@ -8,9 +8,9 @@ import java.util.Set;
  * Portfolio class represents a collection of stocks for a particular investor.
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
-public class Portfolio {
+public class Portfolio extends InflexiblePortfolio{
 
-  private Model model;
+  private FlexiblePortfolioModel model;
   private final String name; // Name of the portfolio
   protected Map<String, Float> stocks; // Map to store stocks with their corresponding amounts
   private String creationDate; // Field to store the creation date
@@ -23,6 +23,7 @@ public class Portfolio {
    * @param name The name of the portfolio.
    */
   public Portfolio(String name) {
+    super(name);
     this.name = name;
     this.stocks = new HashMap<>();
     this.purchaseDates = new HashMap<>();
@@ -31,7 +32,7 @@ public class Portfolio {
   }
 
   public void setModel() {
-    model = new Model();
+    model = new FlexiblePortfolioModel();
   }
 
   /**
