@@ -22,7 +22,7 @@ public class CommandValuePortfolio implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
 
   }
 }

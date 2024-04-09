@@ -1,17 +1,19 @@
 import javax.swing.*;
 
 public class CommandCreatePortfolio implements Command {
+  private JTextArea portfolioTextBox;
+  private JTextArea tickersTextBox;
   @Override
   public JPanel makePanels() {
     JPanel createPortfolioPane = new JPanel();
-    JTextArea textBox1 = new JTextArea(1, 50);
-    textBox1.setBorder(BorderFactory.createTitledBorder("Enter name for portfolio"));
-    createPortfolioPane.add(textBox1);
+    portfolioTextBox = new JTextArea(1, 50);
+    portfolioTextBox.setBorder(BorderFactory.createTitledBorder("Enter name for portfolio"));
+    createPortfolioPane.add(portfolioTextBox);
 
-    JTextArea textBox2 = new JTextArea(1, 60);
-    textBox2.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
+    tickersTextBox = new JTextArea(1, 60);
+    tickersTextBox.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
             + "amounts in the following format: MSFT:20 AAPL:10 NVDA:30"));
-    createPortfolioPane.add(textBox2);
+    createPortfolioPane.add(tickersTextBox);
     return createPortfolioPane;
   }
 
@@ -21,7 +23,10 @@ public class CommandCreatePortfolio implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
+    String portfolioName = portfolioTextBox.getText();
+    String tickers = tickersTextBox.getText();
+    //call model's createPortfolio command
 
   }
 }

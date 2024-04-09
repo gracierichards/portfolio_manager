@@ -21,12 +21,12 @@ import javax.swing.text.Document;
 public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   //Drop down menu of options for commands
   private JLabel comboboxDisplay;
-  JComboBox<String> combobox;
-  //private JLabel portfolioMenuDisplay;
+  private JComboBox<String> combobox;
+  private String selectedItem;
   private JPanel mainPanel;
 
   //The bottom panel that changes depending on the menu option
-  JPanel cards;
+  private JPanel cards;
   private JList<String> portfoliosInMenu;
   //Buy if true, sell if false
   protected boolean isBuy;
@@ -50,6 +50,8 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     setContentPane(mainPanel);
     //pack();
     setVisible(true);
+
+    selectedItem = "---";
   }
 
   private void makeMainMenu() {
@@ -68,7 +70,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     combobox.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         JComboBox<String> cb = (JComboBox<String>)e.getSource();
-        String selectedItem = (String)cb.getSelectedItem();
+        selectedItem = (String)cb.getSelectedItem();
         CardLayout cl = (CardLayout)(cards.getLayout());
         cl.show(cards, selectedItem);
         mainPanel.revalidate();
@@ -138,7 +140,13 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     goButton.setActionCommand("Go");
     goButton.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        //get selected main menu item and call its execute method
+        for (Command c : commandObjects) {
+          if (c.getMenuItem().equals(selectedItem)) {
+            String result = c.executeCommand();
+            JLabel resultJLabel = new JLabel(result);
+            mainPanel.add(resultJLabel);
+          }
+        }
       }
     });
     mainPanel.add(goButton);

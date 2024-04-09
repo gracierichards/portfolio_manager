@@ -42,7 +42,7 @@ public class CommandSavePortfolio implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
 
   }
 }
