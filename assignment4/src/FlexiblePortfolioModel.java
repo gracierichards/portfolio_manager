@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FlexiblePortfolioModel extends Model{
+public class FlexiblePortfolioModel extends Model {
 
   protected Map<String, Portfolio> portfolioList;
 
@@ -413,6 +413,61 @@ public class FlexiblePortfolioModel extends Model{
     return PerformanceChart.generatePerformanceChartStock(tickerSymbol, startDate, endDate, this);
   }
 
+
+  /**
+   * Returns the value of the given stock on the given date, or if there is no data for the given
+   * date, the value on the last date before the given date.
+   *
+   * @param tickerSymbol the ticker symbol of the stock to look up
+   * @param date         the date for which you want the value, in MM/DD/YYYY
+   * @return the value of the stock on that day.
+   */
+  protected float getStockPriceForDollarCost(String tickerSymbol, String date,
+                                             TypeOfPrice typeOfPrice) {
+    isValidTicker(tickerSymbol);
+    try {
+      File file1 = new File("stockcsvs", tickerSymbol + ".csv");
+      Scanner s = new Scanner(file1);
+      String line;
+      //skip first line, which is the header
+      if (s.hasNextLine()) {
+        line = s.nextLine();
+      }
+      String previousOpenPrice = null;
+      String previousClosePrice = null;
+      if (s.hasNextLine()) {
+        line = s.nextLine();
+        previousOpenPrice = line.split(",")[1];
+        previousClosePrice = line.split(",")[4];
+      }
+      while (s.hasNextLine()) {
+        line = s.nextLine();
+        String csvDate = line.split(",")[0];
+        //the same as saying if the value is equal to 0 or 1
+        if (compareDates(date, csvDate) == 0) {
+          if (typeOfPrice == TypeOfPrice.OPEN) {
+            return Float.parseFloat(line.split(",")[1]);
+          } else {
+            return Float.parseFloat(line.split(",")[4]);
+          }
+        } else if (compareDates(date, csvDate) > 0) {
+          if (typeOfPrice == TypeOfPrice.OPEN) {
+            return Float.parseFloat(previousOpenPrice);
+          } else {
+            return Float.parseFloat(previousClosePrice);
+          }
+        }
+        previousOpenPrice = line.split(",")[1];
+        previousClosePrice = line.split(",")[4];
+      }
+      s.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
+      return -1;
+    }
+    throw new RuntimeException("Reached end of file. Stock price not found in file.");
+  }
+
   public String investFixedAmount(String portfolioName, float amount, String date, Map<String, Float> weightDistribution) {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
@@ -435,7 +490,7 @@ public class FlexiblePortfolioModel extends Model{
       float amountToInvest = entry.getValue();
 
       //Calculate the number of shares to buy for each stock.
-      float pricePerShare = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+      float pricePerShare = getStockPriceForDollarCost(tickerSymbol, date, TypeOfPrice.CLOSE);
       if (pricePerShare > 0) {
         float numShares = amountToInvest / pricePerShare;
         purchaseShares(portfolioName, tickerSymbol, date, numShares);
@@ -451,8 +506,8 @@ public class FlexiblePortfolioModel extends Model{
    * the weight distribution and the investment amount.
    *
    * @param weightDistribution Map containing the weight distribution for each stock.
-   * @param amount Amount to be invested.
-   * @param date Date for which the prices are considered.
+   * @param amount             Amount to be invested.
+   * @param date               Date for which the prices are considered.
    * @return Array containing ticker symbols as keys and the corresponding number of shares as values.
    */
   public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution, String date) {
@@ -462,7 +517,7 @@ public class FlexiblePortfolioModel extends Model{
       String tickerSymbol = entry.getKey();
       float weight = entry.getValue();
       float amountToInvest = (weight / 100) * amount; // Convert weight to percentage
-      float numShares = amountToInvest / getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
+      float numShares = amountToInvest / getStockPriceForDollarCost(tickerSymbol, date, TypeOfPrice.CLOSE);
       numSharesArray[index++] = numShares;
     }
 
