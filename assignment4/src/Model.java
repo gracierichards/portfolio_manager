@@ -22,7 +22,7 @@ import java.util.Scanner;
  */
 public class Model implements ModelInterface {
   protected Map<String, InflexiblePortfolio> portfolioList;
-
+  private API api;
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
@@ -132,77 +132,6 @@ public class Model implements ModelInterface {
   }
 
   /**
-   * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
-   * with the given ticker symbol on the given date. Returns all the data as a String in csv
-   * format - lines separated by newline characters, and individual cells separated by commas.
-   */
-  private String getStockData(String tickerSymbol) {
-    return getAlphaVantageData("function=TIME_SERIES_DAILY"
-            + "&outputsize=full"
-            + "&symbol"
-            + "=" + tickerSymbol);
-  }
-
-  /**
-   * The user can look up ticker symbols that match the name of a company, or all ticker symbols
-   * that start with the inputted string. This method will query Alpha Vantage for a list of
-   * matching results.
-   * It will only include results whose type is "Equity" and whose region is "United States".
-   *
-   * @param query the partial or full name of a company or ticker symbol being looked up by the user
-   * @return data in csv format of the ticker symbol matches.
-   * The columns output by AlphaVantage are symbol, name, type, region, marketOpen, marketClose,
-   * timezone, currency, and matchScore.
-   */
-  String getTickerMatches(String query) {
-    return getAlphaVantageData("function=SYMBOL_SEARCH"
-            + "&keywords=" + query);
-  }
-
-  /**
-   * Helper function that performs the common functionality between getStockData and
-   * getTickerMatches.
-   */
-  private String getAlphaVantageData(String urlPart) {
-    //old low volume api key
-    //String apiKey = "8FDS9CHM4YROZVC5";
-    String apiKey = "QEHLSEQZWQ0SZGJA";
-    URL url = null;
-    try {
-      url = new URL("https://www.alphavantage" + ".co/query?" + urlPart + "&apikey="
-              + apiKey + "&datatype=csv");
-    } catch (MalformedURLException e) {
-      throw new RuntimeException("the alphavantage API has either changed or "
-              + "no longer works");
-    }
-    InputStream in = null;
-    StringBuilder output = new StringBuilder();
-    String tickerSymbol = urlPart.substring(urlPart.indexOf("symbol") + "symbol".length()
-            + 1);
-    try {
-      in = url.openStream();
-      int b;
-
-      while ((b = in.read()) != -1) {
-        output.append((char) b);
-      }
-
-      //if (output.charAt(0) == '{') {
-      //  System.out.println(tickerSymbol + " is not a valid ticker symbol.");
-      //}
-    } catch (IOException e) {
-      if (urlPart.contains("TIME_SERIES_DAILY")) {
-        System.out.println("No price data found for " + tickerSymbol);
-      } else {
-        String query = urlPart.substring(urlPart.indexOf("keywords")
-                + "keywords".length() + 1);
-        System.out.println("No ticker symbols or companies found for " + query);
-      }
-    }
-    return output.toString();
-  }
-
-  /**
    * determineValue has changed slightly compared to the version from Assignment 4. The difference
    * is that much of the code has been abstracted away into a helper function called getStockPrice.
    * Now any class in this package can use this method to find the price of a given stock on a given
@@ -242,7 +171,7 @@ public class Model implements ModelInterface {
     if (file.exists()) {
       return isQueriedTickerValid(tickerSymbol);
     }
-    String csvData = getStockData(tickerSymbol);
+    String csvData = api.getStockData(tickerSymbol);
     //Check if it's a valid ticker symbol
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
       writer.write(csvData);

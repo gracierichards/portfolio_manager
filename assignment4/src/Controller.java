@@ -23,6 +23,7 @@ public class Controller implements ControllerInterface {
    */
   private Model model;
   private FlexiblePortfolioModel fleximodel;
+  private API api;
   private ViewInterface view;
   private Scanner scanner;
 
@@ -78,7 +79,7 @@ public class Controller implements ControllerInterface {
           valueCommand(words);
           break;
         case "search":
-          String matches = model.getTickerMatches(words[1]);
+          String matches = api.getTickerMatches(words[1]);
           view.showTickerMatches(matches);
           break;
         case "stock-direction-day":
