@@ -22,7 +22,7 @@ public class CommandCostBasis implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
 
   }
 }

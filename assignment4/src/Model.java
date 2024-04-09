@@ -411,6 +411,60 @@ public class Model implements ModelInterface {
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
 
+  /**
+   * Returns the value of the given stock on the given date, or if there is no data for the given
+   * date, the value on the last date before the given date.
+   *
+   * @param tickerSymbol the ticker symbol of the stock to look up
+   * @param date         the date for which you want the value, in MM/DD/YYYY
+   * @return the value of the stock on that day.
+   */
+  protected float getStockPriceForDollarCost(String tickerSymbol, String date,
+                                             TypeOfPrice typeOfPrice) {
+    isValidTicker(tickerSymbol);
+    try {
+      File file1 = new File("stockcsvs", tickerSymbol + ".csv");
+      Scanner s = new Scanner(file1);
+      String line;
+      //skip first line, which is the header
+      if (s.hasNextLine()) {
+        line = s.nextLine();
+      }
+      String previousOpenPrice = null;
+      String previousClosePrice = null;
+      if (s.hasNextLine()) {
+        line = s.nextLine();
+        previousOpenPrice = line.split(",")[1];
+        previousClosePrice = line.split(",")[4];
+      }
+      while (s.hasNextLine()) {
+        line = s.nextLine();
+        String csvDate = line.split(",")[0];
+        //the same as saying if the value is equal to 0 or 1
+        if (compareDates(date, csvDate) == 0) {
+          if (typeOfPrice == TypeOfPrice.OPEN) {
+            return Float.parseFloat(line.split(",")[1]);
+          } else {
+            return Float.parseFloat(line.split(",")[4]);
+          }
+        } else if (compareDates(date, csvDate) > 0) {
+          if (typeOfPrice == TypeOfPrice.OPEN) {
+            return Float.parseFloat(previousOpenPrice);
+          } else {
+            return Float.parseFloat(previousClosePrice);
+          }
+        }
+        previousOpenPrice = line.split(",")[1];
+        previousClosePrice = line.split(",")[4];
+      }
+      s.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("Unable to read " + tickerSymbol + ".csv." + e.getMessage());
+      return -1;
+    }
+    throw new RuntimeException("Reached end of file. Stock price not found in file.");
+  }
+
   @Override
   public boolean stockDirection(String tickerSymbol, String date) throws IllegalArgumentException {
     return stockDirectionHelper(tickerSymbol, date, "");

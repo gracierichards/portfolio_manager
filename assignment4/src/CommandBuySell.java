@@ -61,7 +61,7 @@ public class CommandBuySell implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
 
   }
 }

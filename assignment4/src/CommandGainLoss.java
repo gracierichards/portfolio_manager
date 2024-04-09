@@ -21,7 +21,7 @@ public class CommandGainLoss implements Command {
   }
 
   @Override
-  public void executeCommand() {
+  public String executeCommand() {
 
   }
 }
