@@ -213,7 +213,33 @@ public class ModelTest {
     model.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
 
     // Verify the result
-    assertEquals("Dollar-cost averaging completed successfully.", result);
+    assertEquals("Dollar-cost averaging completed successfully. Total money invested: 4000.0", result);
+  }
+
+  @Test
+  public void testDollarCostAveraging_NoEndDate() {
+    // Set up initial portfolio
+    String portfolioName = "TanayPortfolio";
+    String[] tickerSymbols = {"AAPL", "MSFT"};
+    float[] stockAmounts = {10.0f, 20.0f};
+    model.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
+    model.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
+
+    // Set parameters for dollar-cost averaging
+    String startDate = "04/01/2024";
+    String endDate = null;
+    float amount = 1000.0f;
+    int frequency = 7; // Weekly frequency
+    Map<String, Float> weightDistribution = new HashMap<>();
+    weightDistribution.put("AAPL", 40.0f);
+    weightDistribution.put("MSFT", 60.0f);
+
+    // Perform dollar-cost averaging
+    String result = model.dollarCostAveraging(portfolioName,amount, startDate, endDate, frequency, weightDistribution);
+    model.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
+
+    // Verify the result
+    assertEquals("Dollar-cost averaging completed successfully. Total money invested: 1000.0", result);
   }
 
 }

@@ -345,7 +345,7 @@ public class Model implements ModelInterface {
     portfolio.costBasisMap.put(tickerSymbol, costBasis);
 
     portfolio.purchaseDates.put(tickerSymbol, date);
-    return "Shares purchased succesfully";
+    return "Shares purchased successfully";
   }
 
   /**
@@ -720,14 +720,14 @@ public class Model implements ModelInterface {
 
       //Calculate the number of shares to buy for each stock.
       float pricePerShare = getStockPrice(tickerSymbol, date, TypeOfPrice.CLOSE);
-      if (pricePerShare > 0) {
+      if (pricePerShare > 0) {  
         float numShares = amountToInvest / pricePerShare;
-        String purchaseResult = purchaseShares(portfolioName, tickerSymbol, date, numShares);
+        purchaseShares(portfolioName, tickerSymbol, date, numShares);
       } else {
         result.append("Failed to retrieve stock price for ").append(tickerSymbol).append("\n");
       }
     }
-    return "Amount invested!";
+    return amount + "Amount invested!";
   }
 
   /**
@@ -757,7 +757,14 @@ public class Model implements ModelInterface {
 
     // Calculate the number of periods
     LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-    LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    LocalDate end;
+    if (endDate == null) {
+      // If endDate is null, set end to the current date
+      end = LocalDate.now();
+    } else {
+      // Otherwise, parse the endDate string
+      end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    }
     int totalPeriods = (int) ChronoUnit.DAYS.between(start, end) / frequency;
 
     // Get ticker symbols from weight distribution
@@ -768,14 +775,14 @@ public class Model implements ModelInterface {
 
     // Create portfolio with ticker symbols and numShares
     createPortfolio(portfolioName, tickerSymbols, numShares);
-
+    float totalInvestment = amount;
     // Reinvest the amount periodically using investFixedAmount
-    StringBuilder result = new StringBuilder();
     for (int i = 1; i < totalPeriods; i++) {
       String currentDate = start.plusDays(i * frequency).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
       investFixedAmount(portfolioName, amount, currentDate, weightDistribution);
+      totalInvestment += amount;
     }
 
-    return "Dollar-cost averaging completed successfully.";
+    return "Dollar-cost averaging completed successfully. Total money invested: " + totalInvestment;
   }
 }
