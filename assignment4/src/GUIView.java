@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -36,9 +37,9 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   protected boolean loadPathSet;
   protected String savePath;
   protected boolean savePathSet;
+  protected JTextArea costBasisTextBox;
   protected JTextArea textBox4;
   protected JTextArea textBox5;
-  protected JTextArea textBox6;
   protected JTextArea textBox7;
   protected JTextArea textBox8;
   protected JTextArea textBox9;
@@ -185,7 +186,14 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
   @Override
   public void examineComposition(InflexiblePortfolio p) {
-
+    StringBuilder messageText = new StringBuilder();
+    messageText.append("Portfolio: " + p.getName() + System.lineSeparator());
+    Map<String, Float> stocks = p.getStocks();
+    for (Map.Entry<String, Float> entry : stocks.entrySet()) {
+      messageText.append(entry.getKey() + ": " + entry.getValue() + System.lineSeparator());
+    }
+    JOptionPane.showMessageDialog(GUIView.this, messageText.toString(),
+            "Portfolio Composition", JOptionPane.PLAIN_MESSAGE);
   }
 
   @Override
@@ -233,13 +241,21 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     return selectedItem;
   }
 
+  @Override
   public void successPopup() {
     JOptionPane.showMessageDialog(GUIView.this,
             "Action performed successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
   }
 
+  @Override
   public void errorPopup() {
     JOptionPane.showMessageDialog(GUIView.this, "There is an error in the "
             + "user input(s).", "Cannot Continue", JOptionPane.ERROR_MESSAGE);
+  }
+
+  @Override
+  public void invalidPortfolioNameMessage() {
+    JOptionPane.showMessageDialog(GUIView.this, "Invalid portfolio name "
+            + "given.", "Please try again", JOptionPane.ERROR_MESSAGE);
   }
 }

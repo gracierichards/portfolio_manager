@@ -66,17 +66,29 @@ public class Controller implements ControllerInterface {
       isInteger1(words);
       switch (words[0]) {
         case "create":
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name.");
+            break;
+          }
           createCommand(words[1], words[2], String.join(" ",
                   Arrays.copyOfRange(words, 3, words.length)));
           break;
         case "load":
+          if (words.length < 4) {
+            System.out.println("Please provide a portfolio name and file name.");
+            break;
+          }
           loadCommand(words[2], words[3]);
           break;
         case "save":
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name and file name.");
+            break;
+          }
           saveCommand(words[1], words[2]);
           break;
         case "list":
-          listCommand(words);
+          listCommand(words[1]);
           break;
         case "value":
           valueCommand(words);
@@ -101,7 +113,11 @@ public class Controller implements ControllerInterface {
           movingCrossoversCommand(words);
           break;
         case "CostBasis":
-          costBasisCommand(words);
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name and date.");
+            break;
+          }
+          costBasisCommand(words[1], words[2]);
           break;
         case "portfolioValueOnDate":
           portfolioValueOnDate(words);
@@ -133,12 +149,10 @@ public class Controller implements ControllerInterface {
 
   protected void createCommand(String portfolioType, String portfolioName,
                                String tickersAndAmounts) {
-    //isInteger1(words);
     List<String> tickerSymbols = new ArrayList<>();
     List<Float> stockAmounts = new ArrayList<>();
     if (portfolioName.contains(":")) {
-      System.out.println("Please provide a name for your portfolio. The name cannot contain "
-              + "a colon.");
+      view.invalidPortfolioNameMessage();
     } else {
       String[] words = tickersAndAmounts.split(" ");
       for (String word : words) {
@@ -174,7 +188,7 @@ public class Controller implements ControllerInterface {
   }
 
   protected void loadCommand(String portfolioName, String path) {
-    /*isInteger1(words);
+    /*
     if (words[1].equals("portfolio")) {
       fleximodel.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
     } else if (words[1].equals("inflexibleportfolio")) {
@@ -184,7 +198,7 @@ public class Controller implements ControllerInterface {
   }
 
   protected void saveCommand(String portfolioName, String path) {
-    /*isInteger1(words);
+    /*
     if (words[1].equals("portfolio")) {
       fleximodel.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
     } else if (words[1].equals("inflexibleportfolio")) {
@@ -193,13 +207,12 @@ public class Controller implements ControllerInterface {
     fleximodel.savePortfolioToFile(portfolioName, path);
   }
 
-  protected void listCommand(String[] words) {
+  protected void listCommand(String portfolioName) {
     InflexiblePortfolio p = null;
-    isInteger1(words);
     try {
-      p = model.getPortfolio(words[1]);
+      p = fleximodel.getPortfolio(portfolioName);
     } catch (FileNotFoundException e) {
-      System.out.println("Cannot find portfolio with this name.");
+      view.invalidPortfolioNameMessage();
       return;
     }
     view.examineComposition(p);
@@ -322,8 +335,7 @@ public class Controller implements ControllerInterface {
     view.showCrossovers(result);
   }
 
-  protected void costBasisCommand(String[] words) {
-    isInteger1(words);
+  protected void costBasisCommand(String portfolioName, String date) {
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and date.");
       return;

@@ -61,4 +61,9 @@ public interface ViewInterface {
    * Prints the menu of possible options.
    */
   void printMenu();
+
+  /**
+   * Tells the user that they gave an invalid portfolio name.
+   */
+  void invalidPortfolioNameMessage();
 }

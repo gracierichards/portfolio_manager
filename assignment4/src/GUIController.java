@@ -74,6 +74,8 @@ public class GUIController {
           view.savePathSet = false;
           break;
         case "Display composition of a portfolio":
+          portfolioName = view.selectedPortfolio;
+          controller.listCommand(portfolioName);
           break;
         case "Find cost basis of a portfolio":
           break;

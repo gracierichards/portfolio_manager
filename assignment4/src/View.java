@@ -92,4 +92,9 @@ public class View implements ViewInterface {
             + System.lineSeparator() + "\tsell {portfolio_name} {ticker_symbol} {date} {numShares}"
             + System.lineSeparator() + "\tquit");
   }
+
+  @Override
+  public void invalidPortfolioNameMessage() {
+    System.out.println("Invalid portfolio name given.");
+  }
 }

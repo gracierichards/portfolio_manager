@@ -16,9 +16,9 @@ public class CommandCostBasis implements Command {
             + "portfolio by the given date.");
     costBasisPane.add(text3);
     costBasisPane.add(text4);
-    view.textBox6 = new JTextArea(1, 50);
-    view.textBox6.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
-    costBasisPane.add(view.textBox6);
+    view.costBasisTextBox = new JTextArea(1, 50);
+    view.costBasisTextBox.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
+    costBasisPane.add(view.costBasisTextBox);
     return costBasisPane;
   }
 
