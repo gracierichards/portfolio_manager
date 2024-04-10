@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FlexiblePortfolioModel extends Model {
+public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioModelInterface {
 
   protected Map<String, Portfolio> portfolioList;
 
@@ -62,7 +62,7 @@ public class FlexiblePortfolioModel extends Model {
 
   @Override
   public void savePortfolioToFile(String portfolioName, String filename) {
-    InflexiblePortfolio portfolio = portfolioList.get(portfolioName);
+    Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       System.out.println("Portfolio not found.");
       return;
@@ -82,47 +82,6 @@ public class FlexiblePortfolioModel extends Model {
     } catch (IOException e) {
       System.out.println("Error saving portfolio to file: " + e.getMessage());
     }
-  }
-
-
-  @Override
-  public void createPortfolioFromFile(String portfolioName, String filename) {
-    File file = new File(filename);
-    if (!file.exists()) {
-      System.out.println("File not found.");
-      return;
-    }
-
-    try (Scanner scanner = new Scanner(file)) {
-      List<String> tickerSymbols = new ArrayList<>();
-      List<Float> stockAmounts = new ArrayList<>();
-
-      //skip the header
-      String line = scanner.nextLine();
-      line = scanner.nextLine();
-      while (scanner.hasNextLine()) {
-        line = scanner.nextLine();
-        String[] parts = line.split(":");
-        if (parts.length != 2) {
-          System.out.println("Invalid format in file.");
-          return;
-        }
-        tickerSymbols.add(parts[0]);
-        stockAmounts.add(Float.parseFloat(parts[1]));
-      }
-
-      float[] amountsArray = new float[stockAmounts.size()];
-      for (int i = 0; i < stockAmounts.size(); i++) {
-        amountsArray[i] = stockAmounts.get(i);
-      }
-
-      createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
-    } catch (FileNotFoundException e) {
-      System.out.println("Error reading file: " + e.getMessage());
-    } catch (NumberFormatException e) {
-      System.out.println("Invalid data format in file.");
-    }
-    System.out.println("Portfolio loaded successfully from file.");
   }
 
   /**
@@ -153,8 +112,8 @@ public class FlexiblePortfolioModel extends Model {
     portfolio.purchaseDates.put(tickerSymbol, date);
   }
 
-  public String purchaseShares(String portfolioName, String tickerSymbol, String date, float numShares)
-          throws IllegalArgumentException {
+  public String purchaseShares(String portfolioName, String tickerSymbol, String date,
+                               float numShares) throws IllegalArgumentException {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       throw new IllegalArgumentException("Portfolio not found.");

@@ -123,7 +123,7 @@ public class Model implements ModelInterface {
         amountsArray[i] = stockAmounts.get(i);
       }
 
-      createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
+      this.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]), amountsArray);
     } catch (FileNotFoundException e) {
       System.out.println("Error reading file: " + e.getMessage());
     } catch (NumberFormatException e) {
