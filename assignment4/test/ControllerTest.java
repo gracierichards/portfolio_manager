@@ -29,11 +29,12 @@ public class ControllerTest {
   @Before
   public void setUp() {
     model = new Model();
+    fleximodel = new FlexiblePortfolioModel();
     view = new View();
     //Next line is just a placeholder, controller only needs input for the moving-crossovers
     //command. The test for this command initializes the controller with the input to be tested.
     Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream("".getBytes())));
-    controller = new Controller(model, view, s);
+    controller = new Controller(model, fleximodel, view, s);
     System.setOut(new PrintStream(outContent));
   }
 
@@ -197,7 +198,7 @@ public class ControllerTest {
     String followUpInput = "3" + System.lineSeparator() + "30";
     Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(
             followUpInput.getBytes())));
-    controller = new Controller(model, view, s);
+    controller = new Controller(model, fleximodel, view, s);
     controller.processCommand(input);
     assertTrue(outContent.toString().contains("Positive crossovers:" + System.lineSeparator() +
             "None" + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
@@ -206,7 +207,7 @@ public class ControllerTest {
     input = "moving-crossovers T 02/13/2024 03/13/2024";
     followUpInput = "3" + System.lineSeparator() + "30";
     s = new Scanner(new InputStreamReader(new ByteArrayInputStream(followUpInput.getBytes())));
-    controller = new Controller(fleximodel, view, s);
+    controller = new Controller(model, fleximodel, view, s);
     controller.processCommand(input);
     String output = outContent.toString();
   }

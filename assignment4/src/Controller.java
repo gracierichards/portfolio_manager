@@ -33,8 +33,9 @@ public class Controller implements ControllerInterface {
    * @param m the Model
    * @param v the View
    */
-  public Controller(Model m, ViewInterface v, Scanner scanner) {
+  public Controller(Model m, FlexiblePortfolioModel fm, ViewInterface v, Scanner scanner) {
     this.model = m;
+    this.fleximodel = fm;
     this.view = v;
     this.scanner = scanner;
   }
