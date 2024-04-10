@@ -49,5 +49,12 @@ public class GUIController {
 
   public static void main(String[] args) {
     new GUIController();
+
+    class GUIController implements ControllerInterface {
+      @Override
+      public void processCommand(String input) {
+
+      }
+    }
   }
 }

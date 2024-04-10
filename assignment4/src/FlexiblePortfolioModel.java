@@ -427,7 +427,8 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
 
-  public String investFixedAmount(String portfolioName, float amount, String date, Map<String, Float> weightDistribution) {
+  public String investFixedAmount(String portfolioName, float amount, String date,
+                                  Map<String, Float> weightDistribution) {
     Portfolio portfolio = portfolioList.get(portfolioName);
     if (portfolio == null) {
       return "Portfolio not found.";

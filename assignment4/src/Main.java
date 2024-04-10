@@ -18,6 +18,7 @@ public class Main {
    */
   public static void main(String[] args) {
     Model model = new Model();
+    FlexiblePortfolioModel fleximodel = new FlexiblePortfolioModel();
     ViewInterface view;
     if (args.length == 0 || args[0].equalsIgnoreCase("gui")) {
       view = new GUIView("Name of program");
@@ -28,7 +29,7 @@ public class Main {
       return;
     }
     Scanner s = new Scanner(System.in);
-    Controller controller = new Controller(model, view, s);
+    Controller controller = new Controller(model, fleximodel, view, s);
     while (true) {
       view.printMenu();
       String command = s.nextLine();

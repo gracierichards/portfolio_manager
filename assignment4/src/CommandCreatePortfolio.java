@@ -27,6 +27,6 @@ public class CommandCreatePortfolio implements Command {
     String portfolioName = portfolioTextBox.getText();
     String tickers = tickersTextBox.getText();
     //call model's createPortfolio command
-
+    return "";
   }
 }

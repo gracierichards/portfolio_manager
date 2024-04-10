@@ -23,6 +23,6 @@ public class CommandValuePortfolio implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

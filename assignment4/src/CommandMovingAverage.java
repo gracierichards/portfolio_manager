@@ -68,6 +68,6 @@ public class CommandMovingAverage implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

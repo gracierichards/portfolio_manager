@@ -43,6 +43,6 @@ public class CommandSavePortfolio implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }
