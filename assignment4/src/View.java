@@ -67,6 +67,8 @@ public class View implements ViewInterface {
   public void printMenu() {
     System.out.println(System.lineSeparator() + "\tPlease enter a command. See SETUP-README.txt "
             + "for full explanations of commands and their usage."
+            + System.lineSeparator() + "\tcreate inflexibleportfolio <portfolio_name> "
+            + "<ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]"
             + System.lineSeparator() + "\tcreate portfolio <portfolio_name> "
             + "<ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]"
             + System.lineSeparator() + "\tload portfolio <portfolio_name> <filename>"

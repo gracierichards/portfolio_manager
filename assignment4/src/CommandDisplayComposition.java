@@ -1,6 +1,11 @@
 import javax.swing.*;
 
 public class CommandDisplayComposition implements Command {
+  private GUIView view;
+
+  public CommandDisplayComposition(GUIView view) {
+    this.view = view;
+  }
   @Override
   public JPanel makePanels() {
     JPanel displayCompositionPane = new JPanel();
@@ -15,8 +20,4 @@ public class CommandDisplayComposition implements Command {
     return "Display composition of a portfolio";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

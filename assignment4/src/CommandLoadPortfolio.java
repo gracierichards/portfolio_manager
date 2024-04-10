@@ -15,10 +15,10 @@ public class CommandLoadPortfolio implements Command {
   @Override
   public JPanel makePanels() {
     JPanel loadPortfolioPane = new JPanel();
-    JTextArea textBox3 = new JTextArea(1, 50);
-    textBox3.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded "
+    view.loadCommandTextBox = new JTextArea(1, 50);
+    view.loadCommandTextBox.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded "
             + "portfolio"));
-    loadPortfolioPane.add(textBox3);
+    loadPortfolioPane.add(view.loadCommandTextBox);
 
     JPanel fileopenPanel = new JPanel();
     fileopenPanel.setLayout(new FlowLayout());
@@ -33,7 +33,8 @@ public class CommandLoadPortfolio implements Command {
         int retvalue = fchooser.showOpenDialog(view);
         if (retvalue == JFileChooser.APPROVE_OPTION) {
           File f = fchooser.getSelectedFile();
-          //Use this to get the user selected file path: f.getAbsolutePath()
+          view.loadPath = f.getAbsolutePath();
+          view.loadPathSet = true;
         }
       }
     });
@@ -47,8 +48,4 @@ public class CommandLoadPortfolio implements Command {
     return "Load portfolio from file";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

@@ -1,19 +1,23 @@
 import javax.swing.*;
 
 public class CommandCreatePortfolio implements Command {
-  private JTextArea portfolioTextBox;
-  private JTextArea tickersTextBox;
+  private GUIView view;
+
+  public CommandCreatePortfolio(GUIView view) {
+    this.view = view;
+  }
   @Override
   public JPanel makePanels() {
     JPanel createPortfolioPane = new JPanel();
-    portfolioTextBox = new JTextArea(1, 50);
-    portfolioTextBox.setBorder(BorderFactory.createTitledBorder("Enter name for portfolio"));
-    createPortfolioPane.add(portfolioTextBox);
+    view.createCommandPortfolioNameTextbox = new JTextArea(1, 50);
+    view.createCommandPortfolioNameTextbox.setBorder(BorderFactory
+            .createTitledBorder("Enter name for portfolio"));
+    createPortfolioPane.add(view.createCommandPortfolioNameTextbox);
 
-    tickersTextBox = new JTextArea(1, 60);
-    tickersTextBox.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
+    view.tickersAndAmountsTextbox = new JTextArea(1, 60);
+    view.tickersAndAmountsTextbox.setBorder(BorderFactory.createTitledBorder("Enter the desired stocks and their "
             + "amounts in the following format: MSFT:20 AAPL:10 NVDA:30"));
-    createPortfolioPane.add(tickersTextBox);
+    createPortfolioPane.add(view.tickersAndAmountsTextbox);
     return createPortfolioPane;
   }
 
@@ -22,11 +26,4 @@ public class CommandCreatePortfolio implements Command {
     return "Create a new portfolio";
   }
 
-  @Override
-  public String executeCommand() {
-    String portfolioName = portfolioTextBox.getText();
-    String tickers = tickersTextBox.getText();
-    //call model's createPortfolio command
-    return "";
-  }
 }

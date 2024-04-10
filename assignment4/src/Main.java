@@ -17,26 +17,24 @@ public class Main {
    *             command line interface.
    */
   public static void main(String[] args) {
-    Model model = new Model();
-    FlexiblePortfolioModel fleximodel = new FlexiblePortfolioModel();
-    ViewInterface view;
     if (args.length == 0 || args[0].equalsIgnoreCase("gui")) {
-      view = new GUIView("Name of program");
+      GUIController controller = new GUIController();
     } else if (args[0].equalsIgnoreCase("nongui")) {
-      view = new View();
+      Model model = new Model();
+      FlexiblePortfolioModel fleximodel = new FlexiblePortfolioModel();
+      View view = new View();
+      Scanner s = new Scanner(System.in);
+      Controller controller = new Controller(model, fleximodel, view, s);
+      while (true) {
+        view.printMenu();
+        String command = s.nextLine();
+        if (command.equals("quit")) {
+          break;
+        }
+        controller.processCommand(command);
+      }
     } else {
       System.out.println("Invalid GUI specification.");
-      return;
-    }
-    Scanner s = new Scanner(System.in);
-    Controller controller = new Controller(model, fleximodel, view, s);
-    while (true) {
-      view.printMenu();
-      String command = s.nextLine();
-      if (command.equals("quit")) {
-        break;
-      }
-      controller.processCommand(command);
     }
   }
 }

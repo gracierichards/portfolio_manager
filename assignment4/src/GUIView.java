@@ -17,14 +17,46 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   //Drop down menu of options for commands
   private JLabel comboboxDisplay;
   private JComboBox<String> combobox;
+  private JButton goButton;
   private String selectedItem;
   private JPanel mainPanel;
 
   //The bottom panel that changes depending on the menu option
   private JPanel cards;
+  protected DefaultListModel<String> dataForPortfoliosInMenu;
   private JList<String> portfoliosInMenu;
+  protected String selectedPortfolio;
   //Buy if true, sell if false
   protected boolean isBuy;
+  //User input text boxes
+  protected JTextArea createCommandPortfolioNameTextbox;
+  protected JTextArea tickersAndAmountsTextbox;
+  protected JTextArea loadCommandTextBox;
+  protected String loadPath;
+  protected boolean loadPathSet;
+  protected String savePath;
+  protected boolean savePathSet;
+  protected JTextArea textBox4;
+  protected JTextArea textBox5;
+  protected JTextArea textBox6;
+  protected JTextArea textBox7;
+  protected JTextArea textBox8;
+  protected JTextArea textBox9;
+  protected JTextArea textBox10;
+  protected JTextArea textBox11;
+  protected JTextArea textBox12;
+  protected JTextArea textBox13;
+  protected JTextArea textBox14;
+  protected JTextArea textBox15;
+  protected JTextArea textBox16;
+  protected JTextArea textBox17;
+  protected JTextArea textBox18;
+  protected JTextArea textBox19;
+  protected JTextArea textBox20;
+  protected JTextArea textBox21;
+  protected JTextArea textBox22;
+  protected JTextArea textBox23;
+  protected JTextArea textBox24;
   public GUIView(String caption) {
     super(caption);
     setSize(750, 600);
@@ -39,6 +71,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     cards = new JPanel(new CardLayout());
 
     makeMainMenu();
+    dataForPortfoliosInMenu = new DefaultListModel<>();
     makePortfolioMenu();
     bottomPanel();
 
@@ -47,6 +80,8 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     setVisible(true);
 
     selectedItem = "---";
+    loadPathSet = false;
+    savePathSet = false;
   }
 
   private void makeMainMenu() {
@@ -88,17 +123,12 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     //selectionListPanel.setAlignmentX(LEFT_ALIGNMENT);
     //selectionListPanel.setLayout(new BoxLayout(selectionListPanel, BoxLayout.X_AXIS));
     //selectionListPanel.setPreferredSize(new Dimension(250, 500));
-
-    DefaultListModel<String> dataForPortfoliosInMenu = new DefaultListModel<>();
-    dataForPortfoliosInMenu.addElement("GR Portfolio");
-    dataForPortfoliosInMenu.addElement("TG Portfolio");
-    dataForPortfoliosInMenu.addElement("Portfolio3");
     portfoliosInMenu = new JList<>(dataForPortfoliosInMenu);
     portfoliosInMenu.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     portfoliosInMenu.addListSelectionListener(new ListSelectionListener() {
       @Override
       public void valueChanged(ListSelectionEvent e) {
-        //Use portfoliosInMenu.getSelectedValue() which is the selected String
+        selectedPortfolio = portfoliosInMenu.getSelectedValue();
       }
     });
     portfoliosInMenu.setFont(new Font("Arial",Font.PLAIN,16));
@@ -111,18 +141,18 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     JPanel emptyPane = new JPanel();
     cards.add(emptyPane, "---");
     ArrayList<Command> commandObjects = new ArrayList<>();
-    commandObjects.add(new CommandCreatePortfolio());
+    commandObjects.add(new CommandCreatePortfolio(this));
     commandObjects.add(new CommandLoadPortfolio(this));
     commandObjects.add(new CommandSavePortfolio(this));
-    commandObjects.add(new CommandDisplayComposition());
-    commandObjects.add(new CommandCostBasis());
-    commandObjects.add(new CommandValuePortfolio());
+    commandObjects.add(new CommandDisplayComposition(this));
+    commandObjects.add(new CommandCostBasis(this));
+    commandObjects.add(new CommandValuePortfolio(this));
     commandObjects.add(new CommandBuySell(this));
-    commandObjects.add(new CommandGainLoss());
-    commandObjects.add(new CommandGainLossOverTime());
-    commandObjects.add(new CommandMovingAverage());
-    commandObjects.add(new CommandCrossovers());
-    commandObjects.add(new CommandMovingCrossovers());
+    commandObjects.add(new CommandGainLoss(this));
+    commandObjects.add(new CommandGainLossOverTime(this));
+    commandObjects.add(new CommandMovingAverage(this));
+    commandObjects.add(new CommandCrossovers(this));
+    commandObjects.add(new CommandMovingCrossovers(this));
 
     for (Command c : commandObjects) {
       JPanel createdPanel = c.makePanels();
@@ -131,9 +161,9 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
     mainPanel.add(cards);
 
-    JButton goButton = new JButton("Go");
+    goButton = new JButton("Go");
     goButton.setActionCommand("Go");
-    goButton.addActionListener(new AbstractAction() {
+    /*goButton.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         for (Command c : commandObjects) {
           if (c.getMenuItem().equals(selectedItem)) {
@@ -143,7 +173,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
           }
         }
       }
-    });
+    });*/
     mainPanel.add(goButton);
   }
 
@@ -189,9 +219,9 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   }
 
   // ActionListener for the menu selection
-  public void addMenuListener(ActionListener listener) {
+  /*public void addMenuListener(ActionListener listener) {
     combobox.addActionListener(listener);
-  }
+  }*/
 
   // ActionListener for the "Go" button
   public void addGoButtonListener(ActionListener listener) {
@@ -201,5 +231,15 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   // Method to get the selected menu item
   public String getSelectedMenuItem() {
     return selectedItem;
+  }
+
+  public void successPopup() {
+    JOptionPane.showMessageDialog(GUIView.this,
+            "Action performed successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
+  }
+
+  public void errorPopup() {
+    JOptionPane.showMessageDialog(GUIView.this, "There is an error in the "
+            + "user input(s).", "Cannot Continue", JOptionPane.ERROR_MESSAGE);
   }
 }

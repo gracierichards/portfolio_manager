@@ -17,11 +17,4 @@ public interface Command {
    */
   String getMenuItem();
 
-  /**
-   * After the required information is filled in to the GUI, and the Go button is pressed, this
-   * method is run and performs the appropriate calculations for the command.
-   *
-   * @return the output of the command, to be shown in the GUI window.
-   */
-  String executeCommand();
 }

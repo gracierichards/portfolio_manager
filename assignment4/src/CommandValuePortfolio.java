@@ -1,6 +1,11 @@
 import javax.swing.*;
 
 public class CommandValuePortfolio implements Command {
+  private GUIView view;
+
+  public CommandValuePortfolio(GUIView view) {
+    this.view = view;
+  }
 
   @Override
   public JPanel makePanels() {
@@ -10,9 +15,9 @@ public class CommandValuePortfolio implements Command {
             + "the specified day.");
     valuePortfolioPane.add(text5);
     valuePortfolioPane.add(text6);
-    JTextArea textBox7 = new JTextArea(1, 50);
-    textBox7.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
-    valuePortfolioPane.add(textBox7);
+    view.textBox7 = new JTextArea(1, 50);
+    view.textBox7.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
+    valuePortfolioPane.add(view.textBox7);
     return valuePortfolioPane;
   }
 
@@ -21,8 +26,4 @@ public class CommandValuePortfolio implements Command {
     return "Find value of a portfolio";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

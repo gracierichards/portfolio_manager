@@ -2,6 +2,12 @@ import javax.swing.*;
 
 public class CommandCostBasis implements Command {
 
+  private GUIView view;
+
+  public CommandCostBasis(GUIView view) {
+    this.view = view;
+  }
+
   @Override
   public JPanel makePanels() {
     JPanel costBasisPane = new JPanel();
@@ -10,9 +16,9 @@ public class CommandCostBasis implements Command {
             + "portfolio by the given date.");
     costBasisPane.add(text3);
     costBasisPane.add(text4);
-    JTextArea textBox6 = new JTextArea(1, 50);
-    textBox6.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
-    costBasisPane.add(textBox6);
+    view.textBox6 = new JTextArea(1, 50);
+    view.textBox6.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
+    costBasisPane.add(view.textBox6);
     return costBasisPane;
   }
 
@@ -21,8 +27,4 @@ public class CommandCostBasis implements Command {
     return "Find cost basis of a portfolio";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

@@ -27,7 +27,8 @@ public class CommandSavePortfolio implements Command {
         int retvalue = fchooser.showSaveDialog(view);
         if (retvalue == JFileChooser.APPROVE_OPTION) {
           File f = fchooser.getSelectedFile();
-          //Use this to get the user selected file path: f.getAbsolutePath()
+          view.savePath = f.getAbsolutePath();
+          view.savePathSet = true;
         }
       }
     });
@@ -41,8 +42,4 @@ public class CommandSavePortfolio implements Command {
     return "Save portfolio to file";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

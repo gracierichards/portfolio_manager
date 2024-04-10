@@ -10,11 +10,15 @@ program, simply enter "java -jar assignment5.jar".
 SUPPORTED COMMANDS
 Below is the syntax for all commands this program can take.
 
+create inflexibleportfolio <portfolio_name> <ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]
+    Creates an inflexible portfolio with the given name and one or more stocks. Each stock must be
+    provided an integer for the number of that stock in the portfolio. For example,
+    create inflexibleportfolio <portfolio_name> MSFT:20 AAPL:10 NVDA:30
+    would make a portfolio with 20 shares of MSFT, 10 shares of AAPL, and 30 shares of NVDA.
+
 create portfolio <portfolio_name> <ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]
-    Creates a portfolio with the given name and one or more stocks. Each stock must be provided an
-    integer for the number of that stock in the portfolio. For example,
-    create portfolio <portfolio_name> MSFT:20 AAPL:10 NVDA:30
-    would make a portfolio with 20 shares of MSFT, 10 shares of AAPL, and 30 shares of NVDA
+    Creates a flexible portfolio with the given name and one or more stocks. Each stock is given
+    the purchase date of the current date.
 
 load portfolio <portfolio_name> <filename>
     Loads a portfolio from the file "filename". Names the resulting portfolio portfolio_name

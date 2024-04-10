@@ -38,20 +38,20 @@ public class CommandBuySell implements Command {
             + "menu");
     buySellPane.add(text7);
 
-    JTextArea textBox4 = new JTextArea(1, 50);
-    textBox4.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the desired "
+    view.textBox4 = new JTextArea(1, 50);
+    view.textBox4.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the desired "
             + "stock:"));
-    buySellPane.add(textBox4);
+    buySellPane.add(view.textBox4);
 
-    JTextArea textBox8 = new JTextArea(1, 50);
-    textBox8.setBorder(BorderFactory.createTitledBorder("Enter the date to make the purchase or "
+    view.textBox8 = new JTextArea(1, 50);
+    view.textBox8.setBorder(BorderFactory.createTitledBorder("Enter the date to make the purchase or "
             + "sale on in MM/DD/YYYY format:"));
-    buySellPane.add(textBox8);
+    buySellPane.add(view.textBox8);
 
-    JTextArea textBox5 = new JTextArea(1, 50);
-    textBox5.setBorder(BorderFactory.createTitledBorder("Enter the number of shares to buy or "
+    view.textBox5 = new JTextArea(1, 50);
+    view.textBox5.setBorder(BorderFactory.createTitledBorder("Enter the number of shares to buy or "
             + "sell. Must be an integer:"));
-    buySellPane.add(textBox5);
+    buySellPane.add(view.textBox5);
     return buySellPane;
   }
 
@@ -60,8 +60,4 @@ public class CommandBuySell implements Command {
     return "Buy/sell stocks";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

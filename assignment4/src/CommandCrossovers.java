@@ -1,6 +1,11 @@
 import javax.swing.*;
 
 public class CommandCrossovers implements Command {
+  private GUIView view;
+
+  public CommandCrossovers(GUIView view) {
+    this.view = view;
+  }
   @Override
   public JPanel makePanels() {
     JPanel crossoversPane = new JPanel();
@@ -13,20 +18,20 @@ public class CommandCrossovers implements Command {
     crossoversPane.add(text14);
     crossoversPane.add(text12);
 
-    JTextArea textBox17 = new JTextArea(1, 50);
-    textBox17.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
+    view.textBox17 = new JTextArea(1, 50);
+    view.textBox17.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
             + "to check:"));
-    crossoversPane.add(textBox17);
+    crossoversPane.add(view.textBox17);
 
-    JTextArea textBox18 = new JTextArea(1, 50);
-    textBox18.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
+    view.textBox18 = new JTextArea(1, 50);
+    view.textBox18.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
             + "format:"));
-    crossoversPane.add(textBox18);
+    crossoversPane.add(view.textBox18);
 
-    JTextArea textBox19 = new JTextArea(1, 50);
-    textBox19.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
+    view.textBox19 = new JTextArea(1, 50);
+    view.textBox19.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
             + "format:"));
-    crossoversPane.add(textBox19);
+    crossoversPane.add(view.textBox19);
     return crossoversPane;
   }
 
@@ -35,8 +40,4 @@ public class CommandCrossovers implements Command {
     return "Find crossovers for a stock";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

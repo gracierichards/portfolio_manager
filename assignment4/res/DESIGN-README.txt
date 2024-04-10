@@ -15,11 +15,15 @@ class, which implements the three methods for usage with Alpha Vantage. These th
 the model class in previous assignments.
 6. Shortened the processCommand method in the Controller by making each case in the switch
 statement a single method call.
-7. Made a DollarCostAveragingStrategy class to implement the new functionality for Assignment 6.
-8. There is a new method to find the stock price on a given day, and give the stock price on the
+7. Edited the createCommand method in the Controller to differentiate between creating a flexible
+or inflexible portfolio. There are now two separate commands in the CLI for creating a flexible or
+inflexible portfolio.
+8. Made a DollarCostAveragingStrategy class to implement the new functionality for Assignment 6.
+9. There is a new method to find the stock price on a given day, and give the stock price on the
 next day if given a holiday. Before we only had a method that gives the stock price on the previous
 day if given a holiday.
-9. Added GUIController, another implementation of ControllerInterface.
+10. Added a new class called GUIController. It creates a GUIView, Model, and FlexiblePortfolioModel,
+and delegates to an object of the original controller.
 
 OVERVIEW
 

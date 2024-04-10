@@ -5,6 +5,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 public class CommandMovingCrossovers implements Command {
+  private GUIView view;
+
+  public CommandMovingCrossovers(GUIView view) {
+    this.view = view;
+  }
 
   @Override
   public JPanel makePanels() {
@@ -18,27 +23,27 @@ public class CommandMovingCrossovers implements Command {
     movingCrossoversPane.add(text15);
     movingCrossoversPane.add(text13);
 
-    JTextArea textBox20 = new JTextArea(1, 50);
-    textBox20.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
+    view.textBox20 = new JTextArea(1, 50);
+    view.textBox20.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
             + "to check:"));
-    movingCrossoversPane.add(textBox20);
+    movingCrossoversPane.add(view.textBox20);
 
-    JTextArea textBox21 = new JTextArea(1, 50);
-    textBox21.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
+    view.textBox21 = new JTextArea(1, 50);
+    view.textBox21.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
             + "format:"));
-    movingCrossoversPane.add(textBox21);
+    movingCrossoversPane.add(view.textBox21);
 
-    JTextArea textBox22 = new JTextArea(1, 50);
-    textBox22.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
+    view.textBox22 = new JTextArea(1, 50);
+    view.textBox22.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
             + "format:"));
-    movingCrossoversPane.add(textBox22);
+    movingCrossoversPane.add(view.textBox22);
 
-    JTextArea textBox23 = new JTextArea(1, 50);
-    textBox23.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for the first "
+    view.textBox23 = new JTextArea(1, 50);
+    view.textBox23.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for the first "
             + "moving average"));
-    movingCrossoversPane.add(textBox23);
+    movingCrossoversPane.add(view.textBox23);
     JLabel xDisplay2 = new JLabel("");
-    textBox23.getDocument().addDocumentListener(new DocumentListener() {
+    view.textBox23.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
@@ -73,12 +78,12 @@ public class CommandMovingCrossovers implements Command {
       }
     });
 
-    JTextArea textBox24 = new JTextArea(1, 50);
-    textBox24.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the second "
+    view.textBox24 = new JTextArea(1, 50);
+    view.textBox24.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the second "
             + "moving average"));
-    movingCrossoversPane.add(textBox24);
+    movingCrossoversPane.add(view.textBox24);
     JLabel yDisplay = new JLabel("");
-    textBox24.getDocument().addDocumentListener(new DocumentListener() {
+    view.textBox24.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
@@ -120,8 +125,4 @@ public class CommandMovingCrossovers implements Command {
     return "Find moving crossovers for a stock";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }

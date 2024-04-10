@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,13 +66,14 @@ public class Controller implements ControllerInterface {
       isInteger1(words);
       switch (words[0]) {
         case "create":
-          createCommand(words);
+          createCommand(words[1], words[2], String.join(" ",
+                  Arrays.copyOfRange(words, 3, words.length)));
           break;
         case "load":
-          loadCommand(words);
+          loadCommand(words[2], words[3]);
           break;
         case "save":
-          saveCommand(words);
+          saveCommand(words[1], words[2]);
           break;
         case "list":
           listCommand(words);
@@ -129,37 +131,29 @@ public class Controller implements ControllerInterface {
     return (float) (int) num == num;
   }
 
-  protected void createCommand(String[] words) {
-
-    isInteger1(words);
-
+  protected void createCommand(String portfolioType, String portfolioName,
+                               String tickersAndAmounts) {
+    //isInteger1(words);
     List<String> tickerSymbols = new ArrayList<>();
     List<Float> stockAmounts = new ArrayList<>();
-    String portfolioName;
-    int startIndex;
-    if (words[1].equals("portfolio") || words[1].equals("inflexibleportfolio")) {
-      startIndex = 2;
-    } else {
-      startIndex = 1;
-    }
-    if (words[startIndex].contains(":")) {
+    if (portfolioName.contains(":")) {
       System.out.println("Please provide a name for your portfolio. The name cannot contain "
               + "a colon.");
     } else {
-      portfolioName = words[startIndex];
-      for (int i = startIndex + 1; i < words.length; i++) {
-        if (!words[i].contains(":")) {
+      String[] words = tickersAndAmounts.split(" ");
+      for (String word : words) {
+        if (!word.contains(":")) {
           System.out.println("There is something wrong with the syntax of the create "
                   + "portfolio command.");
           return;
         }
-        String value = words[i].substring(words[i].indexOf(":") + 1);
+        String value = word.substring(word.indexOf(":") + 1);
         if (isInteger(Float.parseFloat(value))) {
-          tickerSymbols.add(words[i].substring(0, words[i].indexOf(":")));
+          tickerSymbols.add(word.substring(0, word.indexOf(":")));
           stockAmounts.add(Float.parseFloat(value));
         } else {
           System.out.println("Cannot purchase a fractional number of shares. Not including "
-                  + "stock " + words[i].substring(0, words[i].indexOf(":")) + " in the "
+                  + "stock " + word.substring(0, word.indexOf(":")) + " in the "
                   + "portfolio.");
         }
       }
@@ -167,7 +161,7 @@ public class Controller implements ControllerInterface {
       for (int i = 0; i < stockAmounts.size(); i++) {
         amountsArray[i] = stockAmounts.get(i);
       }
-      if (words[1].equals("inflexibleportfolio")) {
+      if (portfolioType.equals("inflexibleportfolio")) {
         model.createPortfolio(portfolioName, tickerSymbols.toArray(new String[0]),
                 amountsArray);
       } else {
@@ -179,39 +173,27 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private void loadCommand(String[] words) {
-    isInteger1(words);
-    int startIndex;
+  protected void loadCommand(String portfolioName, String path) {
+    /*isInteger1(words);
     if (words[1].equals("portfolio")) {
-      startIndex = 2;
       fleximodel.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
     } else if (words[1].equals("inflexibleportfolio")) {
-      startIndex = 2;
       model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
-    }
-    else {
-      startIndex = 1;
-    }
-
+    }*/
+    model.createPortfolioFromFile(portfolioName, path);
   }
 
-  private void saveCommand(String[] words) {
-    isInteger1(words);
-    int startIndex;
-    if (words[1].equals("portfolio") || words[1].equals("inflexibleportfolio")) {
-      startIndex = 2;
-    } else {
-      startIndex = 1;
-    }
+  protected void saveCommand(String portfolioName, String path) {
+    /*isInteger1(words);
     if (words[1].equals("portfolio")) {
       fleximodel.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
     } else if (words[1].equals("inflexibleportfolio")) {
       model.savePortfolioToFile(words[startIndex], words[startIndex + 1]);
-    }
-
+    }*/
+    fleximodel.savePortfolioToFile(portfolioName, path);
   }
 
-  private void listCommand(String[] words) {
+  protected void listCommand(String[] words) {
     InflexiblePortfolio p = null;
     isInteger1(words);
     try {
@@ -223,7 +205,7 @@ public class Controller implements ControllerInterface {
     view.examineComposition(p);
   }
 
-  private void valueCommand(String[] words) {
+  protected void valueCommand(String[] words) {
     isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a date.");
@@ -238,7 +220,7 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private void stockDirectionDay(String[] words) {
+  protected void stockDirectionDay(String[] words) {
     isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a ticker symbol and date.");
@@ -258,7 +240,7 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private void stockDirectionOverTime(String[] words) {
+  protected void stockDirectionOverTime(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
@@ -278,7 +260,7 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private void movingAverageCommand(String[] words) {
+  protected void movingAverageCommand(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a number of days to calculate the average over, a "
@@ -296,7 +278,7 @@ public class Controller implements ControllerInterface {
     System.out.println("The " + x + "-day moving average is " + average);
   }
 
-  private void crossoversCommand(String[] words) {
+  protected void crossoversCommand(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
@@ -306,7 +288,7 @@ public class Controller implements ControllerInterface {
     view.showCrossovers(result);
   }
 
-  private void movingCrossoversCommand(String[] words) {
+  protected void movingCrossoversCommand(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
@@ -340,7 +322,7 @@ public class Controller implements ControllerInterface {
     view.showCrossovers(result);
   }
 
-  private void costBasisCommand(String[] words) {
+  protected void costBasisCommand(String[] words) {
     isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and date.");
@@ -350,7 +332,7 @@ public class Controller implements ControllerInterface {
     view.displayTotalCostBasis(words[1], costBasis);
   }
 
-  private void portfolioValueOnDate(String[] words) {
+  protected void portfolioValueOnDate(String[] words) {
     isInteger1(words);
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and a date.");
@@ -360,7 +342,7 @@ public class Controller implements ControllerInterface {
     view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
   }
 
-  private void chartPortfolioCommand(String[] words) {
+  protected void chartPortfolioCommand(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a portfolio name, start date, and end date.");
@@ -369,7 +351,7 @@ public class Controller implements ControllerInterface {
     System.out.println(fleximodel.chartPerformance(words[1], words[2], words[3]));
   }
 
-  private void chartStockCommand(String[] words) {
+  protected void chartStockCommand(String[] words) {
     isInteger1(words);
     if (words.length < 4) {
       System.out.println("Please provide a ticker symbol, start date, and end date.");
@@ -382,7 +364,7 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private void purchaseCommand(String[] words) {
+  protected void purchaseCommand(String[] words) {
     isInteger1(words);
     if (words.length < 5) {
       System.out.println("Invalid purchase command. Usage: purchase <portfolio_name>"
@@ -401,7 +383,7 @@ public class Controller implements ControllerInterface {
     System.out.println("Shares bought successfully");
   }
 
-  private void sellCommand(String[] words) {
+  protected void sellCommand(String[] words) {
     isInteger1(words);
     if (words.length < 5) {
       System.out.println("Invalid sell command. Usage: sell <portfolio_name> "
@@ -420,9 +402,10 @@ public class Controller implements ControllerInterface {
     System.out.println("Shares sold successfully");
   }
 
-  public void investFixedAmountCommand(String[] words) {
+  protected void investFixedAmountCommand(String[] words) {
     if (words.length < 5) {
-      System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> <ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
+      System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> "
+              + "<ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
       return;
     }
 

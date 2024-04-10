@@ -5,6 +5,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 public class CommandMovingAverage implements Command {
+  private GUIView view;
+
+  public CommandMovingAverage(GUIView view) {
+    this.view = view;
+  }
   @Override
   public JPanel makePanels() {
     JPanel movingAveragePane = new JPanel();
@@ -12,12 +17,12 @@ public class CommandMovingAverage implements Command {
             + "given number of days, starting from the given date.");
     movingAveragePane.add(text9);
 
-    JTextArea textBox14 = new JTextArea(1, 50);
-    textBox14.setBorder(BorderFactory.createTitledBorder("How many days for the moving average?"));
-    movingAveragePane.add(textBox14);
+    view.textBox14 = new JTextArea(1, 50);
+    view.textBox14.setBorder(BorderFactory.createTitledBorder("How many days for the moving average?"));
+    movingAveragePane.add(view.textBox14);
     JLabel xDisplay = new JLabel("");
     movingAveragePane.add(xDisplay);
-    textBox14.getDocument().addDocumentListener(new DocumentListener() {
+    view.textBox14.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
@@ -49,15 +54,15 @@ public class CommandMovingAverage implements Command {
       }
     });
 
-    JTextArea textBox15 = new JTextArea(1, 50);
-    textBox15.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
+    view.textBox15 = new JTextArea(1, 50);
+    view.textBox15.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
             + "format:"));
-    movingAveragePane.add(textBox15);
+    movingAveragePane.add(view.textBox15);
 
-    JTextArea textBox16 = new JTextArea(1, 50);
-    textBox16.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
+    view.textBox16 = new JTextArea(1, 50);
+    view.textBox16.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
             + "to check:"));
-    movingAveragePane.add(textBox16);
+    movingAveragePane.add(view.textBox16);
     return movingAveragePane;
   }
 
@@ -66,8 +71,4 @@ public class CommandMovingAverage implements Command {
     return "Find the moving average of a stock";
   }
 
-  @Override
-  public String executeCommand() {
-    return "";
-  }
 }
