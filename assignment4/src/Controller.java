@@ -128,7 +128,7 @@ public class Controller implements ControllerInterface {
     return (float) (int) num == num;
   }
 
-  private void createCommand(String[] words) {
+  protected void createCommand(String[] words) {
 
     isInteger1(words);
 

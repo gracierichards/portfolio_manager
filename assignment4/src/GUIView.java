@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -191,5 +192,20 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   @Override
   public void printMenu() {
     /**This functionality is not required for the GUI.**/
+  }
+
+  // ActionListener for the menu selection
+  public void addMenuListener(ActionListener listener) {
+    combobox.addActionListener(listener);
+  }
+
+  // ActionListener for the "Go" button
+  public void addGoButtonListener(ActionListener listener) {
+    goButton.addActionListener(listener);
+  }
+
+  // Method to get the selected menu item
+  public String getSelectedMenuItem() {
+    return selectedItem;
   }
 }
