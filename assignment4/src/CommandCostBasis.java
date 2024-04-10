@@ -23,6 +23,6 @@ public class CommandCostBasis implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

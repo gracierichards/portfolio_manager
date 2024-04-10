@@ -49,6 +49,6 @@ public class CommandLoadPortfolio implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

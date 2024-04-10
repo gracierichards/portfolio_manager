@@ -159,7 +159,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   }
 
   @Override
-  public void examineComposition(Portfolio p) {
+  public void examineComposition(InflexiblePortfolio p) {
 
   }
 

@@ -62,6 +62,6 @@ public class CommandBuySell implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

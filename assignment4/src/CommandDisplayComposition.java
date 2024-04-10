@@ -17,6 +17,6 @@ public class CommandDisplayComposition implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

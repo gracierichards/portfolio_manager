@@ -122,6 +122,6 @@ public class CommandMovingCrossovers implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }

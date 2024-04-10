@@ -32,6 +32,6 @@ public class CommandGainLossOverTime implements Command {
 
   @Override
   public String executeCommand() {
-
+    return "";
   }
 }
