@@ -294,14 +294,16 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
 
 
   protected float calculateCostBasis(String tickerSymbol, int numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
+    float purchasePrice = getStockPrice
+            (tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
     // Calculate the cost basis of the purchased shares
     float costBasis = purchasePrice * numShares;
     return costBasis;
   }
 
   protected float calculateCostBasis(String tickerSymbol, float numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice(tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
+    float purchasePrice = getStockPrice
+            (tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
     // Calculate the cost basis of the purchased shares
     float costBasis = purchasePrice * numShares;
     return costBasis;
@@ -353,7 +355,8 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
       if (purchaseDate.compareTo(date) <= 0) {
         // Purchase date is on or before the given date
         float numShares = portfolio.getStocks().getOrDefault(tickerSymbol, 0.0f);
-        float currentPrice = getStockPrice(tickerSymbol, date, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
+        float currentPrice = getStockPrice(tickerSymbol, date,
+                FlexiblePortfolioModel.TypeOfPrice.CLOSE);
         totalValue += currentPrice * numShares;
       }
     }
@@ -362,13 +365,15 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
 
 
   public String chartPerformance(String portfolioName, String startDate, String endDate) {
-    return PerformanceChart.generatePerformanceChart(portfolioName, startDate, endDate, this);
+    return PerformanceChart.generatePerformanceChart
+            (portfolioName, startDate, endDate, this);
   }
 
 
   public String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException {
-    return PerformanceChart.generatePerformanceChartStock(tickerSymbol, startDate, endDate, this);
+    return PerformanceChart.generatePerformanceChartStock
+            (tickerSymbol, startDate, endDate, this);
   }
 
 
@@ -426,6 +431,16 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     throw new RuntimeException("Reached end of file. Stock price not found in file.");
   }
 
+  /**
+   * Invests a fixed amount of money into a portfolio according to a given weight distribution.
+   *
+   * @param portfolioName       the name of the portfolio to invest in
+   * @param amount              the total amount of money to invest
+   * @param date                the date of investment
+   * @param weightDistribution a map representing the weight distribution of the investment,
+   *                            where keys are ticker symbols and values are corresponding weights
+   * @return a string indicating the result of the investment operation
+   */
   public String investFixedAmount(String portfolioName, float amount, String date,
                                   Map<String, Float> weightDistribution) {
     Portfolio portfolio = portfolioList.get(portfolioName);
@@ -467,23 +482,42 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
    * @param weightDistribution Map containing the weight distribution for each stock.
    * @param amount             Amount to be invested.
    * @param date               Date for which the prices are considered.
-   * @return Array containing ticker symbols as keys and the corresponding number of shares as values.
+   * @return Array containing ticker symbols as keys and the corresponding number of shares as
+   *          values.
    */
-  public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution, String date) {
+  public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution,
+                                    String date) {
     float[] numSharesArray = new float[weightDistribution.size()];
     int index = 0;
     for (Map.Entry<String, Float> entry : weightDistribution.entrySet()) {
       String tickerSymbol = entry.getKey();
       float weight = entry.getValue();
       float amountToInvest = (weight / 100) * amount; // Convert weight to percentage
-      float numShares = amountToInvest / getStockPriceForDollarCost(tickerSymbol, date, TypeOfPrice.CLOSE);
+      float numShares = amountToInvest / getStockPriceForDollarCost(tickerSymbol, date,
+              TypeOfPrice.CLOSE);
       numSharesArray[index++] = numShares;
     }
 
     return numSharesArray;
   }
 
-  public String dollarCostAveraging(String portfolioName, float amount, String startDate, String endDate, int frequency, Map<String, Float> weightDistribution) {
+  /**
+   * Performs dollar-cost averaging by periodically investing a fixed amount of money
+   * into a portfolio.
+   *
+   * @param portfolioName       the name of the portfolio to invest in
+   * @param amount              the total amount of money to invest per period
+   * @param startDate           the start date of the dollar-cost averaging strategy
+   * @param endDate             the end date of the dollar-cost averaging strategy (optional,
+   *                            use null for current date)
+   * @param frequency           the frequency of investment periods (e.g., daily, weekly, monthly)
+   * @param weightDistribution a map representing the weight distribution of the investment,
+   *                            where keys are ticker symbols and values are corresponding weights
+   * @return a string indicating the result of the dollar-cost averaging operation
+   */
+  public String dollarCostAveraging(String portfolioName, float amount, String startDate,
+                                    String endDate, int frequency,
+                                    Map<String, Float> weightDistribution) {
 
     // Calculate the number of periods
     LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -508,7 +542,8 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     float totalInvestment = amount;
     // Reinvest the amount periodically using investFixedAmount
     for (int i = 1; i < totalPeriods; i++) {
-      String currentDate = start.plusDays(i * frequency).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+      String currentDate = start.plusDays(i * frequency).
+              format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
       investFixedAmount(portfolioName, amount, currentDate, weightDistribution);
       totalInvestment += amount;
     }
