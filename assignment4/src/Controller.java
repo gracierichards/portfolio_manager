@@ -416,8 +416,9 @@ public class Controller implements ControllerInterface {
     System.out.println("Shares sold successfully");
   }
 
-  protected void investFixedAmountCommand(String[] words) {
-    if (words.length < 5) {
+  protected void investFixedAmountCommand(String portfolioName, String amountString, String date,
+                                          String tickersAndWeights) {
+    /*if (words.length < 5) {
       System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> "
               + "<ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
       return;
@@ -425,13 +426,16 @@ public class Controller implements ControllerInterface {
 
     String portfolioName = words[1];
     float amount = Float.parseFloat(words[2]);
-    String date = words[3];
+    String date = words[3];*/
+
+    float amount = Float.parseFloat(amountString);
 
     Map<String, Float> weightDistribution = new HashMap<>();
-    for (int i = 4; i < words.length; i++) {
-      String[] pair = words[i].split(":");
+    String[] words = tickersAndWeights.split(" ");
+    for (String word : words) {
+      String[] pair = word.split(":");
       if (pair.length != 2) {
-        System.out.println("Invalid ticker symbol:weight pair: " + words[i]);
+        System.out.println("Invalid ticker symbol:weight pair: " + word);
         continue;
       }
       String tickerSymbol = pair[0];
@@ -440,7 +444,7 @@ public class Controller implements ControllerInterface {
     }
 
     String result = fleximodel.investFixedAmount(portfolioName, amount, date, weightDistribution);
-    System.out.println(result);
+    view.showMessage(result);
   }
 
 }

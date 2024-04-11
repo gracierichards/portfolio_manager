@@ -113,7 +113,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
             "Find whether a stock gained or lost over one day",
             "Find whether a stock gained or lost between two dates",
             "Find the moving average of a stock", "Find crossovers for a stock",
-            "Find moving crossovers for a stock"};
+            "Find moving crossovers for a stock", ""};
     combobox = new JComboBox<String>();
     combobox.setActionCommand("Menu");
     combobox.addActionListener(new AbstractAction() {
