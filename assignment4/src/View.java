@@ -94,7 +94,12 @@ public class View implements ViewInterface {
   }
 
   @Override
-  public void invalidPortfolioNameMessage() {
-    System.out.println("Invalid portfolio name given.");
+  public void errorMessage(String message) {
+    System.out.println(message);
+  }
+
+  @Override
+  public void showMessage(String message) {
+    System.out.println(message);
   }
 }

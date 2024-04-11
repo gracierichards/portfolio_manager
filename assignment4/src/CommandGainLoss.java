@@ -18,15 +18,15 @@ public class CommandGainLoss implements Command {
   @Override
   public JPanel makePanels() {
     JPanel gainLossPane = new JPanel();
-    view.textBox9 = new JTextArea(1, 50);
-    view.textBox9.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
-            "stock to check:"));
-    gainLossPane.add(view.textBox9);
+    view.gainLossTickerTextBox = new JTextArea(1, 50);
+    view.gainLossTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol"
+            + " for the stock to check:"));
+    gainLossPane.add(view.gainLossTickerTextBox);
 
-    view.textBox10 = new JTextArea(1, 50);
-    view.textBox10.setBorder(BorderFactory.createTitledBorder("Enter the date in MM/DD/YYYY " +
-            "format:"));
-    gainLossPane.add(view.textBox10);
+    view.gainLossDateTextBox = new JTextArea(1, 50);
+    view.gainLossDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the date in "
+            + "MM/DD/YYYY format:"));
+    gainLossPane.add(view.gainLossDateTextBox);
     return gainLossPane;
   }
 

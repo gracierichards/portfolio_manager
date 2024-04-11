@@ -46,26 +46,27 @@ public class CommandBuySell implements Command {
     rGroup.add(radioButtons[1]);
     radioPanel.add(radioButtons[0]);
     radioPanel.add(radioButtons[1]);
+    radioButtons[0].doClick();
     buySellPane.add(radioPanel);
 
     JLabel text7 = new JLabel("Select the portfolio to buy or sell stocks from in the above "
             + "menu");
     buySellPane.add(text7);
 
-    view.textBox4 = new JTextArea(1, 50);
-    view.textBox4.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
-            "desired stock:"));
-    buySellPane.add(view.textBox4);
+    view.buySellTickerTextBox = new JTextArea(1, 50);
+    view.buySellTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol "
+            + "for the desired stock:"));
+    buySellPane.add(view.buySellTickerTextBox);
 
-    view.textBox8 = new JTextArea(1, 50);
-    view.textBox8.setBorder(BorderFactory.createTitledBorder("Enter the date to make the " +
-            "purchase or sale on in MM/DD/YYYY format:"));
-    buySellPane.add(view.textBox8);
+    view.buySellDateTextBox = new JTextArea(1, 50);
+    view.buySellDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the date to make the "
+            + "purchase or sale on in MM/DD/YYYY format:"));
+    buySellPane.add(view.buySellDateTextBox);
 
-    view.textBox5 = new JTextArea(1, 50);
-    view.textBox5.setBorder(BorderFactory.createTitledBorder("Enter the number of shares to buy " +
-            "or sell. Must be an integer:"));
-    buySellPane.add(view.textBox5);
+    view.buySellIntTextBox = new JTextArea(1, 50);
+    view.buySellIntTextBox.setBorder(BorderFactory.createTitledBorder("Enter the number of shares "
+            + "to buy or sell. Must be an integer:"));
+    buySellPane.add(view.buySellIntTextBox);
     return buySellPane;
   }
 

@@ -176,7 +176,6 @@ public class ControllerTest {
     float avg3 = fleximodel.movingAverage(30, "T", "03/18/2024"); // = 17.043
     String input = "crossovers T 03/14/2024 03/18/2024";
     controller.processCommand(input);
-    // 03/18 should be a positive crossover
     assertEquals("Positive crossovers:" + System.lineSeparator() + "None"
             + System.lineSeparator() + "Negative crossovers:" + System.lineSeparator()
             + "3/14/2024" + System.lineSeparator(), outContent.toString());

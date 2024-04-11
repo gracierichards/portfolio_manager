@@ -25,20 +25,20 @@ public class CommandGainLossOverTime implements Command {
             + "given period of time, from the start date to the end date.");
     gainLossOverTimePane.add(text8);
 
-    view.textBox11 = new JTextArea(1, 50);
-    view.textBox11.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
-            " stock to check:"));
-    gainLossOverTimePane.add(view.textBox11);
+    view.overTimeTickerTextBox = new JTextArea(1, 50);
+    view.overTimeTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol"
+            + " for the stock to check:"));
+    gainLossOverTimePane.add(view.overTimeTickerTextBox);
 
-    view.textBox12 = new JTextArea(1, 50);
-    view.textBox12.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
-            + "format:"));
-    gainLossOverTimePane.add(view.textBox12);
+    view.overTimeStartDateTextBox = new JTextArea(1, 50);
+    view.overTimeStartDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the start date"
+            + " in MM/DD/YYYY format:"));
+    gainLossOverTimePane.add(view.overTimeStartDateTextBox);
 
-    view.textBox13 = new JTextArea(1, 50);
-    view.textBox13.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
-            + "format:"));
-    gainLossOverTimePane.add(view.textBox13);
+    view.overTimeEndDateTextBox = new JTextArea(1, 50);
+    view.overTimeEndDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end date in "
+            + "MM/DD/YYYY format:"));
+    gainLossOverTimePane.add(view.overTimeEndDateTextBox);
     return gainLossOverTimePane;
   }
 

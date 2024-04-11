@@ -26,9 +26,10 @@ public class CommandValuePortfolio implements Command {
             + "the specified day.");
     valuePortfolioPane.add(text5);
     valuePortfolioPane.add(text6);
-    view.textBox7 = new JTextArea(1, 50);
-    view.textBox7.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY format:"));
-    valuePortfolioPane.add(view.textBox7);
+    view.valueCommandTextBox = new JTextArea(1, 50);
+    view.valueCommandTextBox.setBorder(BorderFactory.createTitledBorder("Date in MM/DD/YYYY "
+            + "format:"));
+    valuePortfolioPane.add(view.valueCommandTextBox);
     return valuePortfolioPane;
   }
 

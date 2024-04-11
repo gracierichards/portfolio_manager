@@ -98,16 +98,33 @@ public class Controller implements ControllerInterface {
           view.showTickerMatches(matches);
           break;
         case "stock-direction-day":
-          stockDirectionDay(words);
+          if (words.length < 3) {
+            System.out.println("Please provide a ticker symbol and date.");
+            break;
+          }
+          stockDirectionDay(words[1], words[2]);
           break;
         case "stock-direction-over-time":
-          stockDirectionOverTime(words);
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            return;
+          }
+          stockDirectionOverTime(words[1], words[2], words[3]);
           break;
         case "moving-average":
-          movingAverageCommand(words);
+          if (words.length < 4) {
+            System.out.println("Please provide a number of days to calculate the average over, a "
+                    + "ticker symbol, and the date of the last day in the desired period.");
+            return;
+          }
+          movingAverageCommand(words[1], words[2], words[3]);
           break;
         case "crossovers":
-          crossoversCommand(words);
+          if (words.length < 4) {
+            System.out.println("Please provide a ticker symbol, start date, and end date.");
+            return;
+          }
+          crossoversCommand(words[1], words[2], words[3]);
           break;
         case "moving-crossovers":
           movingCrossoversCommand(words);
@@ -117,10 +134,14 @@ public class Controller implements ControllerInterface {
             System.out.println("Please provide a portfolio name and date.");
             break;
           }
-          //costBasisCommand(words[1], words[2]);
+          costBasisCommand(words[1], words[2]);
           break;
         case "portfolioValueOnDate":
-          portfolioValueOnDate(words);
+          if (words.length < 3) {
+            System.out.println("Please provide a portfolio name and date.");
+            break;
+          }
+          portfolioValueOnDate(words[1], words[2]);
           break;
         case "chart-portfolio":
           chartPortfolioCommand(words);
@@ -129,10 +150,20 @@ public class Controller implements ControllerInterface {
           chartStockCommand(words);
           break;
         case "purchase":
-          purchaseCommand(words);
+          if (words.length < 5) {
+            System.out.println("Invalid purchase command. Usage: purchase <portfolio_name>"
+                    + " <ticker_symbol> <date> <numShares>");
+            return;
+          }
+          purchaseCommand(words[1], words[2], words[3], words[4]);
           break;
         case "sell":
-          sellCommand(words);
+          if (words.length < 5) {
+            System.out.println("Invalid sell command. Usage: sell <portfolio_name>"
+                    + " <ticker_symbol> <date> <numShares>");
+            return;
+          }
+          sellCommand(words[1], words[2], words[3], words[4]);
           break;
         default:
           System.out.println("Did not understand the command, please try again");
@@ -152,23 +183,26 @@ public class Controller implements ControllerInterface {
     List<String> tickerSymbols = new ArrayList<>();
     List<Float> stockAmounts = new ArrayList<>();
     if (portfolioName.contains(":")) {
-      view.invalidPortfolioNameMessage();
+      view.errorMessage("Portfolio name cannot contain a colon.");
     } else {
       String[] words = tickersAndAmounts.split(" ");
       for (String word : words) {
-        if (!word.contains(":")) {
-          System.out.println("There is something wrong with the syntax of the create "
-                  + "portfolio command.");
+        if (!word.isEmpty() && !word.contains(":")) {
+          view.errorMessage("There is something wrong with the syntax of the ticker symbols and "
+                  + "their amounts.");
           return;
         }
         String value = word.substring(word.indexOf(":") + 1);
-        if (isInteger(Float.parseFloat(value))) {
-          tickerSymbols.add(word.substring(0, word.indexOf(":")));
-          stockAmounts.add(Float.parseFloat(value));
-        } else {
-          System.out.println("Cannot purchase a fractional number of shares. Not including "
-                  + "stock " + word.substring(0, word.indexOf(":")) + " in the "
-                  + "portfolio.");
+        if (word.contains(":")) {
+          try {
+            Integer.parseInt(value);
+            tickerSymbols.add(word.substring(0, word.indexOf(":")));
+            stockAmounts.add(Float.parseFloat(value));
+          } catch (NumberFormatException e) {
+            view.errorMessage("Invalid number of shares given. Note that number of shares must be an "
+                    + "integer. Not including stock " + word.substring(0, word.indexOf(":")) +
+                    " in the portfolio.");
+          }
         }
       }
       float[] amountsArray = new float[stockAmounts.size()];
@@ -212,7 +246,7 @@ public class Controller implements ControllerInterface {
     try {
       p = fleximodel.getPortfolio(portfolioName);
     } catch (FileNotFoundException e) {
-      view.invalidPortfolioNameMessage();
+      view.errorMessage("Cannot find the given portfolio, please try again.");
       return;
     }
     view.examineComposition(p);
@@ -233,71 +267,50 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  protected void stockDirectionDay(String[] words) {
-    isInteger1(words);
-    if (words.length < 3) {
-      System.out.println("Please provide a ticker symbol and date.");
-      return;
-    }
+  protected void stockDirectionDay(String tickerSymbol, String date) {
     boolean isGained;
     try {
-      isGained = model.stockDirection(words[1], words[2]);
+      isGained = model.stockDirection(tickerSymbol, date);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      view.errorMessage(e.getMessage());
       return;
     }
     if (isGained) {
-      System.out.println(words[1] + " gained value.");
+      view.showMessage(tickerSymbol + " gained value.");
     } else {
-      System.out.println(words[1] + " lost value.");
+      view.showMessage(tickerSymbol + " lost value.");
     }
   }
 
-  protected void stockDirectionOverTime(String[] words) {
-    isInteger1(words);
-    if (words.length < 4) {
-      System.out.println("Please provide a ticker symbol, start date, and end date.");
-      return;
-    }
+  protected void stockDirectionOverTime(String tickerSymbol, String startDate, String endDate) {
     boolean isGained;
     try {
-      isGained = model.stockDirection(words[1], words[2], words[3]);
+      isGained = model.stockDirection(tickerSymbol, startDate, endDate);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      view.errorMessage(e.getMessage());
       return;
     }
     if (isGained) {
-      System.out.println(words[1] + " gained value.");
+      view.showMessage(tickerSymbol + " gained value.");
     } else {
-      System.out.println(words[1] + " lost value.");
+      view.showMessage(tickerSymbol + " lost value.");
     }
   }
 
-  protected void movingAverageCommand(String[] words) {
-    isInteger1(words);
-    if (words.length < 4) {
-      System.out.println("Please provide a number of days to calculate the average over, a "
-              + "ticker symbol, and the date of the last day in the desired period.");
-      return;
-    }
-    int x;
+  protected void movingAverageCommand(String x, String tickerSymbol, String date) {
+    int xInt;
     try {
-      x = Integer.parseInt(words[1]);
+      xInt = Integer.parseInt(x);
     } catch (NumberFormatException e) {
-      System.out.println("Please provide an integer number of days.");
+      view.errorMessage("Please provide an integer number of days.");
       return;
     }
-    float average = fleximodel.movingAverage(x, words[2], words[3]);
-    System.out.println("The " + x + "-day moving average is " + average);
+    float average = fleximodel.movingAverage(xInt, tickerSymbol, date);
+    view.showMessage("The " + x + "-day moving average is " + average);
   }
 
-  protected void crossoversCommand(String[] words) {
-    isInteger1(words);
-    if (words.length < 4) {
-      System.out.println("Please provide a ticker symbol, start date, and end date.");
-      return;
-    }
-    String result = fleximodel.findCrossovers(words[1], words[2], words[3]);
+  protected void crossoversCommand(String tickerSymbol, String startDate, String endDate) {
+    String result = fleximodel.findCrossovers(tickerSymbol, startDate, endDate);
     view.showCrossovers(result);
   }
 
@@ -335,26 +348,14 @@ public class Controller implements ControllerInterface {
     view.showCrossovers(result);
   }
 
-  /*
   protected void costBasisCommand(String portfolioName, String date) {
-    if (words.length < 3) {
-      System.out.println("Please provide a portfolio name and date.");
-      return;
-    }
-    float costBasis = fleximodel.totalCostBasis(words[1], words[2]);
-    view.displayTotalCostBasis(words[1], costBasis);
+    float costBasis = fleximodel.totalCostBasis(portfolioName, date);
+    view.displayTotalCostBasis(portfolioName, costBasis);
   }
 
-   */
-
-  protected void portfolioValueOnDate(String[] words) {
-    isInteger1(words);
-    if (words.length < 3) {
-      System.out.println("Please provide a portfolio name and a date.");
-      return;
-    }
-    float portfolioValue = fleximodel.portfolioValueOnDate(words[1], words[2]);
-    view.displayPortfolioValueOnDate(words[1], words[2], portfolioValue);
+  protected void portfolioValueOnDate(String portfolioName, String date) {
+    float portfolioValue = fleximodel.portfolioValueOnDate(portfolioName, date);
+    view.displayPortfolioValueOnDate(portfolioName, date, portfolioValue);
   }
 
   protected void chartPortfolioCommand(String[] words) {
@@ -379,41 +380,39 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  protected void purchaseCommand(String[] words) {
-    isInteger1(words);
-    if (words.length < 5) {
-      System.out.println("Invalid purchase command. Usage: purchase <portfolio_name>"
-              + " <ticker_symbol> <date> <numShares>");
+  protected void purchaseCommand(String portfolioName, String tickerSymbol, String date,
+                                 String numShares) {
+    int numSharesInt;
+    try {
+      numSharesInt = Integer.parseInt(numShares);
+    }
+    catch (NumberFormatException e) {
+      view.errorMessage("Number of shares must be an integer.");
       return;
     }
-    String portfolioName1 = words[1];
-    String tickerSymbol = words[2];
-    String date = words[3];
-    int numShares = Integer.parseInt(words[4]);
-    if (numShares < 0) {
-      System.out.println("Number of shares cannot be negative!");
+    if (numSharesInt < 0) {
+      view.errorMessage("Number of shares cannot be negative!");
       return;
     }
-    fleximodel.purchaseShares(portfolioName1, tickerSymbol, date, numShares);
+    fleximodel.purchaseShares(portfolioName, tickerSymbol, date, numSharesInt);
     System.out.println("Shares bought successfully");
   }
 
-  protected void sellCommand(String[] words) {
-    isInteger1(words);
-    if (words.length < 5) {
-      System.out.println("Invalid sell command. Usage: sell <portfolio_name> "
-              + "<ticker_symbol> <date> <numShares>");
+  protected void sellCommand(String portfolioName, String tickerSymbol, String date,
+                             String numShares) {
+    int numSharesInt;
+    try {
+      numSharesInt = Integer.parseInt(numShares);
+    }
+    catch (NumberFormatException e) {
+      view.errorMessage("Number of shares must be an integer.");
       return;
     }
-    String portfolioName = words[1];
-    String tickerSymbol = words[2];
-    String date = words[3];
-    int numShares = Integer.parseInt(words[4]);
-    if (numShares < 0) {
-      System.out.println("Number of shares cannot be negative!");
+    if (numSharesInt < 0) {
+      view.errorMessage("Number of shares cannot be negative!");
       return;
     }
-    fleximodel.sellShares(portfolioName, tickerSymbol, date, numShares);
+    fleximodel.sellShares(portfolioName, tickerSymbol, date, numSharesInt);
     System.out.println("Shares sold successfully");
   }
 

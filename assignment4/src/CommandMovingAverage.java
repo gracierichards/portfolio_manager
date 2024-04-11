@@ -28,13 +28,13 @@ public class CommandMovingAverage implements Command {
             + "given number of days, starting from the given date.");
     movingAveragePane.add(text9);
 
-    view.textBox14 = new JTextArea(1, 50);
-    view.textBox14.setBorder(BorderFactory.createTitledBorder("How many days for the moving " +
-            "average?"));
-    movingAveragePane.add(view.textBox14);
+    view.movingAverageXTextBox = new JTextArea(1, 50);
+    view.movingAverageXTextBox.setBorder(BorderFactory.createTitledBorder("How many days for the "
+            + "moving average?"));
+    movingAveragePane.add(view.movingAverageXTextBox);
     JLabel xDisplay = new JLabel("");
     movingAveragePane.add(xDisplay);
-    view.textBox14.getDocument().addDocumentListener(new DocumentListener() {
+    view.movingAverageXTextBox.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
@@ -69,15 +69,15 @@ public class CommandMovingAverage implements Command {
       }
     });
 
-    view.textBox15 = new JTextArea(1, 50);
-    view.textBox15.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
+    view.movingAverageDateTextBox = new JTextArea(1, 50);
+    view.movingAverageDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
             + "format:"));
-    movingAveragePane.add(view.textBox15);
+    movingAveragePane.add(view.movingAverageDateTextBox);
 
-    view.textBox16 = new JTextArea(1, 50);
-    view.textBox16.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
+    view.movingAverageTickerTextBox = new JTextArea(1, 50);
+    view.movingAverageTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
             "stock to check:"));
-    movingAveragePane.add(view.textBox16);
+    movingAveragePane.add(view.movingAverageTickerTextBox);
     return movingAveragePane;
   }
 

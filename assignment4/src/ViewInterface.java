@@ -63,7 +63,14 @@ public interface ViewInterface {
   void printMenu();
 
   /**
-   * Tells the user that they gave an invalid portfolio name.
+   * Displays the given error message to the user.
+   * @param message the desired error message.
    */
-  void invalidPortfolioNameMessage();
+  void errorMessage(String message);
+
+  /**
+   * Displays a popup window with the given message.
+   * @param message the text contents of the popup window to be created.
+   */
+  void showMessage(String message);
 }

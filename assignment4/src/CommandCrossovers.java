@@ -29,20 +29,20 @@ public class CommandCrossovers implements Command {
     crossoversPane.add(text14);
     crossoversPane.add(text12);
 
-    view.textBox17 = new JTextArea(1, 50);
-    view.textBox17.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
-            " stock to check:"));
-    crossoversPane.add(view.textBox17);
+    view.crossoversTickerTextBox = new JTextArea(1, 50);
+    view.crossoversTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker "
+            + "symbol for the stock to check:"));
+    crossoversPane.add(view.crossoversTickerTextBox);
 
-    view.textBox18 = new JTextArea(1, 50);
-    view.textBox18.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
-            + "format:"));
-    crossoversPane.add(view.textBox18);
+    view.crossoversStartDateTextBox = new JTextArea(1, 50);
+    view.crossoversStartDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the start "
+            + "date in MM/DD/YYYY format:"));
+    crossoversPane.add(view.crossoversStartDateTextBox);
 
-    view.textBox19 = new JTextArea(1, 50);
-    view.textBox19.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
-            + "format:"));
-    crossoversPane.add(view.textBox19);
+    view.crossoversEndDateTextBox = new JTextArea(1, 50);
+    view.crossoversEndDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end date "
+            + "in MM/DD/YYYY format:"));
+    crossoversPane.add(view.crossoversEndDateTextBox);
     return crossoversPane;
   }
 

@@ -34,27 +34,27 @@ public class CommandMovingCrossovers implements Command {
     movingCrossoversPane.add(text15);
     movingCrossoversPane.add(text13);
 
-    view.textBox20 = new JTextArea(1, 50);
-    view.textBox20.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
-            "stock to check:"));
-    movingCrossoversPane.add(view.textBox20);
+    view.movingCrossoversTickerTextBox = new JTextArea(1, 50);
+    view.movingCrossoversTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker"
+            + " symbol for the stock to check:"));
+    movingCrossoversPane.add(view.movingCrossoversTickerTextBox);
 
-    view.textBox21 = new JTextArea(1, 50);
-    view.textBox21.setBorder(BorderFactory.createTitledBorder("Enter the start date in MM/DD/YYYY "
-            + "format:"));
-    movingCrossoversPane.add(view.textBox21);
+    view.movingCrossoversStartDateTextBox = new JTextArea(1, 50);
+    view.movingCrossoversStartDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the "
+            + "start date in MM/DD/YYYY format:"));
+    movingCrossoversPane.add(view.movingCrossoversStartDateTextBox);
 
-    view.textBox22 = new JTextArea(1, 50);
-    view.textBox22.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
-            + "format:"));
-    movingCrossoversPane.add(view.textBox22);
+    view.movingCrossoversEndDateTextBox = new JTextArea(1, 50);
+    view.movingCrossoversEndDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end "
+            + "date in MM/DD/YYYY format:"));
+    movingCrossoversPane.add(view.movingCrossoversEndDateTextBox);
 
-    view.textBox23 = new JTextArea(1, 50);
-    view.textBox23.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for " +
+    view.movingCrossoversXTextBox = new JTextArea(1, 50);
+    view.movingCrossoversXTextBox.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for " +
             "the first moving average"));
-    movingCrossoversPane.add(view.textBox23);
+    movingCrossoversPane.add(view.movingCrossoversXTextBox);
     JLabel xDisplay2 = new JLabel("");
-    view.textBox23.getDocument().addDocumentListener(new DocumentListener() {
+    view.movingCrossoversXTextBox.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
@@ -89,12 +89,12 @@ public class CommandMovingCrossovers implements Command {
       }
     });
 
-    view.textBox24 = new JTextArea(1, 50);
-    view.textBox24.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the "
+    view.movingCrossoversYTextBox = new JTextArea(1, 50);
+    view.movingCrossoversYTextBox.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the "
             + "second moving average"));
-    movingCrossoversPane.add(view.textBox24);
+    movingCrossoversPane.add(view.movingCrossoversYTextBox);
     JLabel yDisplay = new JLabel("");
-    view.textBox24.getDocument().addDocumentListener(new DocumentListener() {
+    view.movingCrossoversYTextBox.getDocument().addDocumentListener(new DocumentListener() {
       @Override
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();

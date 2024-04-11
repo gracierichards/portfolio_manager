@@ -54,26 +54,26 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   protected String savePath;
   protected boolean savePathSet;
   protected JTextArea costBasisTextBox;
-  protected JTextArea textBox4;
-  protected JTextArea textBox5;
-  protected JTextArea textBox7;
-  protected JTextArea textBox8;
-  protected JTextArea textBox9;
-  protected JTextArea textBox10;
-  protected JTextArea textBox11;
-  protected JTextArea textBox12;
-  protected JTextArea textBox13;
-  protected JTextArea textBox14;
-  protected JTextArea textBox15;
-  protected JTextArea textBox16;
-  protected JTextArea textBox17;
-  protected JTextArea textBox18;
-  protected JTextArea textBox19;
-  protected JTextArea textBox20;
-  protected JTextArea textBox21;
-  protected JTextArea textBox22;
-  protected JTextArea textBox23;
-  protected JTextArea textBox24;
+  protected JTextArea valueCommandTextBox;
+  protected JTextArea buySellTickerTextBox;
+  protected JTextArea buySellDateTextBox;
+  protected JTextArea buySellIntTextBox;
+  protected JTextArea gainLossTickerTextBox;
+  protected JTextArea gainLossDateTextBox;
+  protected JTextArea overTimeTickerTextBox;
+  protected JTextArea overTimeStartDateTextBox;
+  protected JTextArea overTimeEndDateTextBox;
+  protected JTextArea movingAverageXTextBox;
+  protected JTextArea movingAverageDateTextBox;
+  protected JTextArea movingAverageTickerTextBox;
+  protected JTextArea crossoversTickerTextBox;
+  protected JTextArea crossoversStartDateTextBox;
+  protected JTextArea crossoversEndDateTextBox;
+  protected JTextArea movingCrossoversTickerTextBox;
+  protected JTextArea movingCrossoversStartDateTextBox;
+  protected JTextArea movingCrossoversEndDateTextBox;
+  protected JTextArea movingCrossoversXTextBox;
+  protected JTextArea movingCrossoversYTextBox;
 
   public GUIView(String caption) {
     super(caption);
@@ -100,6 +100,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     selectedItem = "---";
     loadPathSet = false;
     savePathSet = false;
+    isBuy = true;
   }
 
   private void makeMainMenu() {
@@ -209,8 +210,33 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     for (Map.Entry<String, Float> entry : stocks.entrySet()) {
       messageText.append(entry.getKey() + ": " + entry.getValue() + System.lineSeparator());
     }
-    JOptionPane.showMessageDialog(GUIView.this, messageText.toString(),
-            "Portfolio Composition", JOptionPane.PLAIN_MESSAGE);
+    showMessage(messageText.toString());
+  }
+
+  @Override
+  public void displayTotalCostBasis(String portfolioName, float totalCostBasis) {
+    showMessage("Total cost basis for portfolio " + portfolioName + ": " + totalCostBasis);
+  }
+
+  @Override
+  public void displayPortfolioValueOnDate(String portfolioName, String date, float portfolioValue) {
+    showMessage("Portfolio value for " + portfolioName + " on " + date + ": " + portfolioValue);
+  }
+
+  @Override
+  public void showCrossovers(String results) {
+    StringBuilder result = new StringBuilder();
+    result.append("Positive crossovers:" + System.lineSeparator());
+    String positive = results.split(" ")[0];
+    String negative = results.split(" ")[1];
+    for (String date : positive.split(",")) {
+      result.append(date + System.lineSeparator());
+    }
+    result.append("Negative crossovers:" + System.lineSeparator());
+    for (String date : negative.split(",")) {
+      result.append(date + System.lineSeparator());
+    }
+    showMessage(result.toString());
   }
 
   @Override
@@ -220,22 +246,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
   @Override
   public void displayPortfolioValue(String portfolioName, String date, float value) {
-
-  }
-
-  @Override
-  public void showCrossovers(String results) {
-
-  }
-
-  @Override
-  public void displayTotalCostBasis(String portfolioName, float totalCostBasis) {
-
-  }
-
-  @Override
-  public void displayPortfolioValueOnDate(String portfolioName, String date, float portfolioValue) {
-
+    /**This functionality is not required for the GUI.**/
   }
 
   @Override
@@ -259,20 +270,14 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   }
 
   @Override
-  public void successPopup() {
-    JOptionPane.showMessageDialog(GUIView.this,
-            "Action performed successfully.", "Success", JOptionPane.PLAIN_MESSAGE);
+  public void showMessage(String message) {
+    JOptionPane.showMessageDialog(GUIView.this, message, "Success",
+            JOptionPane.PLAIN_MESSAGE);
   }
 
   @Override
-  public void errorPopup() {
-    JOptionPane.showMessageDialog(GUIView.this, "There is an error in the "
-            + "user input(s).", "Cannot Continue", JOptionPane.ERROR_MESSAGE);
-  }
-
-  @Override
-  public void invalidPortfolioNameMessage() {
-    JOptionPane.showMessageDialog(GUIView.this, "Invalid portfolio name "
-            + "given.", "Please try again", JOptionPane.ERROR_MESSAGE);
+  public void errorMessage(String message) {
+    JOptionPane.showMessageDialog(GUIView.this, message, "Error",
+            JOptionPane.ERROR_MESSAGE);
   }
 }

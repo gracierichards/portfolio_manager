@@ -29,8 +29,8 @@ public class CommandLoadPortfolio implements Command {
   public JPanel makePanels() {
     JPanel loadPortfolioPane = new JPanel();
     view.loadCommandTextBox = new JTextArea(1, 50);
-    view.loadCommandTextBox.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded "
-            + "portfolio"));
+    view.loadCommandTextBox.setBorder(BorderFactory.createTitledBorder("Enter a name for the loaded"
+            + " portfolio"));
     loadPortfolioPane.add(view.loadCommandTextBox);
 
     JPanel fileopenPanel = new JPanel();
