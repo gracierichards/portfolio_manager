@@ -148,6 +148,14 @@ public class GUIController {
                   yInt);
           view.showCrossovers(result);
           break;
+        case "Invest a fixed amount into an existing portfolio":
+          portfolioName = view.selectedPortfolio;
+          String amount = view.fixedAmountIntTextBox.getText();
+          date = view.fixedAmountDateTextBox.getText();
+          tickers = view.fixedAmountTickersTextBox.getText();
+          controller.investFixedAmountCommand(portfolioName, amount, date, tickers);
+          view.showMessage("Transaction successful.");
+          break;
       }
     }
   }
