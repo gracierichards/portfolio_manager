@@ -1,8 +1,19 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 
+/**
+ * Implementation of the Command interface for finding the value of a portfolio.
+ */
 public class CommandValuePortfolio implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandValuePortfolio object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandValuePortfolio(GUIView view) {
     this.view = view;
   }

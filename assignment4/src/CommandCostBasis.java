@@ -1,9 +1,20 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 
+/**
+ * Implementation of the Command interface for calculating the cost basis of a portfolio.
+ */
 public class CommandCostBasis implements Command {
 
   private GUIView view;
 
+  /**
+   * Constructs a CommandCostBasis object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandCostBasis(GUIView view) {
     this.view = view;
   }

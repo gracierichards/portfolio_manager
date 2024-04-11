@@ -85,7 +85,7 @@ public class Controller implements ControllerInterface {
             System.out.println("Please provide a portfolio name and file name.");
             break;
           }
-          saveCommand(words[1], words[2]);
+          saveCommand(words[2], words[3]);
           break;
         case "list":
           listCommand(words[1]);
@@ -117,7 +117,7 @@ public class Controller implements ControllerInterface {
             System.out.println("Please provide a portfolio name and date.");
             break;
           }
-          costBasisCommand(words[1], words[2]);
+          //costBasisCommand(words[1], words[2]);
           break;
         case "portfolioValueOnDate":
           portfolioValueOnDate(words);
@@ -194,7 +194,7 @@ public class Controller implements ControllerInterface {
     } else if (words[1].equals("inflexibleportfolio")) {
       model.createPortfolioFromFile(words[startIndex], words[startIndex + 1]);
     }*/
-    model.createPortfolioFromFile(portfolioName, path);
+    fleximodel.createPortfolioFromFile(portfolioName, path);
   }
 
   protected void saveCommand(String portfolioName, String path) {
@@ -335,6 +335,7 @@ public class Controller implements ControllerInterface {
     view.showCrossovers(result);
   }
 
+  /*
   protected void costBasisCommand(String portfolioName, String date) {
     if (words.length < 3) {
       System.out.println("Please provide a portfolio name and date.");
@@ -343,6 +344,8 @@ public class Controller implements ControllerInterface {
     float costBasis = fleximodel.totalCostBasis(words[1], words[2]);
     view.displayTotalCostBasis(words[1], costBasis);
   }
+
+   */
 
   protected void portfolioValueOnDate(String[] words) {
     isInteger1(words);

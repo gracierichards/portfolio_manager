@@ -40,7 +40,7 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_CreatePortfolio() {
-    String input = "create portfolio TestPortfolio AAPL:10 MSFT:20";
+    String input = "create inflexibleportfolio TestPortfolio AAPL:10 MSFT:20";
 
     controller.processCommand(input);
 
@@ -55,7 +55,7 @@ public class ControllerTest {
 
     controller.processCommand(input);
 
-    assertTrue(model.portfolioList.containsKey("TestPortfolio"));
+    assertTrue(fleximodel.portfolioList.containsKey("TestPortfolio"));
     assertEquals("Portfolio loaded successfully from file." + System.lineSeparator(),
             outContent.toString());
   }
@@ -63,7 +63,7 @@ public class ControllerTest {
   @Test
   public void testProcessCommand_SavePortfolioToFile() {
     String input = "save portfolio TestPortfolio test_portfolio.txt";
-    model.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"},
+    fleximodel.createPortfolio("TestPortfolio", new String[]{"AAPL", "MSFT"},
             new float[]{10.0f, 20.0f});
 
     controller.processCommand(input);

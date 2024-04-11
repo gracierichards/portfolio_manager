@@ -7,8 +7,6 @@ import java.util.Set;
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
 public class InflexiblePortfolio {
-
-  private Model model;
   private final String name; // Name of the portfolio
   protected Map<String, Float> stocks; // Map to store stocks with their corresponding amounts
 
@@ -20,10 +18,6 @@ public class InflexiblePortfolio {
   public InflexiblePortfolio(String name) {
     this.name = name;
     this.stocks = new HashMap<>();
-  }
-
-  public void setModel() {
-    model = new Model();
   }
 
   /**

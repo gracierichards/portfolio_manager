@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-import javax.swing.*;
-
 /**
  * The class to start running the program. It instantiates the Model, View, and Controller. It also
  * continuously accepts input from the command line, and passes commands to the controller.

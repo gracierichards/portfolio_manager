@@ -1,8 +1,20 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 
+/**
+ * Implementation of the Command interface for finding whether a stock gained or lost over a
+ * period of time.
+ */
 public class CommandGainLossOverTime implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandGainLossOverTime object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandGainLossOverTime(GUIView view) {
     this.view = view;
   }
@@ -14,8 +26,8 @@ public class CommandGainLossOverTime implements Command {
     gainLossOverTimePane.add(text8);
 
     view.textBox11 = new JTextArea(1, 50);
-    view.textBox11.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
-            + "to check:"));
+    view.textBox11.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
+            " stock to check:"));
     gainLossOverTimePane.add(view.textBox11);
 
     view.textBox12 = new JTextArea(1, 50);

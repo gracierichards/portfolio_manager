@@ -1,12 +1,23 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+/**
+ * Implementation of the Command interface for finding moving crossovers for a stock.
+ */
 public class CommandMovingCrossovers implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandMovingCrossovers object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandMovingCrossovers(GUIView view) {
     this.view = view;
   }
@@ -24,8 +35,8 @@ public class CommandMovingCrossovers implements Command {
     movingCrossoversPane.add(text13);
 
     view.textBox20 = new JTextArea(1, 50);
-    view.textBox20.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
-            + "to check:"));
+    view.textBox20.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
+            "stock to check:"));
     movingCrossoversPane.add(view.textBox20);
 
     view.textBox21 = new JTextArea(1, 50);
@@ -39,8 +50,8 @@ public class CommandMovingCrossovers implements Command {
     movingCrossoversPane.add(view.textBox22);
 
     view.textBox23 = new JTextArea(1, 50);
-    view.textBox23.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for the first "
-            + "moving average"));
+    view.textBox23.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for " +
+            "the first moving average"));
     movingCrossoversPane.add(view.textBox23);
     JLabel xDisplay2 = new JLabel("");
     view.textBox23.getDocument().addDocumentListener(new DocumentListener() {
@@ -79,8 +90,8 @@ public class CommandMovingCrossovers implements Command {
     });
 
     view.textBox24 = new JTextArea(1, 50);
-    view.textBox24.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the second "
-            + "moving average"));
+    view.textBox24.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the "
+            + "second moving average"));
     movingCrossoversPane.add(view.textBox24);
     JLabel yDisplay = new JLabel("");
     view.textBox24.getDocument().addDocumentListener(new DocumentListener() {

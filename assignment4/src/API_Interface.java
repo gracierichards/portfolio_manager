@@ -1,3 +1,7 @@
+
+/**
+ * This interface defines methods for interacting with the AlphaVantage API.
+ */
 public interface API_Interface {
 
   /**

@@ -1,10 +1,24 @@
 import java.awt.event.ActionEvent;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.AbstractAction;
 
+/**
+ * Implementation of the Command interface for handling buy/sell stock commands.
+ */
 public class CommandBuySell implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandBuySell object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandBuySell(GUIView view) {
     this.view = view;
   }
@@ -39,18 +53,18 @@ public class CommandBuySell implements Command {
     buySellPane.add(text7);
 
     view.textBox4 = new JTextArea(1, 50);
-    view.textBox4.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the desired "
-            + "stock:"));
+    view.textBox4.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
+            "desired stock:"));
     buySellPane.add(view.textBox4);
 
     view.textBox8 = new JTextArea(1, 50);
-    view.textBox8.setBorder(BorderFactory.createTitledBorder("Enter the date to make the purchase or "
-            + "sale on in MM/DD/YYYY format:"));
+    view.textBox8.setBorder(BorderFactory.createTitledBorder("Enter the date to make the " +
+            "purchase or sale on in MM/DD/YYYY format:"));
     buySellPane.add(view.textBox8);
 
     view.textBox5 = new JTextArea(1, 50);
-    view.textBox5.setBorder(BorderFactory.createTitledBorder("Enter the number of shares to buy or "
-            + "sell. Must be an integer:"));
+    view.textBox5.setBorder(BorderFactory.createTitledBorder("Enter the number of shares to buy " +
+            "or sell. Must be an integer:"));
     buySellPane.add(view.textBox5);
     return buySellPane;
   }

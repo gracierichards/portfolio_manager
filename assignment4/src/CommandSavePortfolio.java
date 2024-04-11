@@ -1,15 +1,28 @@
-import java.awt.*;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.AbstractAction;
 
+/**
+ * Implementation of the Command interface for saving a portfolio to a file.
+ */
 public class CommandSavePortfolio implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandSavePortfolio object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandSavePortfolio(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel savePortfolioPane = new JPanel();

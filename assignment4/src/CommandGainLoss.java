@@ -1,8 +1,17 @@
-import javax.swing.*;
-
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+/**
+ * Implementation of the Command interface for finding whether a stock gained or lost over one day.
+ */
 public class CommandGainLoss implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandGainLoss object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandGainLoss(GUIView view) {
     this.view = view;
   }
@@ -10,12 +19,13 @@ public class CommandGainLoss implements Command {
   public JPanel makePanels() {
     JPanel gainLossPane = new JPanel();
     view.textBox9 = new JTextArea(1, 50);
-    view.textBox9.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
-            + "to check:"));
+    view.textBox9.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the " +
+            "stock to check:"));
     gainLossPane.add(view.textBox9);
 
     view.textBox10 = new JTextArea(1, 50);
-    view.textBox10.setBorder(BorderFactory.createTitledBorder("Enter the date in MM/DD/YYYY format:"));
+    view.textBox10.setBorder(BorderFactory.createTitledBorder("Enter the date in MM/DD/YYYY " +
+            "format:"));
     gainLossPane.add(view.textBox10);
     return gainLossPane;
   }

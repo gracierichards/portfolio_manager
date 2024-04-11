@@ -1,8 +1,17 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 
+/**
+ * Implementation of the Command interface for displaying the composition of a portfolio.
+ */
 public class CommandDisplayComposition implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandDisplayComposition object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandDisplayComposition(GUIView view) {
     this.view = view;
   }

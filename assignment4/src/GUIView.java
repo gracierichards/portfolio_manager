@@ -1,4 +1,7 @@
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.CardLayout;
+import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -6,7 +9,20 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.DefaultListModel;
+import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+import javax.swing.ListSelectionModel;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -58,6 +74,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   protected JTextArea textBox22;
   protected JTextArea textBox23;
   protected JTextArea textBox24;
+
   public GUIView(String caption) {
     super(caption);
     setSize(750, 600);
@@ -100,9 +117,9 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     combobox.setActionCommand("Menu");
     combobox.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
-        JComboBox<String> cb = (JComboBox<String>)e.getSource();
-        selectedItem = (String)cb.getSelectedItem();
-        CardLayout cl = (CardLayout)(cards.getLayout());
+        JComboBox<String> cb = (JComboBox<String>) e.getSource();
+        selectedItem = (String) cb.getSelectedItem();
+        CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, selectedItem);
         mainPanel.revalidate();
       }
@@ -132,7 +149,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
         selectedPortfolio = portfoliosInMenu.getSelectedValue();
       }
     });
-    portfoliosInMenu.setFont(new Font("Arial",Font.PLAIN,16));
+    portfoliosInMenu.setFont(new Font("Arial", Font.PLAIN, 16));
     selectionListPanel.add(portfoliosInMenu);
     //setContentPane(selectionListPanel);
     mainPanel.add(selectionListPanel);
@@ -180,8 +197,8 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
   @Override
   public void itemStateChanged(ItemEvent evt) {
-    CardLayout cl = (CardLayout)(cards.getLayout());
-    cl.show(cards, (String)evt.getItem());
+    CardLayout cl = (CardLayout) (cards.getLayout());
+    cl.show(cards, (String) evt.getItem());
   }
 
   @Override

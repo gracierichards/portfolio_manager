@@ -1,8 +1,19 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 
+/**
+ * Implementation of the Command interface for finding crossovers for a stock.
+ */
 public class CommandCrossovers implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandCrossovers object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandCrossovers(GUIView view) {
     this.view = view;
   }
@@ -19,8 +30,8 @@ public class CommandCrossovers implements Command {
     crossoversPane.add(text12);
 
     view.textBox17 = new JTextArea(1, 50);
-    view.textBox17.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
-            + "to check:"));
+    view.textBox17.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
+            " stock to check:"));
     crossoversPane.add(view.textBox17);
 
     view.textBox18 = new JTextArea(1, 50);

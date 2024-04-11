@@ -4,7 +4,6 @@
  */
 public interface ControllerInterface {
 
-
   /**
    * Reads the latest user input and calls the relevant method.
    *

@@ -1,12 +1,23 @@
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+/**
+ * Implementation of the Command interface for finding the moving average of a stock.
+ */
 public class CommandMovingAverage implements Command {
   private GUIView view;
 
+  /**
+   * Constructs a CommandMovingAverage object with the specified GUIView.
+   *
+   * @param view the GUIView associated with this command
+   */
   public CommandMovingAverage(GUIView view) {
     this.view = view;
   }
@@ -18,7 +29,8 @@ public class CommandMovingAverage implements Command {
     movingAveragePane.add(text9);
 
     view.textBox14 = new JTextArea(1, 50);
-    view.textBox14.setBorder(BorderFactory.createTitledBorder("How many days for the moving average?"));
+    view.textBox14.setBorder(BorderFactory.createTitledBorder("How many days for the moving " +
+            "average?"));
     movingAveragePane.add(view.textBox14);
     JLabel xDisplay = new JLabel("");
     movingAveragePane.add(xDisplay);
@@ -27,7 +39,8 @@ public class CommandMovingAverage implements Command {
       public void insertUpdate(DocumentEvent e) {
         Document d = e.getDocument();
         try {
-          xDisplay.setText("Calculating " + d.getText(0, d.getLength()) + "-day moving average");
+          xDisplay.setText("Calculating " + d.getText(0, d.getLength()) +
+                  "-day moving average");
         } catch (BadLocationException ex) {
           throw new RuntimeException(ex);
         }
@@ -37,7 +50,8 @@ public class CommandMovingAverage implements Command {
       public void removeUpdate(DocumentEvent e) {
         Document d = e.getDocument();
         try {
-          xDisplay.setText("Calculating " + d.getText(0, d.getLength()) + "-day moving average");
+          xDisplay.setText("Calculating " + d.getText(0, d.getLength())
+                  + "-day moving average");
         } catch (BadLocationException ex) {
           throw new RuntimeException(ex);
         }
@@ -47,7 +61,8 @@ public class CommandMovingAverage implements Command {
       public void changedUpdate(DocumentEvent e) {
         Document d = e.getDocument();
         try {
-          xDisplay.setText("Calculating " + d.getText(0, d.getLength()) + "-day moving average");
+          xDisplay.setText("Calculating " + d.getText(0, d.getLength())
+                  + "-day moving average");
         } catch (BadLocationException ex) {
           throw new RuntimeException(ex);
         }
@@ -60,8 +75,8 @@ public class CommandMovingAverage implements Command {
     movingAveragePane.add(view.textBox15);
 
     view.textBox16 = new JTextArea(1, 50);
-    view.textBox16.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the stock "
-            + "to check:"));
+    view.textBox16.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
+            "stock to check:"));
     movingAveragePane.add(view.textBox16);
     return movingAveragePane;
   }
