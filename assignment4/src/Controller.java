@@ -447,4 +447,26 @@ public class Controller implements ControllerInterface {
     view.showMessage(result);
   }
 
+  protected void dollarCostAveragingCommand(String portfolioName, String amountString, String startDate,
+                                            String endDate, String frequencyString, String tickersAndWeights) {
+
+    float amount = Float.parseFloat(amountString);
+    int frequency = Integer.parseInt(frequencyString);
+
+    Map<String, Float> weightDistribution = new HashMap<>();
+    String[] words = tickersAndWeights.split(" ");
+    for (String word : words) {
+      String[] pair = word.split(":");
+      if (pair.length != 2) {
+        System.out.println("Invalid ticker symbol:weight pair: " + word);
+        continue;
+      }
+      String tickerSymbol = pair[0];
+      float weight = Float.parseFloat(pair[1]);
+      weightDistribution.put(tickerSymbol, weight);
+    }
+
+    String result = fleximodel.dollarCostAveraging(portfolioName, amount, startDate, endDate, frequency, weightDistribution);
+    view.showMessage(result);
+  }
 }
