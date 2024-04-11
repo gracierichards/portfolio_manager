@@ -1,4 +1,6 @@
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -417,35 +419,61 @@ public class Controller implements ControllerInterface {
   }
 
   protected void investFixedAmountCommand(String portfolioName, String amountString, String date,
-                                          String tickersAndWeights) {
-    /*if (words.length < 5) {
-      System.out.println("Invalid invest command. Usage: invest <portfolio_name> <amount> <date> "
-              + "<ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...");
-      return;
-    }
-
-    String portfolioName = words[1];
-    float amount = Float.parseFloat(words[2]);
-    String date = words[3];*/
+                                          String tickersAndWeights, String endDate) {
 
     float amount = Float.parseFloat(amountString);
 
     Map<String, Float> weightDistribution = new HashMap<>();
+    float totalWeight = 0.0f;
+
+    // Validate date format
+    try {
+      LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid date format. Use MM/dd/yyyy");
+      return;
+    }
+
+    // Validate end date format if it exists
+    if (endDate != null) {
+      try {
+        LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+      } catch (DateTimeParseException e) {
+        System.out.println("Invalid end date format. Use MM/dd/yyyy");
+        return;
+      }
+    }
+
     String[] words = tickersAndWeights.split(" ");
     for (String word : words) {
       String[] pair = word.split(":");
       if (pair.length != 2) {
         System.out.println("Invalid ticker symbol:weight pair: " + word);
-        continue;
+        return;
       }
       String tickerSymbol = pair[0];
       float weight = Float.parseFloat(pair[1]);
+
+      // Check for negative weightage
+      if (weight < 0) {
+        System.out.println("Negative weightage not allowed for ticker: " + tickerSymbol);
+        return;
+      }
+
       weightDistribution.put(tickerSymbol, weight);
+      totalWeight += weight;
+    }
+
+    // Check if total weightage is 100
+    if (totalWeight != 100.0f) {
+      System.out.println("Total weightage must be 100");
+      return;
     }
 
     String result = fleximodel.investFixedAmount(portfolioName, amount, date, weightDistribution);
     view.showMessage(result);
   }
+
 
   protected void dollarCostAveragingCommand(String portfolioName, String amountString, String startDate,
                                             String endDate, String frequencyString, String tickersAndWeights) {
@@ -454,6 +482,26 @@ public class Controller implements ControllerInterface {
     int frequency = Integer.parseInt(frequencyString);
 
     Map<String, Float> weightDistribution = new HashMap<>();
+    float totalWeight = 0.0f;
+
+    // Validate start date format
+    try {
+      LocalDate.parse(startDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid start date format. Use MM/dd/yyyy");
+      return;
+    }
+
+    // Validate end date format
+    if (endDate != null) {
+      try {
+        LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+      } catch (DateTimeParseException e) {
+        System.out.println("Invalid end date format. Use MM/dd/yyyy");
+        return;
+      }
+    }
+
     String[] words = tickersAndWeights.split(" ");
     for (String word : words) {
       String[] pair = word.split(":");
@@ -463,7 +511,21 @@ public class Controller implements ControllerInterface {
       }
       String tickerSymbol = pair[0];
       float weight = Float.parseFloat(pair[1]);
+
+      // Check for negative weightage
+      if (weight < 0) {
+        System.out.println("Negative weightage not allowed for ticker: " + tickerSymbol);
+        return;
+      }
+
       weightDistribution.put(tickerSymbol, weight);
+      totalWeight += weight;
+    }
+
+    // Check if total weightage is 100
+    if (totalWeight != 100.0f) {
+      System.out.println("Total weightage must be 100");
+      return;
     }
 
     String result = fleximodel.dollarCostAveraging(portfolioName, amount, startDate, endDate, frequency, weightDistribution);
