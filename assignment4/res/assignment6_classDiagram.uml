@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>D:/Java/IntelliJ/IntelliJ IDEA Community Edition 2023.3.2/Projects/group/assignment5/assignment4/src</OriginalElement>
+  <nodes>
+    <node x="61.32019379591637" y="1397.2394762093697">CommandLoadPortfolio</node>
+    <node x="236.9405180449012" y="1219.6292291248187">CommandBuySell</node>
+    <node x="1952.6269872899234" y="68.20622967858844">FlexiblePortfolioModelInterface</node>
+    <node x="489.18874747764687" y="1451.3381498778679">CommandCrossovers</node>
+    <node x="718.9807391632876" y="667.3159408633956">View</node>
+    <node x="2473.928576957611" y="-13.287671162243498">Model</node>
+    <node x="1665.6460798306875" y="681.1602373270069">API</node>
+    <node x="1041.0012774876132" y="1888.6053526915273">CommandDisplayComposition</node>
+    <node x="1665.62138395065" y="431.56534521269">APIInterface</node>
+    <node x="1665.4728958181413" y="1777.992861204708">CommandGainLoss</node>
+    <node x="1665.5636262301286" y="1035.4831097481247">CommandGainLossOverTime</node>
+    <node x="1681.1625754921417" y="1586.1091644797355">Main</node>
+    <node x="1775.529741394093" y="1292.4309790274285">CommandCostBasis</node>
+    <node x="898.7789937210977" y="384.2392599200539">InflexiblePortfolio</node>
+    <node x="2046.4287315093025" y="1090.9005798233716">CommandValuePortfolio</node>
+    <node x="813.4015346485118" y="1355.6624021444281">Portfolio</node>
+    <node x="2139.8434477433334" y="1308.279630536471">CommandInvestFixedAmount</node>
+    <node x="2386.6217502826626" y="1113.7048563928952">CommandCreatePortfolio</node>
+    <node x="1280.8882599273963" y="174.03024225721688">GUIViewInterface</node>
+    <node x="2528.4713709337716" y="1308.5943306763222">CommandMovingCrossovers</node>
+    <node x="381.09678297192374" y="990.6421310918275">ControllerInterface</node>
+    <node x="2732.7148658664155" y="1111.7944601709603">CommandDollarCost</node>
+    <node x="2908.6799946625174" y="1312.9635542688006">CommandMovingAverage</node>
+    <node x="2003.2704775123962" y="472.3673486945875">FlexiblePortfolioModel</node>
+    <node x="1218.3849925892628" y="347.2238179908709">GUIView</node>
+    <node x="681.208510666396" y="995.5171513490105">PerformanceChart</node>
+    <node x="486.07561383112164" y="1183.3384471336117">GUIController</node>
+    <node x="-5.226054866864757" y="1212.446047174994">Command</node>
+    <node x="801.5880590386453" y="32.10586707661241">ViewInterface</node>
+    <node x="1547.40945926403" y="86.07524128338488">ModelInterface</node>
+    <node x="3048.107324657034" y="1124.5893822933367">CommandSavePortfolio</node>
+    <node x="-145.30490647195313" y="454.0095200044298">Controller</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="CommandLoadPortfolio" target="Command" relationship="REALIZATION">
+      <point x="-1.937959163669234E-4" y="56.49952379063029" />
+      <point x="178.32" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandBuySell" target="Command" relationship="REALIZATION">
+      <point x="4.8195509879178644E-4" y="56.49977087518141" />
+      <point x="331.44100000000003" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandSavePortfolio" target="Command" relationship="REALIZATION">
+      <point x="-3.246570340706967E-4" y="56.499617706663344" />
+      <point x="3165.107" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="FlexiblePortfolioModel" target="Model" relationship="GENERALIZATION">
+      <point x="239.0" y="-272.5" />
+      <point x="-190.6580994452147" y="212.5" />
+    </edge>
+    <edge source="CommandGainLossOverTime" target="Command" relationship="REALIZATION">
+      <point x="3.7376987143034057E-4" y="56.49989025187517" />
+      <point x="1804.064" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandCreatePortfolio" target="Command" relationship="REALIZATION">
+      <point x="2.49717337283073E-4" y="56.50014360710486" />
+      <point x="2511.122" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="Model" target="ModelInterface" relationship="REALIZATION">
+      <point x="-205.5" y="-148.50609915916806" />
+      <point x="1713.40945926403" y="50.70622967858844" />
+      <point x="0.0" y="-91.5" />
+    </edge>
+    <edge source="CommandInvestFixedAmount" target="Command" relationship="REALIZATION">
+      <point x="-4.4774333355235285E-4" y="-56.49963053647093" />
+      <point x="2280.343" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="FlexiblePortfolioModelInterface" target="ModelInterface" relationship="INTERFACE_GENERALIZATION">
+      <point x="-209.5" y="-42.13098839520356" />
+      <point x="166.0" y="0.0" />
+    </edge>
+    <edge source="CommandDisplayComposition" target="Command" relationship="REALIZATION">
+      <point x="-2.7748761328894034E-4" y="43.49964730847273" />
+      <point x="1183.501" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandValuePortfolio" target="Command" relationship="REALIZATION">
+      <point x="2.6849069763557054E-4" y="56.50042017662838" />
+      <point x="2166.429" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandDollarCost" target="Command" relationship="REALIZATION">
+      <point x="1.341335846518632E-4" y="56.49953982903969" />
+      <point x="2839.215" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="CommandMovingCrossovers" target="Command" relationship="REALIZATION">
+      <point x="-3.709337715918082E-4" y="-56.500330676322164" />
+      <point x="2666.971" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="GUIViewInterface" target="ViewInterface" relationship="INTERFACE_GENERALIZATION">
+      <point x="-92.5" y="0.0" />
+      <point x="193.5" y="28.42437518060447" />
+    </edge>
+    <edge source="CommandMovingAverage" target="Command" relationship="REALIZATION">
+      <point x="5.337482434697449E-6" y="-56.49955426880058" />
+      <point x="3034.68" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="View" target="ViewInterface" relationship="REALIZATION">
+      <point x="-31.201745442189917" y="-127.5" />
+      <point x="-113.8090653175476" y="127.5" />
+    </edge>
+    <edge source="Controller" target="ControllerInterface" relationship="REALIZATION">
+      <point x="223.5" y="235.63261108739772" />
+      <point x="-120.0" y="0.0" />
+    </edge>
+    <edge source="CommandCostBasis" target="Command" relationship="REALIZATION">
+      <point x="2.586059069926705E-4" y="-56.49997902742848" />
+      <point x="1880.03" y="1266.0" />
+      <point x="1638.5" y="1266.0" />
+      <point x="1638.5" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="API" target="APIInterface" relationship="REALIZATION">
+      <point x="-0.024695880037597817" y="-55.5" />
+      <point x="0.0" y="55.5" />
+    </edge>
+    <edge source="CommandCrossovers" target="Command" relationship="REALIZATION">
+      <point x="2.5252235315065263E-4" y="56.4998501221321" />
+      <point x="599.6890000000001" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="Portfolio" target="InflexiblePortfolio" relationship="GENERALIZATION">
+      <point x="137.0" y="0.0" />
+      <point x="1175.708510666396" y="1544.1624021444281" />
+      <point x="1175.708510666396" y="476.7392599200539" />
+      <point x="124.5" y="0.0" />
+    </edge>
+    <edge source="GUIView" target="GUIViewInterface" relationship="REALIZATION">
+      <point x="-38.49673266186642" y="-740.5" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="CommandGainLoss" target="Command" relationship="REALIZATION">
+      <point x="1.0418185866001295E-4" y="56.50013879529183" />
+      <point x="1766.473" y="1999.0" />
+      <point x="43.81999999999999" y="1999.0" />
+      <point x="-41.45394513313525" y="43.49995282500595" />
+    </edge>
+    <edge source="FlexiblePortfolioModel" target="FlexiblePortfolioModelInterface" relationship="REALIZATION">
+      <point x="-87.64349022247279" y="-272.5" />
+      <point x="0.0" y="151.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.28906929544795595" showDependencies="false" x="1578.4999999999995" y="1002.4999999999998" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
