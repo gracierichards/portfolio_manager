@@ -9,7 +9,6 @@ import java.util.Set;
 public class InflexiblePortfolio {
   private final String name; // Name of the portfolio
   protected Map<String, Float> stocks; // Map to store stocks with their corresponding amounts
-
   /**
    * Constructor to initialize a new Portfolio with a given name.
    *
@@ -36,7 +35,6 @@ public class InflexiblePortfolio {
       stocks.put(tickerSymbol, (float) amount);
     }
   }
-
   /**
    * Method to retrieve the name of the portfolio.
    *

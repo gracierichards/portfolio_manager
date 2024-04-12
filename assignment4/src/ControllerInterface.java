@@ -10,5 +10,4 @@ public interface ControllerInterface {
    * @param input a String containing the latest text entered into the command line.
    */
   void processCommand(String input);
-
 }

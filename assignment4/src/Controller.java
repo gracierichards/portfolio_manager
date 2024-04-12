@@ -29,7 +29,6 @@ public class Controller implements ControllerInterface {
   private API api;
   private ViewInterface view;
   private Scanner scanner;
-
   /**
    * Instantiates the Controller.
    *
@@ -42,7 +41,6 @@ public class Controller implements ControllerInterface {
     this.view = v;
     this.scanner = scanner;
   }
-
   private boolean isInteger1(String[] inputs) {
     for (String input : inputs) {
       try {
@@ -57,7 +55,6 @@ public class Controller implements ControllerInterface {
     }
     return true;
   }
-
   /**
    * Processes the given command input.
    *
@@ -177,7 +174,6 @@ public class Controller implements ControllerInterface {
       System.out.println("Date must be in MM/DD/YYYY format. Please try again.");
     }
   }
-
   boolean isInteger(float num) {
     return (float) (int) num == num;
   }
@@ -224,7 +220,6 @@ public class Controller implements ControllerInterface {
       System.out.println("Portfolio created successfully.");
     }
   }
-
   protected void loadCommand(String portfolioName, String path) {
     /*
     if (words[1].equals("portfolio")) {
