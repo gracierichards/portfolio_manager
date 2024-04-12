@@ -10,8 +10,6 @@ public class CommandCreatePortfolio implements Command {
 
   /**
    * Creates and returns the JPanel containing components for creating a new portfolio.
-   *
-   * @return a JPanel containing components for creating a new portfolio
    */
   public CommandCreatePortfolio(GUIView view) {
     this.view = view;

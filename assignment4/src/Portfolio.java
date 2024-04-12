@@ -56,6 +56,12 @@ public class Portfolio extends InflexiblePortfolio {
     purchaseDates.put(tickerSymbol, creationDate); // Store purchase date
   }
 
+  /**
+   * Method to add a stock with a specified amount to the portfolio.
+   *
+   * @param tickerSymbol The ticker symbol of the stock to be added.
+   * @param amount       The amount of the stock to be added.
+   */
   public void addStock(String tickerSymbol, float amount) {
     if (stocks.containsKey(tickerSymbol)) {
       // If the stock already exists in the portfolio, update the amount

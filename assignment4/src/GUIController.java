@@ -1,15 +1,20 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Controller for the Portfolio Manager GUI.
+ */
 public class GUIController {
   private GUIView view;
-  private Model model;
   private FlexiblePortfolioModel fleximodel;
   private Controller controller;
 
+  /**
+   * Constructor for GUIController.
+   */
   public GUIController() {
     view = new GUIView("Portfolio Manager");
-    model = new Model();
+    Model model = new Model();
     fleximodel = new FlexiblePortfolioModel();
     controller = new Controller(model, fleximodel, view, null);
 
@@ -167,6 +172,10 @@ public class GUIController {
           }
           controller.dollarCostAveragingCommand(portfolioName, amount, startDate, endDate,
                   frequencyString, tickers);
+          break;
+        default:
+          System.out.println("Default case in GUIController");
+          break;
       }
     }
   }

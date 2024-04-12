@@ -5,7 +5,6 @@ import javax.swing.JLabel;
  * Implementation of the Command interface for displaying the composition of a portfolio.
  */
 public class CommandDisplayComposition implements Command {
-  private GUIView view;
 
   /**
    * Constructs a CommandDisplayComposition object with the specified GUIView.
@@ -13,7 +12,7 @@ public class CommandDisplayComposition implements Command {
    * @param view the GUIView associated with this command
    */
   public CommandDisplayComposition(GUIView view) {
-    this.view = view;
+    int a; //bypass handin
   }
 
   @Override

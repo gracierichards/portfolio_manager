@@ -6,7 +6,7 @@ import java.net.URL;
 /**
  * Implementation of the API_Interface interface for interacting with the AlphaVantage API.
  */
-public class API implements API_Interface {
+public class API implements APIInterface {
 
   @Override
   public String getStockData(String tickerSymbol) {

@@ -5,6 +5,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 
+/**
+ * Implementation of the Command interface for displaying the fixed amount investment made in a
+ * portfolio.
+ */
 public class CommandInvestFixedAmount implements Command {
   private GUIView view;
 

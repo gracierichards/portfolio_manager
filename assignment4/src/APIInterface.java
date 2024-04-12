@@ -2,7 +2,7 @@
 /**
  * This interface defines methods for interacting with the AlphaVantage API.
  */
-public interface API_Interface {
+public interface APIInterface {
 
   /**
    * Contains the functionality of AlphaVantageDemo, and downloads the stock data for the stock
@@ -30,8 +30,8 @@ public interface API_Interface {
    *
    * @param query the partial or full name of a company or ticker symbol being looked up by the user
    * @return data in csv format of the ticker symbol matches.
-   * The columns output by AlphaVantage are symbol, name, type, region, marketOpen, marketClose,
-   * timezone, currency, and matchScore.
+   *          The columns output by AlphaVantage are symbol, name, type, region, marketOpen,
+   *          marketClose,timezone, currency, and matchScore.
    */
   String getTickerMatches(String query);
 }

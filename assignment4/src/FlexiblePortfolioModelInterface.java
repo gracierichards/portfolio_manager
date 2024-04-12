@@ -86,7 +86,7 @@ public interface FlexiblePortfolioModelInterface extends ModelInterface {
    * @param startDate    the start date of the period to check (in MM/DD/YYYY format)
    * @param endDate      the end date of the period to check (in MM/DD/YYYY format)
    * @return a string listing the positive and negative crossovers. For the View to parse into the
-   * final printed output.
+   *           final printed output.
    * @throws IllegalArgumentException if given an invalid ticker symbol
    */
   String findCrossovers(String tickerSymbol, String startDate, String endDate)
@@ -105,7 +105,7 @@ public interface FlexiblePortfolioModelInterface extends ModelInterface {
    * @param y            the number of days in the moving average that is the boundary for the
    *                     other moving average to cross
    * @return a string listing the positive and negative crossovers. For the View to parse into the
-   * final printed output.
+   *          final printed output.
    * @throws IllegalArgumentException if given an invalid ticker symbol
    */
   String findMovingCrossovers(String tickerSymbol, String startDate, String endDate, int x, int y)

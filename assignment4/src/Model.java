@@ -221,7 +221,7 @@ public class Model implements ModelInterface {
    * MM/DD/YYYY, and one date from an Alpha Vantage csv.
    *
    * @return 0 if the dates are the same, a negative number if inputDate is before csvDate,
-   * and a positive number if inputDate is after csvDate.
+   *          and a positive number if inputDate is after csvDate.
    */
   int compareDates(String inputDate, String csvDate) throws DateTimeParseException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");

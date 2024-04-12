@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * The FlexiblePortfolioModel class represents a model for managing flexible portfolios.
+ * It implements the FlexiblePortfolioModelInterface, providing methods to create, load,
+ * save, and perform various operations on portfolios.
+ */
 public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioModelInterface {
 
   protected Map<String, Portfolio> portfolioList;
@@ -111,6 +116,16 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     portfolio.purchaseDates.put(tickerSymbol, date);
   }
 
+  /**
+   * Purchases a specified number of shares of a stock in the specified portfolio on the given date.
+   *
+   * @param portfolioName The name of the portfolio in which to purchase the shares.
+   * @param tickerSymbol  The ticker symbol of the stock to purchase.
+   * @param date          The date of the purchase in MM/DD/YYYY format.
+   * @param numShares     The number of shares to purchase.
+   * @return A message indicating the success of the purchase operation.
+   * @throws IllegalArgumentException If the specified portfolio does not exist.
+   */
   public String purchaseShares(String portfolioName, String tickerSymbol, String date,
                                float numShares) throws IllegalArgumentException {
     Portfolio portfolio = portfolioList.get(portfolioName);
@@ -150,7 +165,7 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     portfolio.removeStock(tickerSymbol, numShares);
   }
 
-
+  @Override
   public float movingAverage(int numDays, String tickerSymbol, String date) {
     if (isValidTicker(tickerSymbol)) {
       try {
@@ -191,6 +206,7 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
     }
   }
 
+  @Override
   public String findCrossovers(String tickerSymbol, String startDateString, String endDateString)
           throws IllegalArgumentException {
     DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("M/d/yyyy");
@@ -294,16 +310,16 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
 
 
   protected float calculateCostBasis(String tickerSymbol, int numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice
-            (tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
+    float purchasePrice = getStockPrice(tickerSymbol,
+            purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
     // Calculate the cost basis of the purchased shares
     float costBasis = purchasePrice * numShares;
     return costBasis;
   }
 
   protected float calculateCostBasis(String tickerSymbol, float numShares, String purchaseDate) {
-    float purchasePrice = getStockPrice
-            (tickerSymbol, purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
+    float purchasePrice = getStockPrice(tickerSymbol,
+            purchaseDate, FlexiblePortfolioModel.TypeOfPrice.CLOSE);
     // Calculate the cost basis of the purchased shares
     float costBasis = purchasePrice * numShares;
     return costBasis;
@@ -365,15 +381,15 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
 
 
   public String chartPerformance(String portfolioName, String startDate, String endDate) {
-    return PerformanceChart.generatePerformanceChart
-            (portfolioName, startDate, endDate, this);
+    return PerformanceChart.generatePerformanceChart(portfolioName,
+            startDate, endDate, this);
   }
 
 
   public String chartPerformanceStock(String tickerSymbol, String startDate, String endDate)
           throws IllegalArgumentException {
-    return PerformanceChart.generatePerformanceChartStock
-            (tickerSymbol, startDate, endDate, this);
+    return PerformanceChart.generatePerformanceChartStock(tickerSymbol,
+              startDate, endDate, this);
   }
 
 
@@ -483,7 +499,7 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
    * @param amount             Amount to be invested.
    * @param date               Date for which the prices are considered.
    * @return Array containing ticker symbols as keys and the corresponding number of shares as
-   * values.
+   *          values.
    */
   public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution,
                                     String date) {

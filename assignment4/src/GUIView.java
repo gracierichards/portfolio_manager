@@ -31,9 +31,6 @@ import javax.swing.event.ListSelectionListener;
  * construction and interaction.
  */
 public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
-  //Drop down menu of options for commands
-  private JLabel comboboxDisplay;
-  private JComboBox<String> combobox;
   private JButton goButton;
   private String selectedItem;
   private JPanel mainPanel;
@@ -84,6 +81,11 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   protected JTextArea frequencyStringTextBox;
   protected JTextArea dollarCostTickersTextBox;
 
+  /**
+   * Constructs a new GUIView with the specified caption.
+   *
+   * @param caption The caption to be displayed on the frame.
+   */
   public GUIView(String caption) {
     super(caption);
     setSize(750, 600);
@@ -114,17 +116,19 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
   private void makeMainMenu() {
     JPanel comboboxPanel = new JPanel();
-    comboboxDisplay = new JLabel("Please select one of the following actions from the menu.");
+    //Drop down menu of options for commands
+    JLabel comboboxDisplay = new JLabel("Please select one of the following actions" +
+            " from the menu.");
     comboboxPanel.add(comboboxDisplay);
     String[] options = {"---", "Create a new portfolio", "Load portfolio from file",
-            "Save portfolio to file", "Display composition of a portfolio",
-            "Find cost basis of a portfolio", "Find value of a portfolio", "Buy/sell stocks",
-            "Find whether a stock gained or lost over one day",
-            "Find whether a stock gained or lost between two dates",
-            "Find the moving average of a stock", "Find crossovers for a stock",
-            "Find moving crossovers for a stock",
-            "Invest a fixed amount into an existing portfolio", "Dollar-cost averaging"};
-    combobox = new JComboBox<String>();
+      "Save portfolio to file", "Display composition of a portfolio",
+      "Find cost basis of a portfolio", "Find value of a portfolio", "Buy/sell stocks",
+      "Find whether a stock gained or lost over one day",
+      "Find whether a stock gained or lost between two dates",
+      "Find the moving average of a stock", "Find crossovers for a stock",
+      "Find moving crossovers for a stock",
+      "Invest a fixed amount into an existing portfolio", "Dollar-cost averaging"};
+    JComboBox<String> combobox = new JComboBox<String>();
     combobox.setActionCommand("Menu");
     combobox.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
@@ -253,17 +257,17 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
 
   @Override
   public void showTickerMatches(String csvContents) {
-    /**This functionality is not required for the GUI.**/
+    //This functionality is not required for the GUI.**/
   }
 
   @Override
   public void displayPortfolioValue(String portfolioName, String date, float value) {
-    /**This functionality is not required for the GUI.**/
+    //This functionality is not required for the GUI.**/
   }
 
   @Override
   public void printMenu() {
-    /**This functionality is not required for the GUI.**/
+    //This functionality is not required for the GUI.**/
   }
 
   // ActionListener for the menu selection

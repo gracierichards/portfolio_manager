@@ -6,6 +6,9 @@ import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 
 
+/**
+ * Implementation of the Command interface for displaying the dollarCostAveraging implementation.
+ */
 public class CommandDollarCost implements Command {
   private GUIView view;
 
@@ -32,8 +35,8 @@ public class CommandDollarCost implements Command {
     dollarCostPane.add(view.dollarCostIntTextBox);
 
     view.dollarCostStartDateTextBox = new JTextArea(1, 50);
-    view.dollarCostStartDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the start date"
-            + " for the investing period in MM/DD/YYYY format:"));
+    view.dollarCostStartDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the start " +
+            "date for the investing period in MM/DD/YYYY format:"));
     dollarCostPane.add(view.dollarCostStartDateTextBox);
 
     view.dollarCostEndDateTextBox = new JTextArea(1, 50);
