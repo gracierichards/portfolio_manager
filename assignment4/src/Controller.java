@@ -419,7 +419,7 @@ public class Controller implements ControllerInterface {
   }
 
   protected void investFixedAmountCommand(String portfolioName, String amountString, String date,
-                                          String tickersAndWeights, String endDate) {
+                                          String tickersAndWeights) {
 
     float amount = Float.parseFloat(amountString);
 
@@ -432,16 +432,6 @@ public class Controller implements ControllerInterface {
     } catch (DateTimeParseException e) {
       System.out.println("Invalid date format. Use MM/dd/yyyy");
       return;
-    }
-
-    // Validate end date format if it exists
-    if (endDate != null) {
-      try {
-        LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-      } catch (DateTimeParseException e) {
-        System.out.println("Invalid end date format. Use MM/dd/yyyy");
-        return;
-      }
     }
 
     String[] words = tickersAndWeights.split(" ");
