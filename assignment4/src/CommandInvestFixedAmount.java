@@ -1,3 +1,5 @@
+import java.awt.*;
+
 import javax.swing.*;
 
 public class CommandInvestFixedAmount implements Command {
@@ -27,10 +29,16 @@ public class CommandInvestFixedAmount implements Command {
             + "the purchases on in MM/DD/YYYY format:"));
     investFixedAmountPane.add(view.fixedAmountDateTextBox);
 
+    JLabel text2 = new JLabel("Enter the desired stocks and their weights in the following "
+            + "format:");
+    investFixedAmountPane.add(text2);
+    JLabel text3 = new JLabel("<ticker_symbol1>:<weight1> <ticker_symbol2>:<weight2> ...   ");
+    investFixedAmountPane.add(text3);
+    JLabel text4 = new JLabel("where the weights are numbers between 0 and 100 (representing "
+            + "percentages)");
+    investFixedAmountPane.add(text4);
     view.fixedAmountTickersTextBox = new JTextArea(1, 60);
-    view.fixedAmountTickersTextBox.setBorder(BorderFactory.createTitledBorder("Enter the desired "
-            + "stocks and their weights in the following format: <ticker_symbol1>:<weight1> "
-            + "<ticker_symbol2>:<weight2> ..."));
+    view.fixedAmountTickersTextBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
     investFixedAmountPane.add(view.fixedAmountTickersTextBox);
 
     return investFixedAmountPane;

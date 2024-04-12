@@ -474,9 +474,9 @@ public class Controller implements ControllerInterface {
     view.showMessage(result);
   }
 
-
-  protected void dollarCostAveragingCommand(String portfolioName, String amountString, String startDate,
-                                            String endDate, String frequencyString, String tickersAndWeights) {
+  protected void dollarCostAveragingCommand(String portfolioName, String amountString,
+                                            String startDate, String endDate,
+                                            String frequencyString, String tickersAndWeights) {
 
     float amount = Float.parseFloat(amountString);
     int frequency = Integer.parseInt(frequencyString);
@@ -528,7 +528,8 @@ public class Controller implements ControllerInterface {
       return;
     }
 
-    String result = fleximodel.dollarCostAveraging(portfolioName, amount, startDate, endDate, frequency, weightDistribution);
+    String result = fleximodel.dollarCostAveraging(portfolioName, amount, startDate, endDate,
+            frequency, weightDistribution);
     view.showMessage(result);
   }
 }

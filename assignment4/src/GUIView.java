@@ -77,6 +77,12 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   protected JTextArea fixedAmountIntTextBox;
   protected JTextArea fixedAmountDateTextBox;
   protected JTextArea fixedAmountTickersTextBox;
+  protected JTextArea dollarCostPortfolioNameTextbox;
+  protected JTextArea dollarCostIntTextBox;
+  protected JTextArea dollarCostStartDateTextBox;
+  protected JTextArea dollarCostEndDateTextBox;
+  protected JTextArea frequencyStringTextBox;
+  protected JTextArea dollarCostTickersTextBox;
 
   public GUIView(String caption) {
     super(caption);

@@ -154,8 +154,20 @@ public class GUIController {
           date = view.fixedAmountDateTextBox.getText();
           tickers = view.fixedAmountTickersTextBox.getText();
           controller.investFixedAmountCommand(portfolioName, amount, date, tickers);
-          view.showMessage("Transaction successful.");
+          //view.showMessage("Transaction successful.");
           break;
+        case "Dollar-cost averaging":
+          portfolioName = view.selectedPortfolio;
+          amount = view.dollarCostIntTextBox.getText();
+          startDate = view.dollarCostStartDateTextBox.getText();
+          endDate = view.dollarCostEndDateTextBox.getText();
+          String frequencyString = view.frequencyStringTextBox.getText();
+          tickers = view.dollarCostTickersTextBox.getText();
+          if (endDate.equals("")) {
+            endDate = null;
+          }
+          controller.dollarCostAveragingCommand(portfolioName, amount, startDate, endDate,
+                  frequencyString, tickers);
       }
     }
   }
