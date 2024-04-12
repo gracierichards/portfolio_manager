@@ -15,7 +15,7 @@ public class PerformanceChart {
    * @param portfolioName The name of the portfolio.
    * @param startDate     The start date of the performance chart in the format "yyyy-MM-dd".
    * @param endDate       The end date of the performance chart in the format "yyyy-MM-dd".
-   * @param fleximodel         The model containing the portfolio and necessary data.
+   * @param fleximodel    The model containing the portfolio and necessary data.
    * @return A string representing the generated performance chart.
    */
   public static String generatePerformanceChart(String portfolioName, String startDate,
@@ -74,7 +74,8 @@ public class PerformanceChart {
    * @return The text-based bar chart as a string.
    */
   public static String generatePerformanceChartStock(String tickerSymbol, String startDate,
-                                     String endDate, Model model) throws IllegalArgumentException {
+                                                     String endDate, Model model)
+          throws IllegalArgumentException {
     if (!model.isValidTicker(tickerSymbol)) {
       throw new IllegalArgumentException(tickerSymbol + " is not a valid ticker symbol.");
     }

@@ -18,6 +18,7 @@ public class CommandGainLossOverTime implements Command {
   public CommandGainLossOverTime(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel gainLossOverTimePane = new JPanel();

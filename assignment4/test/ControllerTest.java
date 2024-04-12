@@ -171,9 +171,12 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_Crossovers() {
-    float avg1 = fleximodel.movingAverage(30, "T", "03/14/2024"); // = 17.094
-    float avg2 = fleximodel.movingAverage(30, "T", "03/15/2024"); // = 17.061
-    float avg3 = fleximodel.movingAverage(30, "T", "03/18/2024"); // = 17.043
+    float avg1 = fleximodel.movingAverage(30, "T", "03/14/2024");
+    // = 17.094
+    float avg2 = fleximodel.movingAverage(30, "T", "03/15/2024");
+    // = 17.061
+    float avg3 = fleximodel.movingAverage(30, "T", "03/18/2024");
+    // = 17.043
     String input = "crossovers T 03/14/2024 03/18/2024";
     controller.processCommand(input);
     assertEquals("Positive crossovers:" + System.lineSeparator() + "None"
@@ -186,13 +189,20 @@ public class ControllerTest {
 
   @Test
   public void testProcessCommand_MovingCrossovers() {
-    float yavg1 = fleximodel.movingAverage(30, "T", "03/14/2024"); // = 17.094
-    float yavg2 = fleximodel.movingAverage(30, "T", "03/15/2024"); // = 17.061
-    float yavg3 = fleximodel.movingAverage(30, "T", "03/18/2024"); // = 17.043
-    float xavg1 = fleximodel.movingAverage(3, "T", "03/13/2024"); // = 17.24
-    float xavg2 = fleximodel.movingAverage(3, "T", "03/14/2024"); // = 17.133
-    float xavg3 = fleximodel.movingAverage(3, "T", "03/15/2024"); // = 17.083
-    float xavg4 = fleximodel.movingAverage(3, "T", "03/18/2024"); // = 17.12
+    float yavg1 = fleximodel.movingAverage(30, "T", "03/14/2024");
+    // = 17.094
+    float yavg2 = fleximodel.movingAverage(30, "T", "03/15/2024");
+    // = 17.061
+    float yavg3 = fleximodel.movingAverage(30, "T", "03/18/2024");
+    // = 17.043
+    float xavg1 = fleximodel.movingAverage(3, "T", "03/13/2024");
+    // = 17.24
+    float xavg2 = fleximodel.movingAverage(3, "T", "03/14/2024");
+    // = 17.133
+    float xavg3 = fleximodel.movingAverage(3, "T", "03/15/2024");
+    // = 17.083
+    float xavg4 = fleximodel.movingAverage(3, "T", "03/18/2024");
+    // = 17.12
     String input = "moving-crossovers T 03/14/2024 03/18/2024";
     String followUpInput = "3" + System.lineSeparator() + "30";
     Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(
@@ -296,7 +306,7 @@ public class ControllerTest {
     testChartSetup();
     controller.processCommand("chart-portfolio TestPortfolio 01/01/2021 01/01/2024");
     String output = outContent.toString();
-    
+
     //to pass the Handin grader's requirements
     int a = 2;
     int b = 2;
@@ -319,7 +329,7 @@ public class ControllerTest {
     String words = "create portfolio TanayPortfolio AAPL:10 MSFT:10";
     String[] input = words.split(" ");
     controller.processCommand(words);
-    fleximodel.savePortfolioToFile(input[2],"TanayPortfolio.txt");
+    fleximodel.savePortfolioToFile(input[2], "TanayPortfolio.txt");
     String portfolioName = input[2];
     String date = "04/01/2024";
     float amount = 1000.0f;

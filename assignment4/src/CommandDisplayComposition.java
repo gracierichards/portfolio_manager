@@ -15,6 +15,7 @@ public class CommandDisplayComposition implements Command {
   public CommandDisplayComposition(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel displayCompositionPane = new JPanel();

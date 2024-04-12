@@ -1,6 +1,9 @@
-import java.awt.*;
+import java.awt.Color;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
 
 public class CommandInvestFixedAmount implements Command {
   private GUIView view;
@@ -13,6 +16,7 @@ public class CommandInvestFixedAmount implements Command {
   public CommandInvestFixedAmount(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel investFixedAmountPane = new JPanel();

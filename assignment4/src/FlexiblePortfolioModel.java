@@ -434,11 +434,11 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
   /**
    * Invests a fixed amount of money into a portfolio according to a given weight distribution.
    *
-   * @param portfolioName       the name of the portfolio to invest in
-   * @param amount              the total amount of money to invest
-   * @param date                the date of investment
+   * @param portfolioName      the name of the portfolio to invest in
+   * @param amount             the total amount of money to invest
+   * @param date               the date of investment
    * @param weightDistribution a map representing the weight distribution of the investment,
-   *                            where keys are ticker symbols and values are corresponding weights
+   *                           where keys are ticker symbols and values are corresponding weights
    * @return a string indicating the result of the investment operation
    */
   public String investFixedAmount(String portfolioName, float amount, String date,
@@ -483,7 +483,7 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
    * @param amount             Amount to be invested.
    * @param date               Date for which the prices are considered.
    * @return Array containing ticker symbols as keys and the corresponding number of shares as
-   *          values.
+   * values.
    */
   public float[] calculateNumShares(float amount, Map<String, Float> weightDistribution,
                                     String date) {
@@ -505,14 +505,14 @@ public class FlexiblePortfolioModel extends Model implements FlexiblePortfolioMo
    * Performs dollar-cost averaging by periodically investing a fixed amount of money
    * into a portfolio.
    *
-   * @param portfolioName       the name of the portfolio to invest in
-   * @param amount              the total amount of money to invest per period
-   * @param startDate           the start date of the dollar-cost averaging strategy
-   * @param endDate             the end date of the dollar-cost averaging strategy (optional,
-   *                            use null for current date)
-   * @param frequency           the frequency of investment periods (e.g., daily, weekly, monthly)
+   * @param portfolioName      the name of the portfolio to invest in
+   * @param amount             the total amount of money to invest per period
+   * @param startDate          the start date of the dollar-cost averaging strategy
+   * @param endDate            the end date of the dollar-cost averaging strategy (optional,
+   *                           use null for current date)
+   * @param frequency          the frequency of investment periods (e.g., daily, weekly, monthly)
    * @param weightDistribution a map representing the weight distribution of the investment,
-   *                            where keys are ticker symbols and values are corresponding weights
+   *                           where keys are ticker symbols and values are corresponding weights
    * @return a string indicating the result of the dollar-cost averaging operation
    */
   public String dollarCostAveraging(String portfolioName, float amount, String startDate,

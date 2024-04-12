@@ -64,12 +64,14 @@ public interface ViewInterface {
 
   /**
    * Displays the given error message to the user.
+   *
    * @param message the desired error message.
    */
   void errorMessage(String message);
 
   /**
    * Displays a popup window with the given message.
+   *
    * @param message the text contents of the popup window to be created.
    */
   void showMessage(String message);

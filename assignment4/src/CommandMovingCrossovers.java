@@ -50,8 +50,8 @@ public class CommandMovingCrossovers implements Command {
     movingCrossoversPane.add(view.movingCrossoversEndDateTextBox);
 
     view.movingCrossoversXTextBox = new JTextArea(1, 50);
-    view.movingCrossoversXTextBox.setBorder(BorderFactory.createTitledBorder("Set x, the number of days for " +
-            "the first moving average"));
+    view.movingCrossoversXTextBox.setBorder(BorderFactory.createTitledBorder("Set x, the number of "
+            + "days for the first moving average"));
     movingCrossoversPane.add(view.movingCrossoversXTextBox);
     JLabel xDisplay2 = new JLabel("");
     view.movingCrossoversXTextBox.getDocument().addDocumentListener(new DocumentListener() {
@@ -90,8 +90,8 @@ public class CommandMovingCrossovers implements Command {
     });
 
     view.movingCrossoversYTextBox = new JTextArea(1, 50);
-    view.movingCrossoversYTextBox.setBorder(BorderFactory.createTitledBorder("Set y, the number of days for the "
-            + "second moving average"));
+    view.movingCrossoversYTextBox.setBorder(BorderFactory.createTitledBorder("Set y, the " +
+            "number of days for the second moving average"));
     movingCrossoversPane.add(view.movingCrossoversYTextBox);
     JLabel yDisplay = new JLabel("");
     view.movingCrossoversYTextBox.getDocument().addDocumentListener(new DocumentListener() {

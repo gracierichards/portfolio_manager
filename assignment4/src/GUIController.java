@@ -134,8 +134,7 @@ public class GUIController {
           try {
             xInt = Integer.parseInt(x);
             yInt = Integer.parseInt(y);
-          }
-          catch (NumberFormatException e2) {
+          } catch (NumberFormatException e2) {
             view.errorMessage("Number of days must be an integer.");
             break;
           }

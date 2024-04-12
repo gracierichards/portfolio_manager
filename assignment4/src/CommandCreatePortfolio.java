@@ -16,6 +16,7 @@ public class CommandCreatePortfolio implements Command {
   public CommandCreatePortfolio(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel createPortfolioPane = new JPanel();

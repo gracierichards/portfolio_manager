@@ -17,6 +17,7 @@ public class CommandCrossovers implements Command {
   public CommandCrossovers(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel crossoversPane = new JPanel();

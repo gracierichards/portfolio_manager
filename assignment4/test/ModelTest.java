@@ -1,5 +1,4 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -134,8 +133,10 @@ public class ModelTest {
 
   @Test
   public void testFindCrossovers() {
-    fleximodel.findCrossovers("AAPL", "03/08/2024", "03/12/2024");
-    fleximodel.findCrossovers("AAPL", "03/04/2024", "03/08/2024");
+    fleximodel.findCrossovers("AAPL", "03/08/2024",
+            "03/12/2024");
+    fleximodel.findCrossovers("AAPL", "03/04/2024",
+            "03/08/2024");
 
     //to pass the Handin grader's requirements
     int a = 2;
@@ -151,7 +152,8 @@ public class ModelTest {
 
     fleximodel.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     fleximodel.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
-    assertEquals(10013.3, fleximodel.totalCostBasis(portfolioName, "05/26/2024"), 0.001);
+    assertEquals(10013.3, fleximodel.totalCostBasis(portfolioName, "05/26/2024"),
+            0.001);
   }
 
   /*
@@ -186,9 +188,11 @@ public class ModelTest {
 
     fleximodel.createPortfolio(portfolioName, tickerSymbols, stockAmounts);
     fleximodel.savePortfolioToFile(portfolioName, "tanay_portfolio.txt");
-    assertEquals(10013.3, fleximodel.portfolioValueOnDate(portfolioName, "03/27/2024"), 0.001);
+    assertEquals(10013.3, fleximodel.portfolioValueOnDate(portfolioName,
+            "03/27/2024"), 0.001);
     fleximodel.purchaseShares(portfolioName, "VZ", "03/26/2024", 20);
-    assertEquals(10811.9, fleximodel.portfolioValueOnDate(portfolioName, "03/26/2024"), 0.001);
+    assertEquals(10811.9, fleximodel.portfolioValueOnDate(portfolioName,
+            "03/26/2024"), 0.001);
   }
 
   @Test
@@ -210,11 +214,13 @@ public class ModelTest {
     weightDistribution.put("MSFT", 60.0f);
 
     // Perform dollar-cost averaging
-    String result = fleximodel.dollarCostAveraging(portfolioName,amount, startDate, endDate, frequency, weightDistribution);
+    String result = fleximodel.dollarCostAveraging(portfolioName,amount, startDate,
+            endDate, frequency, weightDistribution);
     fleximodel.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
 
     // Verify the result
-    assertEquals("Dollar-cost averaging completed successfully. Total money invested: 4000.0", result);
+    assertEquals("Dollar-cost averaging completed successfully. " +
+            "Total money invested: 4000.0", result);
   }
 
   @Test
@@ -236,11 +242,13 @@ public class ModelTest {
     weightDistribution.put("MSFT", 60.0f);
 
     // Perform dollar-cost averaging
-    String result = fleximodel.dollarCostAveraging(portfolioName,amount, startDate, endDate, frequency, weightDistribution);
+    String result = fleximodel.dollarCostAveraging(portfolioName,amount, startDate,
+            endDate, frequency, weightDistribution);
     fleximodel.savePortfolioToFile(portfolioName, "TanayPortfolio.txt");
 
     // Verify the result
-    assertEquals("Dollar-cost averaging completed successfully. Total money invested: 1000.0", result);
+    assertEquals("Dollar-cost averaging completed successfully." +
+            " Total money invested: 1000.0", result);
   }
 
 }

@@ -22,6 +22,7 @@ public class CommandBuySell implements Command {
   public CommandBuySell(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel buySellPane = new JPanel();

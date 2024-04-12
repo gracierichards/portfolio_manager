@@ -42,6 +42,7 @@ public class Controller implements ControllerInterface {
     this.view = v;
     this.scanner = scanner;
   }
+
   private boolean isInteger1(String[] inputs) {
     for (String input : inputs) {
       try {
@@ -56,6 +57,7 @@ public class Controller implements ControllerInterface {
     }
     return true;
   }
+
   /**
    * Processes the given command input.
    *
@@ -201,8 +203,8 @@ public class Controller implements ControllerInterface {
             tickerSymbols.add(word.substring(0, word.indexOf(":")));
             stockAmounts.add(Float.parseFloat(value));
           } catch (NumberFormatException e) {
-            view.errorMessage("Invalid number of shares given. Note that number of shares must be an "
-                    + "integer. Not including stock " + word.substring(0, word.indexOf(":")) +
+            view.errorMessage("Invalid number of shares given. Note that number of shares must be "
+                    + "an integer. Not including stock " + word.substring(0, word.indexOf(":")) +
                     " in the portfolio.");
           }
         }
@@ -387,8 +389,7 @@ public class Controller implements ControllerInterface {
     int numSharesInt;
     try {
       numSharesInt = Integer.parseInt(numShares);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       view.errorMessage("Number of shares must be an integer.");
       return;
     }
@@ -405,8 +406,7 @@ public class Controller implements ControllerInterface {
     int numSharesInt;
     try {
       numSharesInt = Integer.parseInt(numShares);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       view.errorMessage("Number of shares must be an integer.");
       return;
     }
@@ -419,7 +419,7 @@ public class Controller implements ControllerInterface {
   }
 
   protected void investFixedAmountCommand(String portfolioName, String amountString, String date,
-                                          String tickersAndWeights, String endDate) {
+                                          String tickersAndWeights) {
 
     float amount = Float.parseFloat(amountString);
 
@@ -432,16 +432,6 @@ public class Controller implements ControllerInterface {
     } catch (DateTimeParseException e) {
       System.out.println("Invalid date format. Use MM/dd/yyyy");
       return;
-    }
-
-    // Validate end date format if it exists
-    if (endDate != null) {
-      try {
-        LocalDate.parse(endDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-      } catch (DateTimeParseException e) {
-        System.out.println("Invalid end date format. Use MM/dd/yyyy");
-        return;
-      }
     }
 
     String[] words = tickersAndWeights.split(" ");

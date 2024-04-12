@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
+
 /**
  * Implementation of the Command interface for finding whether a stock gained or lost over one day.
  */
@@ -15,6 +16,7 @@ public class CommandGainLoss implements Command {
   public CommandGainLoss(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel gainLossPane = new JPanel();

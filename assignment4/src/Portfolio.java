@@ -8,7 +8,7 @@ import java.util.Set;
  * Portfolio class represents a collection of stocks for a particular investor.
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
-public class Portfolio extends InflexiblePortfolio{
+public class Portfolio extends InflexiblePortfolio {
 
   private FlexiblePortfolioModel model;
   private final String name; // Name of the portfolio
@@ -48,7 +48,7 @@ public class Portfolio extends InflexiblePortfolio{
       stocks.put(tickerSymbol, currentAmount + amount);
     } else {
       // If the stock is not already in the portfolio, add it
-      stocks.put(tickerSymbol, (float)amount);
+      stocks.put(tickerSymbol, (float) amount);
     }
     setModel();
     float costBasis = model.calculateCostBasis(tickerSymbol, amount, creationDate);

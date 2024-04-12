@@ -1,6 +1,10 @@
-import java.awt.*;
+import java.awt.Color;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.BorderFactory;
+
 
 public class CommandDollarCost implements Command {
   private GUIView view;

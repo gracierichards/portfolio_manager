@@ -21,6 +21,7 @@ public class CommandMovingAverage implements Command {
   public CommandMovingAverage(GUIView view) {
     this.view = view;
   }
+
   @Override
   public JPanel makePanels() {
     JPanel movingAveragePane = new JPanel();
@@ -70,13 +71,13 @@ public class CommandMovingAverage implements Command {
     });
 
     view.movingAverageDateTextBox = new JTextArea(1, 50);
-    view.movingAverageDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end date in MM/DD/YYYY "
-            + "format:"));
+    view.movingAverageDateTextBox.setBorder(BorderFactory.createTitledBorder("Enter the end date " +
+            "in MM/DD/YYYY format:"));
     movingAveragePane.add(view.movingAverageDateTextBox);
 
     view.movingAverageTickerTextBox = new JTextArea(1, 50);
-    view.movingAverageTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker symbol for the" +
-            "stock to check:"));
+    view.movingAverageTickerTextBox.setBorder(BorderFactory.createTitledBorder("Enter the ticker " +
+            "symbol for the stock to check:"));
     movingAveragePane.add(view.movingAverageTickerTextBox);
     return movingAveragePane;
   }
