@@ -45,7 +45,8 @@ public class CommandDollarCost implements Command {
     dollarCostPane.add(view.dollarCostEndDateTextBox);
 
     view.frequencyStringTextBox = new JTextArea(1, 50);
-    view.frequencyStringTextBox.setBorder(BorderFactory.createTitledBorder("Frequency string"));
+    view.frequencyStringTextBox.setBorder(BorderFactory.createTitledBorder("Frequency (in number of"
+            + " days)"));
     dollarCostPane.add(view.frequencyStringTextBox);
 
     JLabel text2 = new JLabel("Enter the desired stocks and their weights in the following "
