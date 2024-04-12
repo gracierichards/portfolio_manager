@@ -6,6 +6,7 @@ import java.util.Set;
  * inflexiblePortfolio class represents a collection of stocks for a particular investor.
  * It contains methods to manage and retrieve information about the stocks within the portfolio.
  */
+
 public class InflexiblePortfolio {
   private final String name; // Name of the portfolio
   protected Map<String, Float> stocks; // Map to store stocks with their corresponding amounts
@@ -14,6 +15,7 @@ public class InflexiblePortfolio {
    *
    * @param name The name of the portfolio.
    */
+
   public InflexiblePortfolio(String name) {
     this.name = name;
     this.stocks = new HashMap<>();
@@ -40,6 +42,7 @@ public class InflexiblePortfolio {
    *
    * @return The name of the portfolio.
    */
+  
   public String getName() {
     return name;
   }
