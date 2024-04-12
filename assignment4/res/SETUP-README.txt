@@ -3,8 +3,9 @@ First, note that the program can create portfolio files and a directory in the s
 .jar file, so place the .jar file in your desired location. It does not depend on any input files
 to be present to run.
 Open the terminal and navigate to the directory where the .jar file is located. To start the
-program, simply enter "java -jar assignment5.jar".
-
+program, simply enter "java -jar assignment6.jar".
+For the GUI to run, the user simply enter "java -jar assignment6.jar gui" and for the CLI users
+can enter "java -jar assignment6.jar nongui".
 
 
 SUPPORTED COMMANDS
@@ -85,6 +86,11 @@ purchase <portfolio_name> <ticker_symbol> <date> <numShares>
 sell {portfolio_name} {ticker_symbol} {date} {numShares}
     Sells the specifed stocks from the portfolio
 
+investFixedAmount{String portfolioName} {float amount} {String date}{ Map<String, Float> weightDistribution}
+    invests the given amount of money according to the weight distribution.
+
+dollarCostAveraging {String portfolioName} {float amount} {String startDate} {String endDate} {int frequency} {Map<String, Float> weightDistribution}
+    Applies the dollar cost averaging to the given portfolio.
 quit
     Terminates the program.
 

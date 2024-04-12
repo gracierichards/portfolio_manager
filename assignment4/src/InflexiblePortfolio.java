@@ -42,7 +42,7 @@ public class InflexiblePortfolio {
    *
    * @return The name of the portfolio.
    */
-  
+
   public String getName() {
     return name;
   }
