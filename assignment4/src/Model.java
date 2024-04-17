@@ -24,6 +24,7 @@ public class Model implements ModelInterface {
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
+    api = new API();
   }
 
   protected InflexiblePortfolio getPortfolio(String portfolioName) throws FileNotFoundException {

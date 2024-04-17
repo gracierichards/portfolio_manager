@@ -172,6 +172,7 @@ public class GUIController {
           }
           controller.dollarCostAveragingCommand(portfolioName, amount, startDate, endDate,
                   frequencyString, tickers);
+          view.dataForPortfoliosInMenu.addElement(portfolioName);
           break;
         default:
           System.out.println("Default case in GUIController");

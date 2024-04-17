@@ -444,6 +444,9 @@ public class Controller implements ControllerInterface {
         return;
       }
       String tickerSymbol = pair[0];
+      if (!fleximodel.isValidTicker(tickerSymbol)) {
+        view.errorMessage(tickerSymbol + " is not a valid ticker symbol.");
+      }
       float weight = Float.parseFloat(pair[1]);
 
       // Check for negative weightage
@@ -502,6 +505,9 @@ public class Controller implements ControllerInterface {
         continue;
       }
       String tickerSymbol = pair[0];
+      if (!fleximodel.isValidTicker(tickerSymbol)) {
+        view.errorMessage(tickerSymbol + " is not a valid ticker symbol.");
+      }
       float weight = Float.parseFloat(pair[1]);
 
       // Check for negative weightage
