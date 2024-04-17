@@ -21,6 +21,9 @@ public class Model implements ModelInterface {
   protected Map<String, InflexiblePortfolio> portfolioList;
   private API api;
 
+  /**
+   * Constructor for the Model classs.git
+   */
   public Model() {
     this.portfolioList = new HashMap<>();
     new File("stockcsvs").mkdirs();
