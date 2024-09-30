@@ -98,7 +98,7 @@ OR
 
 How to create a portfolio with 3 stocks purchased on different dates:
 
-```java
+```
 create portfolio portfolio1
 purchase portfolio1 MSFT 01/01/2019 20
 purchase portfolio1 AAPL 01/11/2019 10
@@ -108,7 +108,7 @@ purchase portfolio1 NVDA 02/01/2019 30
 
 How to query the value and cost basis on two different dates:
 
-```java
+```
 portfolioValueOnDate portfolio1 01/20/2019
 portfolioValueOnDate portfolio1 02/15/2019
 CostBasis portfolio1 01/20/2019
