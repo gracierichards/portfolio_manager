@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -23,9 +25,11 @@ public class API implements APIInterface {
     String apiKey = "QEHLSEQZWQ0SZGJA";
     URL url = null;
     try {
-      url = new URL("https://www.alphavantage" + ".co/query?" + urlPart + "&apikey="
-              + apiKey + "&datatype=csv");
+      url = new URI("https://www.alphavantage" + ".co/query?" + urlPart + "&apikey=" + apiKey + "&datatype=csv").toURL();
     } catch (MalformedURLException e) {
+      throw new RuntimeException("the alphavantage API has either changed or "
+              + "no longer works");
+    } catch (URISyntaxException e) {
       throw new RuntimeException("the alphavantage API has either changed or "
               + "no longer works");
     }

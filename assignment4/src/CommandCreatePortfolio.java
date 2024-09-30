@@ -1,6 +1,4 @@
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.BorderFactory;
+import javax.swing.*;
 
 /**
  * Implementation of the Command interface for creating a new portfolio.
@@ -18,6 +16,11 @@ public class CommandCreatePortfolio implements Command {
   @Override
   public JPanel makePanels() {
     JPanel createPortfolioPane = new JPanel();
+    JLabel text = new JLabel("Creates a portfolio and buys the specified stocks on the current day. If you would like to");
+    JLabel text2 = new JLabel("make a purchase on a previous date, create an empty portfolio here and then go to the buy/sell stocks tab.");
+    createPortfolioPane.add(text);
+    createPortfolioPane.add(text2);
+
     view.createCommandPortfolioNameTextbox = new JTextArea(1, 50);
     view.createCommandPortfolioNameTextbox.setBorder(BorderFactory
             .createTitledBorder("Enter name for portfolio"));

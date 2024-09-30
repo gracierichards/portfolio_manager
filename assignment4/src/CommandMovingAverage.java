@@ -25,9 +25,10 @@ public class CommandMovingAverage implements Command {
   @Override
   public JPanel makePanels() {
     JPanel movingAveragePane = new JPanel();
-    JLabel text9 = new JLabel("Calculates the average price for the given stock in the last "
-            + "given number of days, starting from the given date.");
+    JLabel text9 = new JLabel("Please provide a number of days to calculate the average over,");
+    JLabel text10 = new JLabel("the date of the last day in the desired period, and the stock of interest.");
     movingAveragePane.add(text9);
+    movingAveragePane.add(text10);
 
     view.movingAverageXTextBox = new JTextArea(1, 50);
     view.movingAverageXTextBox.setBorder(BorderFactory.createTitledBorder("How many days for the "

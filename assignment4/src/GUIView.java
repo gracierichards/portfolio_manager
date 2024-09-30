@@ -39,7 +39,7 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   private JPanel cards;
   protected DefaultListModel<String> dataForPortfoliosInMenu;
   private JList<String> portfoliosInMenu;
-  protected String selectedPortfolio;
+  private String selectedPortfolio;
   //Buy if true, sell if false
   protected boolean isBuy;
   //User input text boxes
@@ -132,7 +132,9 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
     combobox.setActionCommand("Menu");
     combobox.addActionListener(new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
+        @SuppressWarnings("unchecked")
         JComboBox<String> cb = (JComboBox<String>) e.getSource();
+        
         selectedItem = (String) cb.getSelectedItem();
         CardLayout cl = (CardLayout) (cards.getLayout());
         cl.show(cards, selectedItem);
@@ -295,5 +297,12 @@ public class GUIView extends JFrame implements GUIViewInterface, ItemListener {
   public void errorMessage(String message) {
     JOptionPane.showMessageDialog(GUIView.this, message, "Error",
             JOptionPane.ERROR_MESSAGE);
+  }
+
+  public String getSelectedPortfolio() {
+    if (selectedPortfolio == null) {
+      errorMessage("Portfolio not selected, please try again.");
+    }
+    return selectedPortfolio;
   }
 }

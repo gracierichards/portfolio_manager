@@ -50,6 +50,10 @@ public class GUIController {
       switch (selectedItem) {
         case "Create a new portfolio":
           String portfolioName = view.createCommandPortfolioNameTextbox.getText();
+          if (portfolioName.isEmpty()) {
+            view.errorMessage("Portfolio name cannot be empty");
+            break;
+          }
           String tickers = view.tickersAndAmountsTextbox.getText();
           controller.createCommand("flexible", portfolioName, tickers);
           view.dataForPortfoliosInMenu.addElement(portfolioName);
@@ -61,6 +65,10 @@ public class GUIController {
             break;
           }
           portfolioName = view.loadCommandTextBox.getText();
+          if (portfolioName.isEmpty()) {
+            view.errorMessage("Portfolio name cannot be empty");
+            break;
+          }
           String loadPath = view.loadPath;
           controller.loadCommand(portfolioName, loadPath);
           view.dataForPortfoliosInMenu.addElement(portfolioName);
@@ -72,28 +80,28 @@ public class GUIController {
             view.errorMessage("File not specified.");
             break;
           }
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           String savePath = view.savePath;
           controller.saveCommand(portfolioName, savePath);
           view.showMessage("Portfolio saved successfully.");
           view.savePathSet = false;
           break;
         case "Display composition of a portfolio":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           controller.listCommand(portfolioName);
           break;
         case "Find cost basis of a portfolio":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           String date = view.costBasisTextBox.getText();
           controller.costBasisCommand(portfolioName, date);
           break;
         case "Find value of a portfolio":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           date = view.valueCommandTextBox.getText();
           controller.portfolioValueOnDate(portfolioName, date);
           break;
         case "Buy/sell stocks":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           String ticker = view.buySellTickerTextBox.getText();
           date = view.buySellDateTextBox.getText();
           String numShares = view.buySellIntTextBox.getText();
@@ -153,7 +161,7 @@ public class GUIController {
           view.showCrossovers(result);
           break;
         case "Invest a fixed amount into an existing portfolio":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           String amount = view.fixedAmountIntTextBox.getText();
           date = view.fixedAmountDateTextBox.getText();
           tickers = view.fixedAmountTickersTextBox.getText();
@@ -161,7 +169,7 @@ public class GUIController {
           //view.showMessage("Transaction successful.");
           break;
         case "Dollar-cost averaging":
-          portfolioName = view.selectedPortfolio;
+          portfolioName = view.getSelectedPortfolio();
           amount = view.dollarCostIntTextBox.getText();
           startDate = view.dollarCostStartDateTextBox.getText();
           endDate = view.dollarCostEndDateTextBox.getText();

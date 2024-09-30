@@ -42,6 +42,7 @@ public class Controller implements ControllerInterface {
     this.fleximodel = fm;
     this.view = v;
     this.scanner = scanner;
+    this.api = new API();
   }
 
   private boolean isInteger1(String[] inputs) {
