@@ -1,4 +1,4 @@
-# STARTING THE PROGRAM
+## STARTING THE PROGRAM
 First, note that the program can create portfolio files and a directory in the same folder as the
 .jar file, so place the .jar file in your desired location. It does not depend on any input files
 to be present to run.<br/>
@@ -8,7 +8,7 @@ For the GUI to run, the user simply enter "java -jar assignment6.jar gui" and fo
 can enter "java -jar assignment6.jar nongui".
 
 
-#SUPPORTED COMMANDS
+## SUPPORTED COMMANDS
 Below is the syntax for all commands this program can take.
 
 ```create inflexibleportfolio <portfolio_name> <ticker_symbol>:<integer> [<ticker_symbol>:<integer>...]```
@@ -110,7 +110,7 @@ CostBasis portfolio1 02/15/2019```
 
 
 
-# STOCKS SUPPORTED
+## STOCKS SUPPORTED
 Any U.S. stock available on Alpha Vantage. Search for valid stocks using the search command.
-# DATES SUPPORTED
+## DATES SUPPORTED
 Any date.
